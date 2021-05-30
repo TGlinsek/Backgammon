@@ -51,19 +51,20 @@ public class Igra {
 	}
 	
 	public Igra(Igralec igralecKiZacne, boolean crniGreVSmeriUrinegaKazalca, boolean crniZacneSpodaj) {
+		kocka1 = new Kocka();
+		kocka2 = new Kocka();
+		dvojnaKocka = new Kocka();
+		
 		napolniSlovarIgralcevaKocka();
 		napolniSlovarPridobiKocko();
 		
 		this.crniGreVSmeriUrinegaKazalca = crniGreVSmeriUrinegaKazalca;
 		this.crniZacneSpodaj = crniZacneSpodaj;
 		
-		igralnaPlosca = new IgralnaPlosca(crniGreVSmeriUrinegaKazalca, crniZacneSpodaj);  // èrni gre v smeri urinega kazalca po defaultu
+		igralnaPlosca = new IgralnaPlosca();  // èrni gre v smeri urinega kazalca po defaultu
 		igralecNaVrsti = igralecKiZacne;
 		
 		// napaka = null;
-		kocka1 = new Kocka();
-		kocka2 = new Kocka();
-		dvojnaKocka = new Kocka();
 		
 		trenutnoStanje = StanjeIgre.IZBIRA_ZACETNEGA_IGRALCA;
 	}
@@ -98,33 +99,136 @@ public class Igra {
 		return false;  // TODO
 	}
 	
-	public List<Poteza> vrniVeljavnePotezeTePlosce(LinkedList<Kocka> seznamKock) {
-		return vrniVeljavnePoteze(seznamKock, this.igralnaPlosca, this.igralecNaVrsti);
+	/*
+	public Trikotnik vrniTrikotnik(int relativniIndeks) {
+		// v odvisnosti od this.crniGreVSmeriUrinegaKazalca in this.crniZacneSpodaj
+		
+		if (relativniIndeks == 0) {
+			if (BarvaIgralca.barva(this.igralecNaVrsti) == Figura.CRNA) {
+				
+			} else {
+				
+			}
+		} else if (relativniIndeks == 25) {
+			if (BarvaIgralca.barva(this.igralecNaVrsti) == Figura.CRNA) {
+				
+			} else {
+				
+			}
+		} else {
+			
+		}
 	}
+	*/
 	
 
 	// @SuppressWarnings("unchecked")
-	private static LinkedList<Kocka> odstraniElementIzSeznama(LinkedList<Kocka> seznam, Kocka element) {
-		LinkedList<Kocka> kopija = new LinkedList<Kocka>();
-		kopija = (LinkedList<Kocka>) seznam.clone();  // shallow copy, ampak to je vse kar rabimo
+	private static LinkedList<Integer> odstraniElementIzSeznama(LinkedList<Integer> seznam, Integer element) {
+		LinkedList<Integer> kopija = new LinkedList<Integer>();
+		kopija = (LinkedList<Integer>) seznam.clone();  // shallow copy, ampak to je vse kar rabimo
 		kopija.remove(element);
 		return kopija;
 	}
 	
-	public static List<Poteza> vrniVeljavnePoteze(LinkedList<Kocka> seznamKock, IgralnaPlosca igralnaPlosca, Igralec igralecNaVrsti) // glede na trenutne kocke in igralcaNaVrsti
-	// ne vrne parov potez (èe sta paè dve potezi možni, bo najprej vrnil eno, nato drugo)
-	{
-		List<Poteza> seznamVsehPotez = new LinkedList<Poteza>();
-		/*
-		Trikotnik[] seznam = new Trikotnik[25];  // 25, ker gledamo še bariero (nulto polje) (ampak le od enega igralca, zato ni 26)
-		
-		if (igralecNaVrsti == Igralec.BELI) {
-			seznam[0] = belaBariera;
+	public LinkedList<Integer> vrniSeznamKock() {
+		LinkedList<Integer> seznam = new LinkedList<Integer>();
+		if (trenutnoJeDvojnaKocka) {
+			for (int i = 0; i < 4; i++) {
+				seznam.add(dvojnaKocka.vrniVrednost());
+			}
 		} else {
-			seznam[0] = crnaBariera;
+			seznam.add(kocka1.vrniVrednost());
+			seznam.add(kocka2.vrniVrednost());
 		}
-		*/  // tega ne rabimo, kr smo itak drugaè šli iterirat po trikotnikih
-		for (Kocka kocka : seznamKock) {
+		return seznam;
+	}
+	
+	public List<Poteza> vrniVeljavnePotezeTePlosce() {
+		// return vrniVeljavnePoteze(this.vrniSeznamKock(), this.igralnaPlosca, this.igralecNaVrsti);
+		return vrniVeljavnePoteze2(this.vrniSeznamKock(), this.igralecNaVrsti);
+	}
+	
+	private List<Poteza> vrniVeljavnePotezeZaEnoKocko(int kocka, Igralec igralecNaVrsti) {
+		List<Poteza> seznamVsehPotez = new LinkedList<Poteza>();
+		for (int i = 0; i <= igralnaPlosca.plosca.length; i++) {
+			
+			Poteza poteza = new Poteza(i, kocka, BarvaIgralca.barva(igralecNaVrsti));
+			
+			Trikotnik trikotnik;
+			if (i == igralnaPlosca.plosca.length) {  // poleg ostalih 24 trikotnikov na konec dodamo še bariero od igralca
+				if (igralecNaVrsti == Igralec.BELI) {
+					trikotnik = igralnaPlosca.belaBariera;
+				} else {
+					trikotnik = igralnaPlosca.crnaBariera;
+				}
+			} else {
+				trikotnik = igralnaPlosca.plosca[i];
+			}
+			
+			
+			if (trikotnik.barvaFigur == BarvaIgralca.barva(igralecNaVrsti)) {
+				
+				boolean preverimoPotezo;
+
+				preverimoPotezo = !igralnaPlosca.potezaNiVeljavna(poteza);
+
+				if (preverimoPotezo) {
+					seznamVsehPotez.add(poteza);
+				}
+			}
+		}
+		return seznamVsehPotez;
+	}
+	
+	
+	private List<Poteza> vrniUnijoSeznamov(List<Poteza> prvi, List<Poteza> drugi) {  // predpostavljamo, da prvi nima dvojnikov
+		List<Poteza> unija = new LinkedList<Poteza>();
+		for (Poteza i : prvi) {
+			unija.add(i);
+		}
+		for (Poteza j : drugi) {
+			if (!unija.contains(j)) {
+				unija.add(j);
+			}
+		}
+		return unija;
+	}
+	
+	private List<Poteza> vrniVeljavnePoteze2(LinkedList<Integer> seznamKock, Igralec igralecNaVrsti) {
+		if (seznamKock.size() > 2) throw new java.lang.RuntimeException("To še ni implementirano za veè kot dve kocki.");  // in tudi ne bo
+		
+		List<Poteza> prvaKocka = vrniVeljavnePotezeZaEnoKocko(kocka1.vrniVrednost(), igralecNaVrsti);
+		List<Poteza> drugaKocka = vrniVeljavnePotezeZaEnoKocko(kocka2.vrniVrednost(), igralecNaVrsti);
+		
+		if (prvaKocka.size() == 1) {
+			Poteza poteza = prvaKocka.get(0);
+			int stevec = 0;
+			while (stevec < drugaKocka.size()) {
+				Poteza p = drugaKocka.get(stevec);
+				if (igralnaPlosca.potezaNiVeljavna(Poteza.pristejDvePotezi(poteza, p))) {
+					drugaKocka.remove(stevec);
+				}
+				stevec += 1;
+			}
+		} else if (drugaKocka.size() == 1) {
+			
+		}
+		return vrniUnijoSeznamov(prvaKocka, drugaKocka);
+	}
+	
+	private List<Poteza> vrniVeljavnePoteze(LinkedList<Integer> seznamKock, IgralnaPlosca igralnaPlosca, Igralec igralecNaVrsti) // glede na trenutne kocke in igralcaNaVrsti
+	// ne vrne parov potez (èe sta paè dve potezi možni, bo najprej vrnil eno, nato drugo)
+	
+
+	{
+		/*
+		List<Integer> seznamKock = this.vrniSeznamKock();
+		IgralnaPlosca igralnaPlosca = this.igralnaPlosca;
+		Igralec igralecNaVrsti = this.igralecNaVrsti;
+		*/
+		List<Poteza> seznamVsehPotez = new LinkedList<Poteza>();
+		
+		for (Integer kocka : seznamKock) {
 			// kocka1:
 			for (int i = 0; i <= igralnaPlosca.plosca.length; i++) {
 				
@@ -145,7 +249,8 @@ public class Igra {
 					IgralnaPlosca kopija = new IgralnaPlosca(igralnaPlosca);
 					
 					boolean preverimoPotezo;
-					preverimoPotezo = kopija.igrajPotezo(new Poteza(trikotnik, kocka.vrniVrednost()));
+					// preverimoPotezo = kopija.igrajPotezo(new Poteza(trikotnik, kocka));
+					preverimoPotezo = kopija.igrajPotezo(new Poteza(i, kocka, BarvaIgralca.barva(igralecNaVrsti)));
 					if (seznamKock.size() == 1) {  // manj ko 1 tk al tk ne more bit
 						preverimoPotezo = preverimoPotezo;
 					}
@@ -161,7 +266,8 @@ public class Igra {
 						}
 					}
 					if (preverimoPotezo) {
-						seznamVsehPotez.add(new Poteza(trikotnik, kocka.vrniVrednost()));  // seznam ni odvisen od kocke
+						// seznamVsehPotez.add(new Poteza(trikotnik, kocka));  // seznam ni odvisen od kocke
+						seznamVsehPotez.add(new Poteza(i, kocka, BarvaIgralca.barva(igralecNaVrsti)));
 					} 
 					/*
 					else {
@@ -173,6 +279,12 @@ public class Igra {
 		}
 		return seznamVsehPotez;
 		
+	}
+	
+	public void zamenjajIgralca() {
+		this.igralecNaVrsti = this.igralecNaVrsti.pridobiNasprotnika();
+		if (this.trenutnoStanje != StanjeIgre.PREMIKANJE_FIGUR) throw new java.lang.RuntimeException("To se ne bi smelo zgoditi!");
+		this.trenutnoStanje = StanjeIgre.METANJE_KOCK;
 	}
 	
 

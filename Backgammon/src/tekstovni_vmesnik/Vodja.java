@@ -8,10 +8,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import logika.BarvaIgralca;
 import logika.Igra;
 import logika.Igralec;
 import logika.ImeKocke;
 import logika.Poteza;
+import logika.StanjeIgre;
 
 public class Vodja {
 private static BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
@@ -157,7 +159,7 @@ private static BufferedReader r = new BufferedReader(new InputStreamReader(Syste
 							break metanjeKock;
 						}
 					}
-					break igranje;
+					igra.trenutnoStanje = StanjeIgre.METANJE_KOCK;  // priènemo z igro
 				case METANJE_KOCK:
 					Igralec igralec = igra.igralecNaVrsti;
 					VrstaIgralca vrstaNaPotezi = vrstaIgralca.get(igralec);
@@ -196,15 +198,15 @@ private static BufferedReader r = new BufferedReader(new InputStreamReader(Syste
 					
 					premikanje : switch (vrstaNaPotezi2) {
 					case CLOVEK:
-						System.out.println("Možne poteze: " + igra.vrniVeljavnePoteze());
+						System.out.println("Možne poteze: " + igra.vrniVeljavnePotezeTePlosce());
 						poteza = clovekovaPoteza(igra);
 						break premikanje;
 					case RACUNALNIK:
 						poteza = racunalnikovaPoteza(igra);
 						break premikanje;
 					}
-					System.out.println(igra);
 					System.out.println("Igralec " + igralec2 + " je igral " + poteza);
+					igra.zamenjajIgralca();
 					break;
 				}
 				
@@ -240,8 +242,9 @@ private static BufferedReader r = new BufferedReader(new InputStreamReader(Syste
 				System.out.println("Napaèen format"); continue;
 			}
 			// x bo številka trikotnika, y bo za kolk naprej gremo
-			Poteza poteza = new Poteza(x, y);  // igra.pridobiTrikotnik(x)
-			if (igra.igraj(poteza)) return poteza;
+			Poteza poteza = new Poteza(x, y, BarvaIgralca.barva(igra.igralecNaVrsti));  // igra.pridobiTrikotnik(x)
+			// if (igra.igraj(poteza)) return poteza;
+			if (igra.vrniVeljavnePotezeTePlosce().contains(poteza)) return poteza;
 			System.out.println(poteza.toString() + " ni možna");
 		}
 	}

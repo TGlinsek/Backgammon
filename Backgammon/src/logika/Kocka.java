@@ -12,11 +12,11 @@ public class Kocka {
 	
 	public Kocka() {
 		rand = new Random();
-		this.vrednost = vrziKocko();
+		vrziKocko();
 	}
 	
-	public int vrziKocko() {
-		return rand.nextInt(STEVILO_PLOSKEV) + 1;
+	public void vrziKocko() {
+		this.vrednost = rand.nextInt(STEVILO_PLOSKEV) + 1;
 	}
 	
 	public int vrniVrednost() {
