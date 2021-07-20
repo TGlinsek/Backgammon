@@ -4,9 +4,9 @@ public class Poteza {  // 0 je izhodisce crnega oz. cilj belega, 25 je izhodisce
 	public int izhodisce;  // od tu jemljemo figuro
 	public int premik;  // to je razlika med ciljem in izhodiscem
 	// lahko sta to tudi barieri ali kar cilja
-	// 0 je bariera crnega oz. cilj belega
+	// 0 je bariera crnega oz. cilj belega (torej, èe je izhodišèe 0 in premik 4, potem je to poteza, ki figuro vzame iz bariere in jo premakne za 4 polja naprej)
 	// 25 je bariera belega oz. cilj crnega
-	public Figura igralec;  // smer, v katero gremo
+	public Figura igralec;  // igralec, èigar poteza je to (oz. smer, v katero gremo)
 	
 	
 	public Poteza(int izhodisce, int premik, Figura igralec) {
@@ -36,10 +36,14 @@ public class Poteza {  // 0 je izhodisce crnega oz. cilj belega, 25 je izhodisce
 		return this.igralec;
 	}
 	
-	public static Poteza pristejDvePotezi(Poteza prva, Poteza druga) {
-		if (prva.izhodisce != druga.izhodisce || prva.igralec != druga.igralec) throw new java.lang.RuntimeException("To pa ne gre.");
+	/* ne bomo rabli te metode:
+	public static Poteza pristejDvePotezi(Poteza prva, Poteza druga) {  // sešteje dve potezi (sešteje njun premik), katerih izhodišèe je enako
+		// predpostavljamo, da je prva poteza veljavna (drugaèe tako te metode ne bomo klicali)
+		// if (prva.vrniCilj() != druga.izhodisce || prva.igralec != druga.igralec) throw new java.lang.RuntimeException("To pa ne gre.");
+		if (prva.vrniIzhodisce() != druga.vrniIzhodisce()) throw new java.lang.RuntimeException("Ta metoda sešteje le potezi z istima izhodišèema.");
 		return new Poteza(prva.izhodisce, prva.premik + druga.premik, prva.igralec);
 	}
+	*/
 	
 	@Override 
 	public boolean equals(Object o) {
