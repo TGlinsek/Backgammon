@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 
 import logika.Figura;
 import logika.Igra;
+import logika.Igralec;
 import logika.Trikotnik;
 import tekstovni_vmesnik.Vodja;
 
@@ -65,7 +66,7 @@ public class Platno extends JPanel implements MouseListener {
 		addMouseListener(this);
 		
 //		samo za preverjanje kode
-//		igra = new Igra(Igralec.BELI, true, true);
+		igra = new Igra(Igralec.BELI, true, true);
 		
 	}
 	
