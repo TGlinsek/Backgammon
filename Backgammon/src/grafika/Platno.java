@@ -13,8 +13,6 @@ import javax.swing.JPanel;
 
 import logika.Figura;
 import logika.Igra;
-import logika.Igralec;
-import logika.IgralnaPlosca;
 import logika.Trikotnik;
 import tekstovni_vmesnik.Vodja;
 
