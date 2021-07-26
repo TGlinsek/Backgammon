@@ -11,13 +11,18 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JPanel;
 
+import logika.Figura;
 import logika.Igra;
 import logika.Igralec;
+import logika.IgralnaPlosca;
+import logika.Trikotnik;
 import tekstovni_vmesnik.Vodja;
 
 
 @SuppressWarnings("serial")
 public class Platno extends JPanel implements MouseListener {
+	
+	public Igra igra;
 	
 	public Vodja vodja;
 	
@@ -29,8 +34,11 @@ public class Platno extends JPanel implements MouseListener {
 	protected Color barvaParnihTrikotnikov;
 	protected Color barvaNeparnihTrikotnokov;
 	
-	protected double debelinaRoba; // debelina roba plosce
-	protected double debelinaObrobe; // debelina obrobe za trikotnike, zetone
+	protected double debelinaRobaRelativna; // debelina roba plosce
+	protected double debelinaObrobeRelativna; // debelina obrobe za trikotnike, zetone
+	protected double odmikRelativen; // odmik med trikotniki v polju
+	
+	protected double sirinaTrikotnikaRelativen; // sirinaTrikotnika žetonov
 	
 	protected int sirina; //sirina originalnega polja
 	protected int visina; //visina originalnega polja
@@ -49,22 +57,27 @@ public class Platno extends JPanel implements MouseListener {
 		this.barvaParnihTrikotnikov = Color.BLUE;
 		this.barvaNeparnihTrikotnokov = Color.CYAN;
 		
-		this.debelinaObrobe = 0.003;
-		this.debelinaRoba = 0.05;
+		this.debelinaObrobeRelativna = 0.003;
+		this.debelinaRobaRelativna = 0.05;
+		this.odmikRelativen = 0.09;
 		
 		this.sirina = sirina;
 		this.visina = visina;
 		
 		addMouseListener(this);
+		
+//		samo za preverjanje kode
+//		igra = new Igra(Igralec.BELI, true, true);
+		
 	}
 	
-	private double triangleWidth() {
-		return (Math.min(getWidth(), getHeight()) - 2 * debelinaRoba) / 13;
-	}
-	
-	private double triangleHeight() {
-		return 3 * (Math.min(getWidth(), getHeight()) - 2 * debelinaRoba) / 7;
-	}
+//	private double triangleWidth() {
+//		return (Math.min(getWidth(), getHeight()) - 2 * debelinaRobaRelativna) / 13;
+//	}
+//	
+//	private double triangleHeight() {
+//		return 3 * (Math.min(getWidth(), getHeight()) - 2 * debelinaRobaRelativna) / 7;
+//	}
 	
 	@Override
 	protected void paintComponent(Graphics g) {
@@ -72,16 +85,14 @@ public class Platno extends JPanel implements MouseListener {
 		Graphics2D g2d = (Graphics2D) g;
 
 		int velikostPolja = (int) (Math.min(getWidth(), getHeight()));
-		
-		int rob = (int) (debelinaRoba * velikostPolja);
-		double obroba = debelinaObrobe * velikostPolja;
 				
-		double w = (Math.min(getWidth(), getHeight()) - 2 * rob) / 13;
-		double h = 3 * (Math.min(getWidth(), getHeight()) - 2 * rob) / 7;
+		int rob = (int) (debelinaRobaRelativna * velikostPolja);
+		int obroba = (int) (debelinaObrobeRelativna * velikostPolja);
 		
-		double odmikMedTrikotniki = 0.09 * w;
-		
-		double polmer = w * 0.9;
+		int sirinaTrikotnika = (Math.min(getWidth(), getHeight()) - 2 * rob) / 13;
+		int visinaTrikotnika = 3 * (Math.min(getWidth(), getHeight()) - 2 * rob) / 7;
+				
+		int odmikMedTrikotniki = (int) (odmikRelativen * sirinaTrikotnika);
 		
 //		narise rob
 		g2d.setColor(barvaRoba);
@@ -92,37 +103,82 @@ public class Platno extends JPanel implements MouseListener {
 		g2d.fillRect(rob, rob, velikostPolja - 2 * rob, velikostPolja - 2 * rob);
 		
 //		narise bariero
-		g2d.setStroke(new BasicStroke((float) w));
+		g2d.setStroke(new BasicStroke((float) sirinaTrikotnika));
 		g2d.setColor(barvaRoba);
-		g2d.drawLine((int) (rob + 6.5 * w), rob, (int) (rob + 6.5 * w), velikostPolja - rob);
+		g2d.drawLine((int) (rob + 6.5 * sirinaTrikotnika), rob, (int) (rob + 6.5 * sirinaTrikotnika), velikostPolja - rob);
 		
-//		narise tirkotnike
+//		narise tirkotnike tako da zacne v levem zgrnjem robu in gre do desnega zgornjega roba, potem pa nadaljuje v levem spodnjem robu in gre do desnega spodnjega roba
 		boolean parnost = true;
-		boolean spodnjaStran = false;
-		int[] x;
-		int[] y;
+		int spodnjaStran = 1;
+		int trikotnikNaPlosci = -1;					// to je indeks za dolocen tirkotnik na plosci
+		int[] xTrikotnik;
+		int[] yTrikotnik;
 		int zacetnaTocka;
 		for (int i = 0; i < 26; i++) {
-			if (i == 6 || i == 19) continue;
-			if (i == 13) {
-				spodnjaStran = !spodnjaStran;
-			} if (parnost) {
+			if (i == 6 || i == 19) continue; 	// ne nariše trikotnika na barieri
+			
+			if (i == 13) { 						// narisal je vse trikotnike na zgornji strani in gre na spodnjo stran
+				spodnjaStran = -1;
+			} 
+			
+			if (parnost) { 						// nastavi pravo barvo trikotnikov
 				g2d.setColor(barvaParnihTrikotnikov); parnost = !parnost;
 			} else {
 				g2d.setColor(barvaNeparnihTrikotnokov); parnost = !parnost;
-			} if (spodnjaStran) {
-				y = new int[] {velikostPolja - rob, (int) (velikostPolja - rob - h), velikostPolja - rob};
-				zacetnaTocka = (int) (rob + odmikMedTrikotniki + (i - 13) * w);
+			} 
+			
+			if (spodnjaStran == -1) { 				// doloci koordinate za trikotnik
+				yTrikotnik = new int[] {velikostPolja - rob, velikostPolja - rob - visinaTrikotnika, velikostPolja - rob};
+				zacetnaTocka = rob + odmikMedTrikotniki + (i - 13) * sirinaTrikotnika;
 			} else {
-				y = new int[] {rob, (int) (rob + h), rob};
-				zacetnaTocka = (int) (rob + odmikMedTrikotniki + i * w);
+				yTrikotnik = new int[] {rob, rob + visinaTrikotnika, rob};
+				zacetnaTocka = rob + odmikMedTrikotniki + i * sirinaTrikotnika;
 			}
-			x = new int[] {zacetnaTocka, (int) (zacetnaTocka + (w / 2 - odmikMedTrikotniki)), (int) (zacetnaTocka + w - odmikMedTrikotniki)};
-			Polygon p = new Polygon(x, y, 3);
+			xTrikotnik = new int[] {zacetnaTocka, (int) (zacetnaTocka + (sirinaTrikotnika / 2 - odmikMedTrikotniki)), zacetnaTocka + sirinaTrikotnika - odmikMedTrikotniki};
+			
+			// narisemo trikotnik
+			Polygon p = new Polygon(xTrikotnik, yTrikotnik, 3);
 			g2d.fillPolygon(p);
+			
 			g2d.setColor(barvaObrobe);
 			g2d.setStroke(new BasicStroke((float) obroba));
 			g2d.drawPolygon(p);
+			
+//			narisemo zetone na triktoniku, če imamo igro
+			
+			if (igra != null) {
+				// dolocimo kateri trikotnik iz plosce risemo
+				if (0 <= i && i <= 5) trikotnikNaPlosci = -i + 11; 
+				if (7 <= i && i <= 12) trikotnikNaPlosci = -i + 12;
+				if (13 <= i && i <= 18) trikotnikNaPlosci = i - 1;
+				if (20 <= i && i <= 25) trikotnikNaPlosci = i - 2;
+				
+				Trikotnik trenutniTrikotnik = igra.igralnaPlosca.plosca[trikotnikNaPlosci];
+				Color barvaFigure;
+				int razdaljaMedSredisciZetonov;
+				
+				// pogledamo kaksno barvo imamo na tem trikotniku
+				if (trenutniTrikotnik.barvaFigur == Figura.BELA) barvaFigure = barvaZetonaBeli;
+				else barvaFigure = barvaZetonaCrni;
+				
+				// kako skupaj moramo narisati zetone, da ne pogledajo čez trikotnik
+				if (trenutniTrikotnik.stevilo * sirinaTrikotnika <= visinaTrikotnika) razdaljaMedSredisciZetonov = sirinaTrikotnika;
+				else razdaljaMedSredisciZetonov = (int) ((visinaTrikotnika - sirinaTrikotnika) / (trenutniTrikotnik.stevilo - 1));
+				
+				int faktor;
+				for (int j = 0; j < trenutniTrikotnik.stevilo; j++) {
+					if (spodnjaStran == 1) faktor = spodnjaStran * j;
+					else faktor = spodnjaStran * (j + 1);
+					
+					// narisemo zeotne
+					g2d.setColor(barvaFigure);
+					g2d.fillOval(xTrikotnik[0] - odmikMedTrikotniki, yTrikotnik[0] + faktor * razdaljaMedSredisciZetonov, sirinaTrikotnika, sirinaTrikotnika);
+					
+					g2d.setColor(barvaObrobe);
+					g2d.setStroke(new BasicStroke((float) obroba));
+					g2d.drawOval(xTrikotnik[0] - odmikMedTrikotniki, yTrikotnik[0] + faktor * razdaljaMedSredisciZetonov, sirinaTrikotnika, sirinaTrikotnika);
+				}
+			}
 		}
 	}
 	
