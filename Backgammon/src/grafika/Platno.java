@@ -27,11 +27,16 @@ public class Platno extends JPanel implements MouseListener {
 	
 	protected Color barvaOzadja;
 	protected Color barvaRoba;
-	protected Color barvaObrobe;
 	protected Color barvaZetonaBeli;
 	protected Color barvaZetonaCrni;
 	protected Color barvaParnihTrikotnikov;
 	protected Color barvaNeparnihTrikotnokov;
+	
+//	teme
+	protected boolean Jungle = false;
+	protected boolean BubbleGum = false;
+	protected boolean Navy = false;
+	protected boolean BlackAndWhite = false;
 	
 	protected double debelinaRobaRelativna; // debelina roba plosce
 	protected double debelinaObrobeRelativna; // debelina obrobe za trikotnike, zetone
@@ -45,16 +50,43 @@ public class Platno extends JPanel implements MouseListener {
 	public Platno(int sirina, int visina) {
 		super();
 		setPreferredSize(new Dimension(sirina, visina));
-
-		vodja = null;
 		
-		this.barvaOzadja = Color.WHITE;
-		this.barvaRoba = Color.GRAY;
-		this.barvaObrobe = Color.BLACK;
-		this.barvaZetonaCrni = Color.BLACK;
-		this.barvaZetonaBeli = Color.WHITE;
-		this.barvaParnihTrikotnikov = Color.BLUE;
-		this.barvaNeparnihTrikotnokov = Color.CYAN;
+		if (Jungle) {
+			this.barvaOzadja = new Color(134, 161, 125);
+			this.barvaRoba = new Color(102, 58, 0);
+			this.barvaParnihTrikotnikov = new Color(255, 233, 204);
+			this.barvaNeparnihTrikotnokov = new Color(1, 101, 21);
+			this.barvaZetonaCrni = Color.BLACK;
+			this.barvaZetonaBeli = new Color(255, 244, 230);
+		} else if (BubbleGum) {
+			this.barvaOzadja = new Color(225, 184, 184);
+			this.barvaRoba = new Color(172, 108, 108);
+			this.barvaParnihTrikotnikov = new Color(244, 139, 139);
+			this.barvaNeparnihTrikotnokov = new Color(243, 216, 190);
+			this.barvaZetonaCrni = new Color(132, 21, 71);
+			this.barvaZetonaBeli = new Color(253, 237, 232);
+		} else if (Navy) {
+			this.barvaOzadja = new Color(179, 241, 255);
+			this.barvaRoba = new Color (253, 217, 180);
+			this.barvaParnihTrikotnikov = Color.WHITE;
+			this.barvaNeparnihTrikotnokov = new Color(0, 0, 120);
+			this.barvaZetonaCrni = new Color(0, 195, 230);
+			this.barvaZetonaBeli = Color.WHITE;
+		} else if (BlackAndWhite) {
+			this.barvaOzadja = Color.GRAY;
+			this.barvaRoba = Color.DARK_GRAY;
+			this.barvaParnihTrikotnikov = Color.WHITE;
+			this.barvaNeparnihTrikotnokov = Color.BLACK;
+			this.barvaZetonaCrni = Color.BLACK;
+			this.barvaZetonaBeli = Color.WHITE;
+		} else {
+			this.barvaOzadja = new Color(210, 166, 121);
+			this.barvaRoba = new Color(77, 42, 0);
+			this.barvaParnihTrikotnikov = new Color(102, 51, 0);
+			this.barvaNeparnihTrikotnokov = new Color(247, 231, 212);
+			this.barvaZetonaCrni = Color.BLACK;
+			this.barvaZetonaBeli = new Color(255, 242, 230);
+		}
 		
 		this.debelinaObrobeRelativna = 0.003;
 		this.debelinaRobaRelativna = 0.05;
@@ -69,14 +101,6 @@ public class Platno extends JPanel implements MouseListener {
 		igra = new Igra(Igralec.BELI, true, true);
 		
 	}
-	
-//	private double triangleWidth() {
-//		return (Math.min(getWidth(), getHeight()) - 2 * debelinaRobaRelativna) / 13;
-//	}
-//	
-//	private double triangleHeight() {
-//		return 3 * (Math.min(getWidth(), getHeight()) - 2 * debelinaRobaRelativna) / 7;
-//	}
 	
 	@Override
 	protected void paintComponent(Graphics g) {
@@ -139,9 +163,10 @@ public class Platno extends JPanel implements MouseListener {
 			Polygon p = new Polygon(xTrikotnik, yTrikotnik, 3);
 			g2d.fillPolygon(p);
 			
-			g2d.setColor(barvaObrobe);
-			g2d.setStroke(new BasicStroke((float) obroba));
-			g2d.drawPolygon(p);
+//			lepse izgleda brez obrobe na trikotnikih
+//			g2d.setColor(barvaObrobe);
+//			g2d.setStroke(new BasicStroke((float) obroba));
+//			g2d.drawPolygon(p);
 			
 //			narisemo zetone na triktoniku, če imamo igro
 			
@@ -154,11 +179,18 @@ public class Platno extends JPanel implements MouseListener {
 				
 				Trikotnik trenutniTrikotnik = igra.igralnaPlosca.plosca[trikotnikNaPlosci];
 				Color barvaFigure;
+				Color barvaObrobe;
 				int razdaljaMedSredisciZetonov;
 				
 				// pogledamo kaksno barvo imamo na tem trikotniku
-				if (trenutniTrikotnik.barvaFigur == Figura.BELA) barvaFigure = barvaZetonaBeli;
-				else barvaFigure = barvaZetonaCrni;
+				if (trenutniTrikotnik.barvaFigur == Figura.BELA) {
+					barvaFigure = barvaZetonaBeli;
+					barvaObrobe = barvaZetonaCrni;
+				}
+				else {
+					barvaFigure = barvaZetonaCrni;
+					barvaObrobe = barvaZetonaBeli;
+				}
 				
 				// kako skupaj moramo narisati zetone, da ne pogledajo čez trikotnik
 				if (trenutniTrikotnik.stevilo * sirinaTrikotnika <= visinaTrikotnika) razdaljaMedSredisciZetonov = sirinaTrikotnika;
