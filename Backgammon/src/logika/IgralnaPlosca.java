@@ -125,7 +125,7 @@ public class IgralnaPlosca {
 	
 	private Trikotnik pridobiTrikotnik(int relativnoPolje, Figura igralecNaVrsti) {
 		// relativno polje je lahko število med (vkljuèno) 0-25 (skupaj 26 razliènih možnosti). 0 pomeni bariero, 25 pomeni cilj, ostalih 24 pa predstavljajo trikotnike na plošèi
-		// 
+		
 		if (relativnoPolje == 0) {
 			if (igralecNaVrsti == Figura.CRNA) {
 				return crnaBariera;
@@ -158,6 +158,7 @@ public class IgralnaPlosca {
 		
 		if (izhodiscniTrikotnik.barvaFigur != poteza.vrniIgralca()) return false;  // èe na izhodišènem trikotniku sploh niso ta prave figure (a bi blo boljš kr throwat kak exception?)
 		if (ciljniTrikotnik.barvaFigur == poteza.vrniIgralca().pridobiNasprotnika() && ciljniTrikotnik.stevilo > 1) return false;  // ne moremo prestaviti tja (tam so nasprotnikove figure)
+		
 		
 		izhodiscniTrikotnik.odstraniFiguro();
 		ciljniTrikotnik.dodajFiguro(poteza.vrniIgralca());

@@ -29,11 +29,13 @@ public class Trikotnik {
 		if (this.stevilo == 0) this.barvaFigur = Figura.PRAZNA;
 	}
 	
+	/*
 	// tega verjetno ne bomo rabli
 	public void spremeniBarvoFigur(Figura novaBarva) {
 		this.barvaFigur = novaBarva;
 		if (this.stevilo != 1) throw new java.lang.RuntimeException("Število mora biti 1, da se lahko stanje spremeni");  // paè, zbijanje figur
 	}
+	*/
 	
 	@Override
 	public String toString() {

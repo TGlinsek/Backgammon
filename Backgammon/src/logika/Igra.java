@@ -76,7 +76,7 @@ public class Igra {
 	}
 	*/
 	
-	public void vrziKocki(boolean zrebanjeZacetnegaIgralca) {
+	public void vrziKocki(boolean zrebanjeZacetnegaIgralca) {  // èe je parameter true, potem je to zaèetek igre
 		kocka1.vrziKocko();
 		kocka2.vrziKocko();
 		if (!zrebanjeZacetnegaIgralca) this.trenutnoStanje = StanjeIgre.PREMIKANJE_FIGUR;
@@ -197,8 +197,35 @@ public class Igra {
 		return unija;
 	}
 	
+	
+	private int vrniPotezeDvojneKocke(int vrednostKocke, List<Poteza> poteze) {
+		int stevec = 0;
+		for (Poteza p : poteze) {
+			Poteza zacasnaPoteza = p;
+			while (true) {
+				if (igralnaPlosca.potezaNiVeljavna(zacasnaPoteza)) {
+					break;
+				} else {
+					stevec += 1;
+					zacasnaPoteza = zacasnaPoteza + p;
+				}
+			}
+		}
+		return stevec;
+	}
+	
+	
 	private List<Poteza> vrniVeljavnePoteze2(LinkedList<Integer> seznamKock, Igralec igralecNaVrsti) {
 		if (seznamKock.size() > 2) throw new java.lang.RuntimeException("To še ni implementirano za veè kot dve kocki.");  // saj še bo
+		
+		if (seznamKock.size() == 4) {
+			List<Poteza> dvojnaKockaPoteze = vrniVeljavnePotezeZaEnoKocko(dvojnaKocka.vrniVrednost(), igralecNaVrsti);
+			int stPotez = vrniPotezeDvojneKocke(dvojnaKocka.vrniVrednost());
+			if (stPotez < 4) {
+				dvojnaKockaPoteze.clear();  // zato, da bomo returnali prazen seznam
+			}
+			return dvojnaKockaPoteze;
+		}
 		
 		// pridobi sezname veljavnih potez za vsako kocko posebej
 		List<Poteza> prvaKocka = vrniVeljavnePotezeZaEnoKocko(kocka1.vrniVrednost(), igralecNaVrsti);
