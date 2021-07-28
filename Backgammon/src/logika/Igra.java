@@ -8,28 +8,28 @@ import java.util.Map;
 
 public class Igra {
 	
-	private IgralnaPlosca igralnaPlosca;
+	public IgralnaPlosca igralnaPlosca;
 	public Igralec igralecNaVrsti;
 	
 	private Kocka kocka1;
 	private Kocka kocka2;
 	private Kocka dvojnaKocka;
 	
-	public boolean trenutnoJeDvojnaKocka;  // je true, èe trenutni igralec uporablja dvojno kocko
+	public boolean trenutnoJeDvojnaKocka;  // je true, ï¿½e trenutni igralec uporablja dvojno kocko
 	
-	public String napaka;  // èe je to null, ni napake, drugaèe pa je
+	public String napaka;  // ï¿½e je to null, ni napake, drugaï¿½e pa je
 	
 	public StanjeIgre trenutnoStanje;
 	
-	private Map<ImeKocke, Kocka> pridobiKocko;  // to bo važno samo, èe izbiramo zaèetnega igralca z metanjem kock
-	private Map<ImeKocke, Igralec> igralcevaKocka;  // to bo važno samo, èe izbiramo zaèetnega igralca z metanjem kock
+	private Map<ImeKocke, Kocka> pridobiKocko;  // to bo vaï¿½no samo, ï¿½e izbiramo zaï¿½etnega igralca z metanjem kock
+	private Map<ImeKocke, Igralec> igralcevaKocka;  // to bo vaï¿½no samo, ï¿½e izbiramo zaï¿½etnega igralca z metanjem kock
 	
-	// spremenljivke, ki doloèajo postavitev plošèe glede na platno
+	// spremenljivke, ki doloï¿½ajo postavitev ploï¿½ï¿½e glede na platno
 	public final boolean crniGreVSmeriUrinegaKazalca;
 	public final boolean crniZacneSpodaj;
 	
 	
-	// naslednji dve metodi se klièeta samo v konstruktorju, saj samo ustvarita slovar (map)
+	// naslednji dve metodi se kliï¿½eta samo v konstruktorju, saj samo ustvarita slovar (map)
 	private void napolniSlovarPridobiKocko() {
 		pridobiKocko = new EnumMap<ImeKocke, Kocka>(ImeKocke.class);
 		pridobiKocko.put(ImeKocke.PRVA_KOCKA, kocka1);
@@ -62,28 +62,30 @@ public class Igra {
 		this.crniGreVSmeriUrinegaKazalca = crniGreVSmeriUrinegaKazalca;
 		this.crniZacneSpodaj = crniZacneSpodaj;
 		
-		igralnaPlosca = new IgralnaPlosca();  // èrni gre v smeri urinega kazalca po defaultu
+		igralnaPlosca = new IgralnaPlosca();  // ï¿½rni gre v smeri urinega kazalca po defaultu
 		igralecNaVrsti = igralecKiZacne;
 		
-		// napaka = null;  // itak bo na zaèetku null, tako da tega ni treba napisati
+		// napaka = null;  // itak bo na zaï¿½etku null, tako da tega ni treba napisati
 		
 		trenutnoStanje = StanjeIgre.IZBIRA_ZACETNEGA_IGRALCA;
 	}
 	
 	/*
 	public Igra() {
-		this(null, true, true);  // to pomeni, da se igralec doloèi z metanjem kocke
+		this(null, true, true);  // to pomeni, da se igralec doloï¿½i z metanjem kocke
 	}
 	*/
 	
-	public void vrziKocki(boolean zrebanjeZacetnegaIgralca) {
+//	!!popravi, da bo vodja dal vrednost kock
+	public int[] vrziKocki(boolean zrebanjeZacetnegaIgralca) {
 		kocka1.vrziKocko();
 		kocka2.vrziKocko();
 		if (!zrebanjeZacetnegaIgralca) this.trenutnoStanje = StanjeIgre.PREMIKANJE_FIGUR;
 		else this.trenutnoStanje = StanjeIgre.METANJE_KOCK;
+		return new int[] {kocka1.vrniVrednost(), kocka2.vrniVrednost()};
 	}
 	
-	public int primerjajKocki(ImeKocke prvaKocka, ImeKocke drugaKocka) {  // to morda ne bo uporabno, èe bomo itak morali vsako vrednost posebej v vodji dobit
+	public int primerjajKocki(ImeKocke prvaKocka, ImeKocke drugaKocka) {  // to morda ne bo uporabno, ï¿½e bomo itak morali vsako vrednost posebej v vodji dobit
 		return Integer.compare(pridobiVrednostKocke(prvaKocka), pridobiVrednostKocke(drugaKocka));
 	}
 	
@@ -95,7 +97,13 @@ public class Igra {
 		return igralnaPlosca.plosca[mesto];
 	}
 	
-	// vrne false, èe je poteza neveljavna
+	
+	// ali lahko premaknemo figuro iz tega trikotnika?
+	public boolean mozenPremik() {
+		return true; // TODO
+	}
+	
+	// vrne false, ï¿½e je poteza neveljavna
 	public boolean odigraj(Poteza poteza) {
 		return false;  // TODO
 	}
@@ -134,7 +142,7 @@ public class Igra {
 	public LinkedList<Integer> vrniSeznamKock() {
 		LinkedList<Integer> seznam = new LinkedList<Integer>();
 		if (trenutnoJeDvojnaKocka) {
-			for (int i = 0; i < 4; i++) {  // dvojna kocka predstavlja štiri mete
+			for (int i = 0; i < 4; i++) {  // dvojna kocka predstavlja ï¿½tiri mete
 				seznam.add(dvojnaKocka.vrniVrednost());
 			}
 		} else {
@@ -155,16 +163,16 @@ public class Igra {
 			
 			Poteza poteza = new Poteza(i, kocka, BarvaIgralca.barva(igralecNaVrsti));
 			
-			Trikotnik trikotnik;  // predstavlja izhodišèni trikotnik poteze (od tam, od koder jemljemo figure)
+			Trikotnik trikotnik;  // predstavlja izhodiï¿½ï¿½ni trikotnik poteze (od tam, od koder jemljemo figure)
 			
-			// za zadnji obhod for zanke pogledamo še primer, ko poteza vzame figuro iz bariere (namesto iz trikotnika)
-			if (i == igralnaPlosca.plosca.length) {  // poleg ostalih 24 trikotnikov na konec dodamo še bariero od igralca
+			// za zadnji obhod for zanke pogledamo ï¿½e primer, ko poteza vzame figuro iz bariere (namesto iz trikotnika)
+			if (i == igralnaPlosca.plosca.length) {  // poleg ostalih 24 trikotnikov na konec dodamo ï¿½e bariero od igralca
 				if (igralecNaVrsti == Igralec.BELI) {
 					trikotnik = igralnaPlosca.belaBariera;
 				} else {
 					trikotnik = igralnaPlosca.crnaBariera;
 				}
-			} else {  // èe jemljemo figuro iz trikotnika in ne bariere
+			} else {  // ï¿½e jemljemo figuro iz trikotnika in ne bariere
 				trikotnik = igralnaPlosca.plosca[i];
 			}
 			
@@ -176,7 +184,7 @@ public class Igra {
 				preverimoPotezo = !igralnaPlosca.potezaNiVeljavna(poteza);
 
 				if (preverimoPotezo) {
-					seznamVsehPotez.add(poteza);  // èe je poteza veljavna, jo dodamo med veljavne poteze
+					seznamVsehPotez.add(poteza);  // ï¿½e je poteza veljavna, jo dodamo med veljavne poteze
 				}
 			}
 		}
@@ -198,21 +206,21 @@ public class Igra {
 	}
 	
 	private List<Poteza> vrniVeljavnePoteze2(LinkedList<Integer> seznamKock, Igralec igralecNaVrsti) {
-		if (seznamKock.size() > 2) throw new java.lang.RuntimeException("To še ni implementirano za veè kot dve kocki.");  // saj še bo
+		if (seznamKock.size() > 2) throw new java.lang.RuntimeException("To ï¿½e ni implementirano za veï¿½ kot dve kocki.");  // saj ï¿½e bo
 		
 		// pridobi sezname veljavnih potez za vsako kocko posebej
 		List<Poteza> prvaKocka = vrniVeljavnePotezeZaEnoKocko(kocka1.vrniVrednost(), igralecNaVrsti);
 		List<Poteza> drugaKocka = vrniVeljavnePotezeZaEnoKocko(kocka2.vrniVrednost(), igralecNaVrsti);
 		
 		/*
-		 Ko naredimo prvo potezo, ne moremo ustvariti novih potez za drugo kocko, razen èe isto figuro premaknemo.
-		 Prav tako ne moremo izgubiti potez, razen èe bi isto figuro premaknili.
+		 Ko naredimo prvo potezo, ne moremo ustvariti novih potez za drugo kocko, razen ï¿½e isto figuro premaknemo.
+		 Prav tako ne moremo izgubiti potez, razen ï¿½e bi isto figuro premaknili.
 		 */
 		/*
 		 Ta metoda samo vrne veljavne poteze za prvi premik (od dveh premikov skupno). Za ta drugi premik bomo spet klicali toisto metodo.
 		 */
 		Kocka manjsaKocka;
-		Kocka vecjaKocka;  // te spremenljivke ne bomo rabli, ampak je tkle vseen lepš
+		Kocka vecjaKocka;  // te spremenljivke ne bomo rabli, ampak je tkle vseen lepï¿½
 		List<Poteza> manjPotez;
 		List<Poteza> vecPotez;
 		if (prvaKocka.size() < drugaKocka.size()) {
@@ -230,58 +238,58 @@ public class Igra {
 		/*
 		Psevdokoda (ni pomembno):
 		
-		if (manjšakocka == 0) {
-			if (veèjakocka == 0) {
-				return veèja U manjša;
+		if (manjï¿½akocka == 0) {
+			if (veï¿½jakocka == 0) {
+				return veï¿½ja U manjï¿½a;
 			}
 			else {
-				for i in veèjepoteze:
-					if (i + manjša ustrezna poteza) {
+				for i in veï¿½jepoteze:
+					if (i + manjï¿½a ustrezna poteza) {
 						dodaj i v poteze
 					}
 				return poteze
 						
 				alternativno:
-				for i in veèjepoteze:
-					if (i + manjša is not ustrezna poteza) {
+				for i in veï¿½jepoteze:
+					if (i + manjï¿½a is not ustrezna poteza) {
 						odstrani i iz potez
 					}
-				return veèja U manjša
+				return veï¿½ja U manjï¿½a
 			}
 		} 
-		elif (manjšakocka == 1) {
-			// potem so neveljavne le tiste, kjer z veèjo kocko pokvarimo potezo manjše
-			// da se to zgodi, moramo z veèjo kocko premakniti tisto figuro, ki jo premakne tudi edina poteza prve kocke
-			if (veèjakocka.size() == 1):
-				if veèja.izhodisce == manjša.izhodisce:
-					if ((manjša + veèja) is ustrezna poteza):
-						return veèja U manjša
+		elif (manjï¿½akocka == 1) {
+			// potem so neveljavne le tiste, kjer z veï¿½jo kocko pokvarimo potezo manjï¿½e
+			// da se to zgodi, moramo z veï¿½jo kocko premakniti tisto figuro, ki jo premakne tudi edina poteza prve kocke
+			if (veï¿½jakocka.size() == 1):
+				if veï¿½ja.izhodisce == manjï¿½a.izhodisce:
+					if ((manjï¿½a + veï¿½ja) is ustrezna poteza):
+						return veï¿½ja U manjï¿½a
 					else:
 						return prazno
 				else:
-					return veèja U manjša
+					return veï¿½ja U manjï¿½a
 			else:
-				for i in veèjakocka:
-					if i.izhodisce == manjša.izhodisce:
-						if (i + manjša is not ustrezna poteza):
-							i remove from veèjaKockaPoteze
+				for i in veï¿½jakocka:
+					if i.izhodisce == manjï¿½a.izhodisce:
+						if (i + manjï¿½a is not ustrezna poteza):
+							i remove from veï¿½jaKockaPoteze
 				
 		}
 		*/
-		// èe sta obe kocki vsaj 2, damo kr vse poteze od obeh
+		// ï¿½e sta obe kocki vsaj 2, damo kr vse poteze od obeh
 		
 		
 		/*
-		Skrajšana psevdokoda zgornje psevdokode (ni popolna):
+		Skrajï¿½ana psevdokoda zgornje psevdokode (ni popolna):
 		
-		for i in veèjaKocka:
-			if veèja.izhodisce == manjša.izhodisce:
-				if (i + manjša is not ustrezna poteza):
-					i remove from veèjaPotezaKocke
-		if veèjakocka == 0: manjše.clear()  // oz. return prazno
-		return manjše U veèje
+		for i in veï¿½jaKocka:
+			if veï¿½ja.izhodisce == manjï¿½a.izhodisce:
+				if (i + manjï¿½a is not ustrezna poteza):
+					i remove from veï¿½jaPotezaKocke
+		if veï¿½jakocka == 0: manjï¿½e.clear()  // oz. return prazno
+		return manjï¿½e U veï¿½je
 		*/
-		if (manjPotez.size() <= 1) {  // èe obe kocki data vsaj dve možni potezi, potem lahko kot prvo potezo izberemo katerokoli izmed potez
+		if (manjPotez.size() <= 1) {  // ï¿½e obe kocki data vsaj dve moï¿½ni potezi, potem lahko kot prvo potezo izberemo katerokoli izmed potez
 			
 			for (Poteza poteza : vecPotez) {
 				Poteza skupnaPoteza;
@@ -295,7 +303,7 @@ public class Igra {
 				}
 			}
 			if (vecPotez.size() == 0) {
-				manjPotez.clear();  // to že pomeni, da bomo returnali prazen seznam
+				manjPotez.clear();  // to ï¿½e pomeni, da bomo returnali prazen seznam
 			}
 		}
 		return vrniUnijoSeznamov(vecPotez, manjPotez);
@@ -312,16 +320,16 @@ public class Igra {
 				}
 				stevec += 1;
 			}
-		}  // pristejDvePotezi ne rabi met skupnih ciljev oz. izhodisc. Lahk kerikol potezi damo skup, razen èe gre izven plošèe
+		}  // pristejDvePotezi ne rabi met skupnih ciljev oz. izhodisc. Lahk kerikol potezi damo skup, razen ï¿½e gre izven ploï¿½ï¿½e
 		
 		return vrniUnijoSeznamov(prvaKocka, drugaKocka);
 		*/
 	}
 	
 	
-	// to metodo zbriši
+	// to metodo zbriï¿½i
 	private List<Poteza> vrniVeljavnePoteze(LinkedList<Integer> seznamKock, IgralnaPlosca igralnaPlosca, Igralec igralecNaVrsti) // glede na trenutne kocke in igralcaNaVrsti
-	// ne vrne parov potez (èe sta paè dve potezi možni, bo najprej vrnil eno, nato drugo)
+	// ne vrne parov potez (ï¿½e sta paï¿½ dve potezi moï¿½ni, bo najprej vrnil eno, nato drugo)
 	
 
 	{
@@ -337,7 +345,7 @@ public class Igra {
 			for (int i = 0; i <= igralnaPlosca.plosca.length; i++) {
 				
 				Trikotnik trikotnik;
-				if (i == igralnaPlosca.plosca.length) {  // poleg ostalih 24 trikotnikov na konec dodamo še bariero od igralca
+				if (i == igralnaPlosca.plosca.length) {  // poleg ostalih 24 trikotnikov na konec dodamo ï¿½e bariero od igralca
 					if (igralecNaVrsti == Igralec.BELI) {
 						trikotnik = igralnaPlosca.belaBariera;
 					} else {
