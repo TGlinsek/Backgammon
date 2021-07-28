@@ -63,7 +63,6 @@ public class Igra {
 		this.crniZacneSpodaj = crniZacneSpodaj;
 		
 		igralnaPlosca = new IgralnaPlosca();  // ï¿½rni gre v smeri urinega kazalca po defaultu
-		System.out.println(igralnaPlosca);
 		igralecNaVrsti = igralecKiZacne;
 		
 		// napaka = null;  // itak bo na zaï¿½etku null, tako da tega ni treba napisati
@@ -77,11 +76,14 @@ public class Igra {
 	}
 	*/
 	
-	public void vrziKocki(boolean zrebanjeZacetnegaIgralca) {  // èe je parameter true, potem je to zaèetek igre
+	
+//	!!popravi, da bo vodja dal vrednost kock: TODO
+	public int[] vrziKocki(boolean zrebanjeZacetnegaIgralca) {  // parameter true -> izbira igralca s kockami, false -> navadno metanje kock v teku igre
 		kocka1.vrziKocko();
 		kocka2.vrziKocko();
 		if (!zrebanjeZacetnegaIgralca) this.trenutnoStanje = StanjeIgre.PREMIKANJE_FIGUR;
 		else this.trenutnoStanje = StanjeIgre.METANJE_KOCK;
+		return new int[] {kocka1.vrniVrednost(), kocka2.vrniVrednost()};
 	}
 	
 	public int primerjajKocki(ImeKocke prvaKocka, ImeKocke drugaKocka) {  // to morda ne bo uporabno, ï¿½e bomo itak morali vsako vrednost posebej v vodji dobit
@@ -94,6 +96,12 @@ public class Igra {
 	
 	public Trikotnik pridobiTrikotnik(int mesto) {
 		return igralnaPlosca.plosca[mesto];
+	}
+	
+	
+	// ali lahko premaknemo figuro iz tega trikotnika?
+	public boolean mozenPremik() {
+		return true; // TODO
 	}
 	
 	// vrne false, ï¿½e je poteza neveljavna
