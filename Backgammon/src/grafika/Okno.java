@@ -149,8 +149,11 @@ public class Okno extends JFrame{
 		  {
 			  if(clovek1.getBackground() != barva) {
 				  clovek1.setBackground(barva);
-				  racunalnik1.setBackground(null);
-			  } 		    
+				  racunalnik1.setBackground(null);				  
+			  } 
+			  
+			  //Nastavi prvega igralca na človek
+		  
 		  }
 		});
 	
@@ -161,7 +164,10 @@ public class Okno extends JFrame{
 			  if(racunalnik1.getBackground() != barva) {
 				  racunalnik1.setBackground(barva);
 				  clovek1.setBackground(null);
-			  } 		    
+			  }
+			  
+			  //Nastavi prvega igralca na računalnik
+			  
 		  }
 		});
 		
@@ -173,7 +179,10 @@ public class Okno extends JFrame{
 			  if(clovek2.getBackground() != barva) {
 				  clovek2.setBackground(barva);
 				  racunalnik2.setBackground(null);
-			  } 		    
+			  }
+			  
+			  //Nastavi drugega igralca na človek
+			  
 		  }
 		});
 	
@@ -184,7 +193,10 @@ public class Okno extends JFrame{
 			  if(racunalnik2.getBackground() != barva) {
 				  racunalnik2.setBackground(barva);
 				  clovek2.setBackground(null);
-			  } 		    
+			  } 	
+			  
+			  //Nastavi drugega igralca na računalnik
+			  
 		  }
 		});
 		
@@ -194,6 +206,7 @@ public class Okno extends JFrame{
 		  public void actionPerformed(ActionEvent e)
 		  {
 		    //TODO
+			// Začni z igro (če kliknjen med igro resetiraj igro?)
 		  }
 		});
 	
