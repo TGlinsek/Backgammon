@@ -4,9 +4,9 @@ public class Poteza {  // 0 je izhodisce crnega oz. cilj belega, 25 je izhodisce
 	public int izhodisce;  // od tu jemljemo figuro
 	public int premik;  // to je razlika med ciljem in izhodiscem
 	// lahko sta to tudi barieri ali kar cilja
-	// 0 je bariera crnega oz. cilj belega (torej, �e je izhodi��e 0 in premik 4, potem je to poteza, ki figuro vzame iz bariere in jo premakne za 4 polja naprej)
+	// 0 je bariera crnega oz. cilj belega (torej, če je izhodišče 0 in premik 4, potem je to poteza, ki figuro vzame iz bariere in jo premakne za 4 polja naprej)
 	// 25 je bariera belega oz. cilj crnega
-	public Figura igralec;  // igralec, �igar poteza je to (oz. smer, v katero gremo)
+	public Figura igralec;  // igralec, čigar poteza je to (oz. smer, v katero gremo)
 	
 	
 	public Poteza(int izhodisce, int premik, Figura igralec) {
@@ -37,13 +37,20 @@ public class Poteza {  // 0 je izhodisce crnega oz. cilj belega, 25 je izhodisce
 	}
 	
 	/* ne bomo rabli te metode:
-	public static Poteza pristejDvePotezi(Poteza prva, Poteza druga) {  // se�teje dve potezi (se�teje njun premik), katerih izhodi��e je enako
-		// predpostavljamo, da je prva poteza veljavna (druga�e tako te metode ne bomo klicali)
+	public static Poteza pristejDvePotezi(Poteza prva, Poteza druga) {  // sešteje dve potezi (sešteje njun premik), katerih izhodišče je enako
+		// predpostavljamo, da je prva poteza veljavna (drugače tako te metode ne bomo klicali)
 		// if (prva.vrniCilj() != druga.izhodisce || prva.igralec != druga.igralec) throw new java.lang.RuntimeException("To pa ne gre.");
-		if (prva.vrniIzhodisce() != druga.vrniIzhodisce()) throw new java.lang.RuntimeException("Ta metoda se�teje le potezi z istima izhodi��ema.");
+		if (prva.vrniIzhodisce() != druga.vrniIzhodisce()) throw new java.lang.RuntimeException("Ta metoda sešteje le potezi z istima izhodiščema.");
 		return new Poteza(prva.izhodisce, prva.premik + druga.premik, prva.igralec);
 	}
 	*/
+	
+	
+	public void dodaj(Poteza p) {
+		if (this.izhodisce != p.izhodisce) throw new java.lang.RuntimeException("Izhodišči potez morata biti enaki! To se ne bi smelo zgoditi ...");
+		this.premik += p.premik;
+	}
+	
 	
 	@Override 
 	public boolean equals(Object o) {

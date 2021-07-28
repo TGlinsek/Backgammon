@@ -24,7 +24,7 @@ public class Trikotnik {
 	}
 	
 	public void odstraniFiguro() {
-		// if (this.stevilo == 0) throw new java.lang.RuntimeException("Ne more� odstraniti ni�esar, saj je trikotnik prazen!");  // to se ne bo moglo zgodit, ker bomo itak sproti to preverili
+		// if (this.stevilo == 0) throw new java.lang.RuntimeException("Ne moreš odstraniti ničesar, saj je trikotnik prazen!");  // to se ne bo moglo zgodit, ker bomo itak sproti to preverili
 		this.stevilo -= 1;
 		if (this.stevilo == 0) this.barvaFigur = Figura.PRAZNA;
 	}
@@ -33,7 +33,7 @@ public class Trikotnik {
 	// tega verjetno ne bomo rabli
 	public void spremeniBarvoFigur(Figura novaBarva) {
 		this.barvaFigur = novaBarva;
-		if (this.stevilo != 1) throw new java.lang.RuntimeException("�tevilo mora biti 1, da se lahko stanje spremeni");  // pa�, zbijanje figur
+		if (this.stevilo != 1) throw new java.lang.RuntimeException("število mora biti 1, da se lahko stanje spremeni");  // pač, zbijanje figur
 	}
 	*/
 	

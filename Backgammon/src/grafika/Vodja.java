@@ -13,8 +13,6 @@ import logika.Igralec;
 import logika.ImeKocke;
 import logika.Poteza;
 import logika.StanjeIgre;
-import splosno.KdoIgra;
-import splosno.Koordinati;
 
 public class Vodja {	
 	
@@ -36,7 +34,7 @@ public class Vodja {
 		if (igralecKiZacne == null) {
 			sKockamiDolociZacetnegaIgralca();
 		}
-		okno.nastaviVelikostPoljVPlatnu();
+		// okno.nastaviVelikostPlosce();  hipotetiƒçna metoda, ki nastavi velikost okna v odvisnosti od getWidth() in getHeight()
 		igramo();
 	}
 	
@@ -65,23 +63,23 @@ public class Vodja {
 			switch (Integer.compare(vrednostPrveKocke, vrednostDrugeKocke)) {
 			case 1:
 				igra.igralecNaVrsti = igra.pridobiLastnikaKocke(ImeKocke.PRVA_KOCKA);
-				System.out.println("Prvi igralec zaËne!");
+				System.out.println("Prvi igralec zaƒçne!");
 				break;
 			case -1:
 				igra.igralecNaVrsti = igra.pridobiLastnikaKocke(ImeKocke.DRUGA_KOCKA);
-				System.out.println("Drugi igralec zaËne!");
+				System.out.println("Drugi igralec zaƒçne!");
 				break;
 			case 0:
-				System.out.println("NeodloËeno! Ponovimo metanje ...");
+				System.out.println("Neodloƒçeno! Ponovimo metanje ...");
 				continue metanjeKock;
 			}
 			break metanjeKock;
 		}
-		igra.trenutnoStanje = StanjeIgre.METANJE_KOCK;  // priËnemo z igro
+		igra.trenutnoStanje = StanjeIgre.METANJE_KOCK;  // priƒçnemo z igro
 	}
 	
 	public static void igramo() {
-		okno.osveziGUI();
+		// okno.osveziGUI();  to je npr. za posodabljanje napisa na oknu oz. napake
 		// igra.spremeniStanjeIgre();
 		
 		switch (igra.trenutnoStanje) {
@@ -90,7 +88,7 @@ public class Vodja {
 		case METANJE_KOCK: 
 			Igralec igralec = igra.igralecNaVrsti;
 			VrstaIgralca vrstaNaPotezi = vrstaIgralca.get(igralec);
-			clovekNaVrsti = false;  // Ëe tega ne bi bilo, bi lahko uporabnik "prenesel" potezo iz enega naËina igre v drugega, kar pa se ne sme zgoditi
+			clovekNaVrsti = false;  // ƒçe tega ne bi bilo, bi lahko uporabnik "prenesel" potezo iz enega naƒçina igre v drugega, kar pa se ne sme zgoditi
 			switch (vrstaNaPotezi) {
 			case C: 
 				clovekNaVrsti = true;
@@ -99,8 +97,8 @@ public class Vodja {
 				igrajRacunalnikovoPotezo();
 				break;
 			}
-		case PREMIKANJE_FIGUR: throw new java.lang.RuntimeException("To bi se moralo ûe izvesti in spremeniti nazaj na metanje kock.");
-		case IZBIRA_ZACETNEGA_IGRALCA: throw new java.lang.RuntimeException("Na tem mestu smo verjetno ûe Ëez to fazo.");
+		case PREMIKANJE_FIGUR: throw new java.lang.RuntimeException("To bi se moralo na tem mestu ≈æe izvesti in spremeniti nazaj na metanje kock.");
+		case IZBIRA_ZACETNEGA_IGRALCA: throw new java.lang.RuntimeException("Na tem mestu bi morali ≈æe biti ƒçez to fazo.");
 		default: throw new java.lang.RuntimeException("Napaka");
 		}
 	}
