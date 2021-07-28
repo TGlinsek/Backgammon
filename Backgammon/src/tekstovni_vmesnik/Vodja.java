@@ -167,6 +167,7 @@ private static BufferedReader r = new BufferedReader(new InputStreamReader(Syste
 					
 					metanje : switch (vrstaNaPotezi) {
 					case CLOVEK:
+						System.out.println(igralec + ", na vrsti si!");
 						System.out.println("Kakšno kocko boš vrgel?");
 						System.out.println("1 - dve navadni");
 						System.out.println("2 - double");
@@ -191,6 +192,8 @@ private static BufferedReader r = new BufferedReader(new InputStreamReader(Syste
 					
 					break;
 				case PREMIKANJE_FIGUR:
+					System.out.println(igra.igralnaPlosca);
+					
 					Igralec igralec2 = igra.igralecNaVrsti;
 					VrstaIgralca vrstaNaPotezi2 = vrstaIgralca.get(igralec2);
 					Poteza poteza = null;
