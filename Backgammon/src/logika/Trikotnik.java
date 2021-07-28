@@ -2,8 +2,8 @@ package logika;
 
 public class Trikotnik {
 	
-	Figura barvaFigur;
-	int stevilo;
+	public Figura barvaFigur;
+	public int stevilo;
 	
 	public Trikotnik(Figura barvaFigur, int stevilo) {
 		this.barvaFigur = barvaFigur;
@@ -24,7 +24,7 @@ public class Trikotnik {
 	}
 	
 	public void odstraniFiguro() {
-		// if (this.stevilo == 0) throw new java.lang.RuntimeException("Ne moreš odstraniti nièesar, saj je trikotnik prazen!");  // to se ne bo moglo zgodit, ker bomo itak sproti to preverili
+		// if (this.stevilo == 0) throw new java.lang.RuntimeException("Ne moreï¿½ odstraniti niï¿½esar, saj je trikotnik prazen!");  // to se ne bo moglo zgodit, ker bomo itak sproti to preverili
 		this.stevilo -= 1;
 		if (this.stevilo == 0) this.barvaFigur = Figura.PRAZNA;
 	}
@@ -33,12 +33,12 @@ public class Trikotnik {
 	// tega verjetno ne bomo rabli
 	public void spremeniBarvoFigur(Figura novaBarva) {
 		this.barvaFigur = novaBarva;
-		if (this.stevilo != 1) throw new java.lang.RuntimeException("Število mora biti 1, da se lahko stanje spremeni");  // paè, zbijanje figur
+		if (this.stevilo != 1) throw new java.lang.RuntimeException("ï¿½tevilo mora biti 1, da se lahko stanje spremeni");  // paï¿½, zbijanje figur
 	}
 	*/
 	
 	@Override
 	public String toString() {
-		return Integer.toString((barvaFigur == Figura.CRNA ? 1 : (barvaFigur == Figura.BELA ? -1 : 0)) * stevilo);
+		return Integer.toString((barvaFigur == Figura.CRNA ? 1 : (barvaFigur == Figura.BELA ? -1 : 0)) * stevilo) + "__";
 	}
 }

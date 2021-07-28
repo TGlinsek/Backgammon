@@ -3,7 +3,8 @@ package logika;
 import java.util.Arrays;
 
 public class IgralnaPlosca {
-	// ne kock, vseeno pa opazuj, koliko jih je še na zaèetku oz. na koncu
+	
+	// ne kock, vseeno pa opazuj, koliko jih je ï¿½e na zaï¿½etku oz. na koncu
 	// public Trikotnik[] plosca = new Trikotnik[24];
 	/*
 	public Trikotnik[] plosca = {
@@ -14,20 +15,21 @@ public class IgralnaPlosca {
 	
 	
 	/*
-	 bariera je pri backgammonu sredinski del plošèe, torej tam, kjer igralca na zaèetku hranita figure
+	 bariera je pri backgammonu sredinski del ploï¿½ï¿½e, torej tam, kjer igralca na zaï¿½etku hranita figure
 	 
 	 */
+	
 	public Trikotnik[] plosca;  // indeksi od 0 do 23
 	
-	public Trikotnik belaBariera = new Trikotnik(Figura.BELA, 0);  // na zaèetku so vse bele figure v barieri belega igralca
-	public Trikotnik crnaBariera = new Trikotnik(Figura.CRNA, 0);  // bariera èrnega
-	public Trikotnik beliCilj = new Trikotnik(Figura.BELA, 0);  // figure belega igralca, ki so že prišle na cilj
-	public Trikotnik crniCilj = new Trikotnik(Figura.CRNA, 0);  // cilj èrnega igralca
+	public Trikotnik belaBariera = new Trikotnik(Figura.BELA, 0);  // na zaï¿½etku so vse bele figure v barieri belega igralca
+	public Trikotnik crnaBariera = new Trikotnik(Figura.CRNA, 0);  // bariera ï¿½rnega
+	public Trikotnik beliCilj = new Trikotnik(Figura.BELA, 0);  // figure belega igralca, ki so ï¿½e priï¿½le na cilj
+	public Trikotnik crniCilj = new Trikotnik(Figura.CRNA, 0);  // cilj ï¿½rnega igralca
 	
 	
-	private static Trikotnik[] vrniEnoPolovicoPlosce(Figura zacetna, Figura koncna) {  // pomožna metoda za plošèo
+	private static Trikotnik[] vrniEnoPolovicoPlosce(Figura zacetna, Figura koncna) {  // pomoï¿½na metoda za ploï¿½ï¿½o
 		if (zacetna == Figura.PRAZNA || koncna == Figura.PRAZNA) throw new java.lang.RuntimeException("Figura ne more biti prazna tukaj!");
-		if (zacetna == koncna) throw new java.lang.RuntimeException("Figuri morata biti razlièni!");
+		if (zacetna == koncna) throw new java.lang.RuntimeException("Figuri morata biti razliï¿½ni!");
 		return new Trikotnik[] {
 				new Trikotnik(zacetna, 2),
 				new Trikotnik(Figura.PRAZNA, 0),
@@ -71,8 +73,8 @@ public class IgralnaPlosca {
 	}
 	
 	
-	public IgralnaPlosca() {  // vrne plošèo, ki je tabela 24-ih trikotnikov
-		// grajenje plošèe razdelimo na dva dela, saj sta oba dela (anti)simetrièna (samo barvo figur je treba zamenjati)
+	public IgralnaPlosca() {  // vrne ploï¿½ï¿½o, ki je tabela 24-ih trikotnikov
+		// grajenje ploï¿½ï¿½e razdelimo na dva dela, saj sta oba dela (anti)simetriï¿½na (samo barvo figur je treba zamenjati)
 		plosca = zdruziDvePolovici(vrniEnoPolovicoPlosce(Figura.CRNA, Figura.BELA), vrniObrnjenoPolovicoPlosce(Figura.BELA, Figura.CRNA));
 		/*
 		 Alternativno:
@@ -107,7 +109,7 @@ public class IgralnaPlosca {
 			new Trikotnik(Figura.BELA, 2)
 		 }
 		 */
-	}  // popravil sem, da zdaj igralnaPlosca zaène vedno na èrnem štartu, ne glede na to, kje èrni zaène
+	}  // popravil sem, da zdaj igralnaPlosca zaï¿½ne vedno na ï¿½rnem ï¿½tartu, ne glede na to, kje ï¿½rni zaï¿½ne
 	
 	
 	public IgralnaPlosca(IgralnaPlosca igralnaPlosca) {  // kopiranje
@@ -125,7 +127,6 @@ public class IgralnaPlosca {
 	
 	private Trikotnik pridobiTrikotnik(int relativnoPolje, Figura igralecNaVrsti) {
 		// relativno polje je lahko število med (vkljuèno) 0-25 (skupaj 26 razliènih možnosti). 0 pomeni bariero, 25 pomeni cilj, ostalih 24 pa predstavljajo trikotnike na plošèi
-		
 		if (relativnoPolje == 0) {
 			if (igralecNaVrsti == Figura.CRNA) {
 				return crnaBariera;
@@ -141,14 +142,14 @@ public class IgralnaPlosca {
 				return belaBariera;
 			}
 		} else {
-			return this.plosca[relativnoPolje - 1];  // pri plosci ne upoštevamo bariere (plošèa ima 24 trikotnikov, torej bariere in cilja ni zraven), zato se vse za eno zamakne
+			return this.plosca[relativnoPolje - 1];  // pri plosci ne upoï¿½tevamo bariere (ploï¿½ï¿½a ima 24 trikotnikov, torej bariere in cilja ni zraven), zato se vse za eno zamakne
 		}
 	}
 	
 	
-	public boolean potezaNiVeljavna(Poteza poteza) {  // vrne true le, èe poteza ni veljavna (torej, tja ne moremo prestaviti, saj so tam nasprotnikove figure)
+	public boolean potezaNiVeljavna(Poteza poteza) {  // vrne true le, ï¿½e poteza ni veljavna (torej, tja ne moremo prestaviti, saj so tam nasprotnikove figure)
 		Trikotnik ciljniTrikotnik = pridobiTrikotnik(poteza.vrniCilj(), poteza.vrniIgralca());
-		return ciljniTrikotnik.barvaFigur == poteza.vrniIgralca().pridobiNasprotnika() && ciljniTrikotnik.stevilo > 1;  // stevilo je število figur na trikotniku
+		return ciljniTrikotnik.barvaFigur == poteza.vrniIgralca().pridobiNasprotnika() && ciljniTrikotnik.stevilo > 1;  // stevilo je ï¿½tevilo figur na trikotniku
 	}
 	
 	
@@ -156,13 +157,13 @@ public class IgralnaPlosca {
 		Trikotnik izhodiscniTrikotnik = pridobiTrikotnik(poteza.vrniIzhodisce(), poteza.vrniIgralca());
 		Trikotnik ciljniTrikotnik = pridobiTrikotnik(poteza.vrniCilj(), poteza.vrniIgralca());
 		
-		if (izhodiscniTrikotnik.barvaFigur != poteza.vrniIgralca()) return false;  // èe na izhodišènem trikotniku sploh niso ta prave figure (a bi blo boljš kr throwat kak exception?)
+		if (izhodiscniTrikotnik.barvaFigur != poteza.vrniIgralca()) return false;  // ï¿½e na izhodiï¿½ï¿½nem trikotniku sploh niso ta prave figure (a bi blo boljï¿½ kr throwat kak exception?)
 		if (ciljniTrikotnik.barvaFigur == poteza.vrniIgralca().pridobiNasprotnika() && ciljniTrikotnik.stevilo > 1) return false;  // ne moremo prestaviti tja (tam so nasprotnikove figure)
 		
 		
 		izhodiscniTrikotnik.odstraniFiguro();
 		ciljniTrikotnik.dodajFiguro(poteza.vrniIgralca());
 		
-		return true;  // poteza je bila uspešno odigrana
+		return true;  // poteza je bila uspeï¿½no odigrana
 	}
 }
