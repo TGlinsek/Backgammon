@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Map;
 
 import javax.swing.JPanel;
 
@@ -34,6 +35,7 @@ public class Platno extends JPanel implements MouseListener {
 	protected Color barvaNeparnihTrikotnokov;
 	protected Color barvaKocke;
 	protected Color barvaPik;
+	protected Color barvaObrobeKocke;
 	
 	protected double debelinaRobaRelativna; // debelina roba plosce
 	protected double debelinaObrobeRelativna; // debelina obrobe za zetone
@@ -95,6 +97,7 @@ public class Platno extends JPanel implements MouseListener {
 		
 		this.barvaKocke = Color.RED;
 		this.barvaPik = Color.BLACK;
+		this.barvaObrobeKocke = Color.BLACK;
 		
 		this.debelinaObrobeRelativna = 0.003;
 		this.debelinaRobaRelativna = 0.05;
@@ -109,7 +112,7 @@ public class Platno extends JPanel implements MouseListener {
 		
 //		samo za preverjanje kode
 		igra = new Igra(Igralec.BELI, true, true);
-		
+		igra.trenutnoStanje = StanjeIgre.METANJE_KOCK;
 	}
 	
 	@Override
@@ -242,111 +245,117 @@ public class Platno extends JPanel implements MouseListener {
 		}
 		
 		// narisemo kocke
-		if (igra != null && igra.trenutnoStanje == StanjeIgre.PREMIKANJE_FIGUR) {
+		if (igra != null) {
 			int velikostKocke = (int) (velikostPolja * velikostKockeRelativna);
 			int velikostPik = (int) (velikostPolja * velikostPikRelativna);
 			int xKoordinata;
-			g2d.setColor(barvaKocke);
 //			!!popravi, da bo vodja dal vrednost kock
 			int[] vrednostKock = igra.vrziKocki(false);
-//			int[] vrednostKock = new int[] {5, 1}; // za preverjanje
-			int premikKockDve;
-			double premikKockStiri;
-			if (igra.igralecNaVrsti == Igralec.BELI) {
-				premikKockDve = 0;
-				premikKockStiri = 0;
-			} else {
+//			int[] vrednostKock = new int[] {6, 2}; // za preverjanje
+			double premikKockDve = 0;
+			double premikKockStiri = 0;
+			if (igra.igralecNaVrsti == Igralec.CRNI) {
 				premikKockDve = 5;
 				premikKockStiri= 13.25;
 			}
+			
+			int xEnaKockaBeli = (int) ((velikostPolja - rob) / 4);
+			int xEnaKockaCrni = (int) (3 * (velikostPolja - rob) / 4);
+			
+			int xDveKockiPrvi = (int) ((1 + premikKockDve) * (velikostPolja - rob) / 10);
+			int xDveKockiDrugi = (int) ((3 + premikKockDve) * (velikostPolja - rob) / 10);
 			
 			int xStiriKockePrvi = (int) ((1.5 + premikKockStiri) * (velikostPolja - rob) / 26);
 			int xStiriKockeDrugi = (int) ((4.3 + premikKockStiri) * (velikostPolja - rob) / 26);
 			int xStiriKockeTretji = (int) ((7.1 + premikKockStiri) * (velikostPolja - rob) / 26);
 			int xStiriKockeCetrti = (int) ((9.9 + premikKockStiri) * (velikostPolja - rob) / 26);
 			
-			int xDveKockiPrvi = (int) ((1 + premikKockDve) * (velikostPolja - rob) / 10);
-			int xDveKockiDrugi = (int) ((3 + premikKockDve) * (velikostPolja - rob) / 10);
+			int yVseKocke = (int) (velikostPolja / 2 - velikostKocke / 2); 
 			
-			int yVseKocke = (int) (velikostPolja / 2 - velikostKocke / 2);
-			
-//			ali potrebujemo stiri kocke ali le dve
-			if (vrednostKock[0] == vrednostKock[1]) {
-				velikostKocke = (int) (velikostKocke * 0.9);
-				g2d.fillRoundRect(xStiriKockePrvi, (int) (rob + velikostPolja / 2 - velikostKocke), velikostKocke, velikostKocke, 20, 20);
-				g2d.fillRoundRect((int) ((4.3 + premikKockStiri) * (velikostPolja - rob) / 26), (int) (velikostPolja / 2 - velikostKocke / 2), velikostKocke, velikostKocke, 20, 20);
-				g2d.fillRoundRect((int) ((7.1 + premikKockStiri) * (velikostPolja - rob) / 26), (int) (velikostPolja / 2 - velikostKocke / 2), velikostKocke, velikostKocke, 20, 20);
-				g2d.fillRoundRect((int) ((9.9 + premikKockStiri) * (velikostPolja - rob) / 26), (int) (velikostPolja / 2 - velikostKocke / 2), velikostKocke, velikostKocke, 20, 20);
-			} else {
-				g2d.fillRoundRect( xDveKockiPrvi, yVseKocke, velikostKocke, velikostKocke, 20, 20);
-				g2d.fillRoundRect( xDveKockiDrugi, yVseKocke, velikostKocke, velikostKocke, 20, 20);					
+			if (igra.trenutnoStanje == StanjeIgre.METANJE_KOCK) {
+				g2d.setColor(barvaKocke);
+				g2d.fillRoundRect(xEnaKockaBeli, yVseKocke, velikostKocke, velikostKocke, 20, 20);
+				g2d.fillRoundRect(xEnaKockaCrni, yVseKocke, velikostKocke, velikostKocke, 20, 20);
+				g2d.setStroke(new BasicStroke(obroba));
+				g2d.setColor(barvaObrobeKocke);
+				g2d.drawRoundRect(xEnaKockaBeli, yVseKocke, velikostKocke, velikostKocke, 20, 20);
+				g2d.drawRoundRect(xEnaKockaCrni, yVseKocke, velikostKocke, velikostKocke, 20, 20);
+			}
+			else {
+//				ali potrebujemo stiri kocke ali le dve
+				if (vrednostKock[0] == vrednostKock[1]) {
+					velikostKocke = (int) (velikostKocke * 0.9);
+					g2d.setColor(barvaKocke);
+					g2d.fillRoundRect(xStiriKockePrvi, yVseKocke, velikostKocke, velikostKocke, 20, 20);
+					g2d.fillRoundRect(xStiriKockeDrugi, yVseKocke, velikostKocke, velikostKocke, 20, 20);
+					g2d.fillRoundRect(xStiriKockeTretji, yVseKocke, velikostKocke, velikostKocke, 20, 20);
+					g2d.fillRoundRect(xStiriKockeCetrti, yVseKocke, velikostKocke, velikostKocke, 20, 20);
+					g2d.drawRoundRect(xStiriKockePrvi, yVseKocke, velikostKocke, velikostKocke, 20, 20);
+					g2d.drawRoundRect(xStiriKockeDrugi, yVseKocke, velikostKocke, velikostKocke, 20, 20);
+					g2d.drawRoundRect(xStiriKockeTretji, yVseKocke, velikostKocke, velikostKocke, 20, 20);
+					g2d.drawRoundRect(xStiriKockeCetrti, yVseKocke, velikostKocke, velikostKocke, 20, 20);
+					g2d.setStroke(new BasicStroke(obroba));
+					g2d.setColor(barvaObrobeKocke);
+					g2d.drawRoundRect(xStiriKockePrvi, yVseKocke, velikostKocke, velikostKocke, 20, 20);
+					g2d.drawRoundRect(xStiriKockeDrugi, yVseKocke, velikostKocke, velikostKocke, 20, 20);
+					g2d.drawRoundRect(xStiriKockeTretji, yVseKocke, velikostKocke, velikostKocke, 20, 20);
+					g2d.drawRoundRect(xStiriKockeCetrti, yVseKocke, velikostKocke, velikostKocke, 20, 20);
+				} else {
+					g2d.setColor(barvaKocke);
+					g2d.fillRoundRect(xDveKockiPrvi, yVseKocke, velikostKocke, velikostKocke, 20, 20);
+					g2d.fillRoundRect(xDveKockiDrugi, yVseKocke, velikostKocke, velikostKocke, 20, 20);
+					g2d.setStroke(new BasicStroke(obroba));
+					g2d.setColor(barvaObrobeKocke);
+					g2d.drawRoundRect(xDveKockiPrvi, yVseKocke, velikostKocke, velikostKocke, 20, 20);
+					g2d.drawRoundRect(xDveKockiDrugi, yVseKocke, velikostKocke, velikostKocke, 20, 20);	
+				}				
 			}
 			
 //			pike na kockah
+			
+			// pove katere faktoje moramo vnesti v PikaNaKocki, za toliko stevilo pik kot je kljuc. Faktorje gledamo po dva skupaj.
+			Map<Integer, int[]> pikeNaKocki = Map.of(1, new int[] {3, 3}, 2, new int[] {1, 1, 5, 5}, 3, new int[] {1, 1, 3, 3, 5, 5}, 
+					4, new int[] {1, 1, 1, 5, 5, 1, 5, 5}, 5, new int[] {1, 1, 1, 5, 5, 1, 5, 5, 3, 3}, 6, new int[] {1, 3, 5, 3, 1, 1, 1, 5, 5, 1, 5, 5});
+			int StiriKockePrvic;
+			int StrirKockeDrugic;
+			int DveKocki;
+			int EnaKocka;
 			g2d.setColor(barvaPik);
-			if (vrednostKock[0] == vrednostKock[1]) {
-				
-			} else {
-				if (vrednostKock[0] == 1) PikaNaKocki(g2d, xDveKockiPrvi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 3, 3);
-				if (vrednostKock[1] == 1) PikaNaKocki(g2d, xDveKockiDrugi, velikostKocke, velikostPik, velikostPik, yVseKocke, 3, 3);
-				if (vrednostKock[0] == 2) {
-					PikaNaKocki(g2d, xDveKockiPrvi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 1, 1);
-					PikaNaKocki(g2d, xDveKockiPrvi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 5, 5);
-				} if (vrednostKock[1] == 2) {
-					PikaNaKocki(g2d, xDveKockiDrugi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 1, 1);
-					PikaNaKocki(g2d, xDveKockiDrugi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 5, 5);
-				} if (vrednostKock[0] == 3) {
-					PikaNaKocki(g2d, xDveKockiPrvi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 1, 1);
-					PikaNaKocki(g2d, xDveKockiPrvi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 3, 3);
-					PikaNaKocki(g2d, xDveKockiPrvi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 5, 5);
-				} if (vrednostKock[1] == 3) {
-					PikaNaKocki(g2d, xDveKockiDrugi, velikostKocke, velikostPik, velikostPik, yVseKocke, 1, 1);
-					PikaNaKocki(g2d, xDveKockiDrugi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 3, 3);
-					PikaNaKocki(g2d, xDveKockiDrugi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 5, 5);
-				} if (vrednostKock[0] == 4) {
-					PikaNaKocki(g2d, xDveKockiPrvi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 1, 1);
-					PikaNaKocki(g2d, xDveKockiPrvi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 1, 5);
-					PikaNaKocki(g2d, xDveKockiPrvi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 5, 1);
-					PikaNaKocki(g2d, xDveKockiPrvi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 5, 5);
-				} if (vrednostKock[1] == 4) {
-					PikaNaKocki(g2d, xDveKockiDrugi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 1, 1);
-					PikaNaKocki(g2d, xDveKockiDrugi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 1, 5);
-					PikaNaKocki(g2d, xDveKockiDrugi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 5, 1);
-					PikaNaKocki(g2d, xDveKockiDrugi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 5, 5);
-				} if (vrednostKock[0] == 5) {
-					PikaNaKocki(g2d, xDveKockiPrvi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 1, 1);
-					PikaNaKocki(g2d, xDveKockiPrvi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 1, 5);
-					PikaNaKocki(g2d, xDveKockiPrvi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 5, 1);
-					PikaNaKocki(g2d, xDveKockiPrvi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 5, 5);
-					PikaNaKocki(g2d, xDveKockiPrvi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 3, 3);
-				} if (vrednostKock[1] == 5) {
-					PikaNaKocki(g2d, xDveKockiDrugi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 1, 1);
-					PikaNaKocki(g2d, xDveKockiDrugi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 1, 5);
-					PikaNaKocki(g2d, xDveKockiDrugi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 5, 1);
-					PikaNaKocki(g2d, xDveKockiDrugi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 5, 5);
-					PikaNaKocki(g2d, xDveKockiDrugi, velikostKocke, velikostPik, velikostPik, yVseKocke, 3, 3);
-				} if (vrednostKock[0] == 6) {
-					PikaNaKocki(g2d, xDveKockiPrvi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 1, 3);
-					PikaNaKocki(g2d, xDveKockiPrvi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 5, 3);
-					PikaNaKocki(g2d, xDveKockiPrvi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 1, 1);
-					PikaNaKocki(g2d, xDveKockiPrvi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 1, 5);
-					PikaNaKocki(g2d, xDveKockiPrvi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 5, 1);
-					PikaNaKocki(g2d, xDveKockiPrvi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 5, 5);
-				} if (vrednostKock[1] == 6) {
-					PikaNaKocki(g2d, xDveKockiDrugi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 1, 3);
-					PikaNaKocki(g2d, xDveKockiDrugi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 5, 3);
-					PikaNaKocki(g2d, xDveKockiDrugi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 1, 1);
-					PikaNaKocki(g2d, xDveKockiDrugi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 1, 5);
-					PikaNaKocki(g2d, xDveKockiDrugi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 5, 1);
-					PikaNaKocki(g2d, xDveKockiDrugi, velikostKocke, velikostPik, velikostPolja, yVseKocke, 5, 5);
+			
+			for (int j = 0; j < vrednostKock.length; j++) {
+				int [] zaporedje = pikeNaKocki.get(vrednostKock[j]);
+				if (igra.trenutnoStanje == StanjeIgre.METANJE_KOCK) {
+					if (j == 1) EnaKocka = xEnaKockaBeli;
+					else EnaKocka = xEnaKockaCrni;
+					for (int i = 0; i < zaporedje.length; i = i + 2) {
+						PikaNaKocki(g2d, EnaKocka, velikostKocke, velikostPik, velikostPolja, yVseKocke, zaporedje[i], zaporedje[i + 1]);
+					}
+				} else if (vrednostKock[0] == vrednostKock[1]) {
+					if (j == 1) {
+						StiriKockePrvic = xStiriKockePrvi;
+						StrirKockeDrugic = xStiriKockeDrugi;
+					}
+					else {
+						StiriKockePrvic = xStiriKockeTretji;
+						StrirKockeDrugic = xStiriKockeCetrti;
+					}
+					for (int i = 0; i < zaporedje.length; i = i + 2) {
+						PikaNaKocki(g2d, StiriKockePrvic, velikostKocke, velikostPik, velikostPolja, yVseKocke, zaporedje[i], zaporedje[i + 1]);
+						PikaNaKocki(g2d, StrirKockeDrugic, velikostKocke, velikostPik, velikostPolja, yVseKocke, zaporedje[i], zaporedje[i + 1]);
+					}
+				} else {
+					if (j == 1) DveKocki = xDveKockiPrvi;
+					else DveKocki = xDveKockiDrugi;
+					for (int i = 0; i < zaporedje.length; i = i + 2) {
+						PikaNaKocki(g2d, DveKocki, velikostKocke, velikostPik, velikostPolja, yVseKocke, zaporedje[i], zaporedje[i + 1]);
+					}
 				}
 			}
 		}
-		
 	}
 	
-	private void PikaNaKocki(Graphics2D g2d, int xDveKocki, int velikostKocke, int velikostPik, int velikostPolja, int yVseKocke, int faktorX, int faktorY) {
-		g2d.fillOval(xDveKocki + faktorX * velikostKocke / 7,  yVseKocke + faktorY * velikostKocke / 7, velikostPik, velikostPik);
+	private void PikaNaKocki(Graphics2D g2d, int xKocki, int velikostKocke, int velikostPik, int velikostPolja, int yVseKocke, int faktorX, int faktorY) {
+		g2d.fillOval(xKocki + faktorX * velikostKocke / 7,  yVseKocke + faktorY * velikostKocke / 7, velikostPik, velikostPik);
 	}
 	
 	@Override
