@@ -184,8 +184,8 @@ public class Platno extends JPanel implements MouseListener {
 			}
 			
 			double obrobaOznacen = debelinaObrobeOznacen * velikostPolja;
-//			List<Poteza> veljavnePoteze = igra.vrniVeljavnePotezeTePlosce();
-			List<Poteza> veljavnePoteze = Arrays.asList(new Poteza(0, 10, Figura.BELA));
+			List<Poteza> veljavnePoteze = igra.vrniVeljavnePotezeTePlosce();
+//			List<Poteza> veljavnePoteze = Arrays.asList(new Poteza(0, 10, Figura.BELA));
 
 //			relativno polje
 			for (Poteza poteza : veljavnePoteze){
