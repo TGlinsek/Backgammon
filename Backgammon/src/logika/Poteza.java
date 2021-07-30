@@ -28,7 +28,7 @@ public class Poteza {  // 0 je izhodisce crnega oz. cilj belega, 25 je izhodisce
 		return this.izhodisce;
 	}
 	
-	public int vrniCilj() {
+	public Integer vrniCilj() {
 		return this.izhodisce + this.premik;
 	}
 	

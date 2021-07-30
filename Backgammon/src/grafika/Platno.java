@@ -8,6 +8,8 @@ import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JPanel;
@@ -15,6 +17,7 @@ import javax.swing.JPanel;
 import logika.Figura;
 import logika.Igra;
 import logika.Igralec;
+import logika.Poteza;
 import logika.StanjeIgre;
 import logika.Trikotnik;
 import tekstovni_vmesnik.Vodja;
@@ -36,9 +39,11 @@ public class Platno extends JPanel implements MouseListener {
 	protected Color barvaKocke;
 	protected Color barvaPik;
 	protected Color barvaObrobeKocke;
+	protected Color barvaObrobeOznacen;
 	
 	protected double debelinaRobaRelativna; // debelina roba plosce
 	protected double debelinaObrobeRelativna; // debelina obrobe za zetone
+	protected double debelinaObrobeOznacen; // debelina obrobe za oznacene trikotnike
 	protected double odmikRelativen; // odmik med trikotniki v polju
 	protected double velikostKockeRelativna;
 	protected double velikostPikRelativna;
@@ -98,9 +103,11 @@ public class Platno extends JPanel implements MouseListener {
 		this.barvaKocke = Color.RED;
 		this.barvaPik = Color.BLACK;
 		this.barvaObrobeKocke = Color.BLACK;
+		this.barvaObrobeOznacen = Color.YELLOW;
 		
 		this.debelinaObrobeRelativna = 0.003;
 		this.debelinaRobaRelativna = 0.05;
+		this.debelinaObrobeOznacen = 0.005;
 		this.odmikRelativen = 0.09;
 		this.velikostKockeRelativna = 0.1;
 		this.velikostPikRelativna = 0.02;
@@ -171,15 +178,23 @@ public class Platno extends JPanel implements MouseListener {
 			xTrikotnik = new int[] {zacetnaTocka, (int) (zacetnaTocka + (sirinaTrikotnika / 2 - odmikMedTrikotniki)), zacetnaTocka + sirinaTrikotnika - odmikMedTrikotniki};
 			
 			// narisemo trikotnik
+			Polygon p = new Polygon(xTrikotnik, yTrikotnik, 3);
 			if (i != 6 && i != 19) {
-				Polygon p = new Polygon(xTrikotnik, yTrikotnik, 3);
 				g2d.fillPolygon(p);
 			}
 			
-//			lepse izgleda brez obrobe na trikotnikih
-//			g2d.setColor(barvaObrobe);
-//			g2d.setStroke(new BasicStroke((float) obroba));
-//			g2d.drawPolygon(p);
+			double obrobaOznacen = debelinaObrobeOznacen * velikostPolja;
+//			List<Poteza> veljavnePoteze = igra.vrniVeljavnePotezeTePlosce();
+			List<Poteza> veljavnePoteze = Arrays.asList(new Poteza(0, 10, Figura.BELA));
+
+//			relativno polje
+			for (Poteza poteza : veljavnePoteze){
+				if (poteza.vrniCilj() == i) {
+					g2d.setColor(barvaObrobeOznacen);
+					g2d.setStroke(new BasicStroke((float) obrobaOznacen));
+					g2d.drawPolygon(p);
+				}
+			}
 			
 //			narisemo zetone na triktoniku, ce imamo igro
 			
@@ -214,8 +229,7 @@ public class Platno extends JPanel implements MouseListener {
 				// kako skupaj moramo narisati zetone, da ne pogledajo cez trikotnik
 				if (trenutniTrikotnik.stevilo * sirinaTrikotnika <= visinaTrikotnika) razdaljaMedSredisciZetonov = sirinaTrikotnika;
 				else razdaljaMedSredisciZetonov = (int) ((visinaTrikotnika - sirinaTrikotnika) / (trenutniTrikotnik.stevilo - 1));
-				
-				int faktor;
+
 				for (int j = 0; j < trenutniTrikotnik.stevilo; j++) {
 					
 					// narisemo zetone
@@ -243,7 +257,6 @@ public class Platno extends JPanel implements MouseListener {
 				}
 			}
 		}
-		
 		// narisemo kocke
 		if (igra != null) {
 			int velikostKocke = (int) (velikostPolja * velikostKockeRelativna);
@@ -290,10 +303,6 @@ public class Platno extends JPanel implements MouseListener {
 					g2d.fillRoundRect(xStiriKockeDrugi, yVseKocke, velikostKocke, velikostKocke, 20, 20);
 					g2d.fillRoundRect(xStiriKockeTretji, yVseKocke, velikostKocke, velikostKocke, 20, 20);
 					g2d.fillRoundRect(xStiriKockeCetrti, yVseKocke, velikostKocke, velikostKocke, 20, 20);
-					g2d.drawRoundRect(xStiriKockePrvi, yVseKocke, velikostKocke, velikostKocke, 20, 20);
-					g2d.drawRoundRect(xStiriKockeDrugi, yVseKocke, velikostKocke, velikostKocke, 20, 20);
-					g2d.drawRoundRect(xStiriKockeTretji, yVseKocke, velikostKocke, velikostKocke, 20, 20);
-					g2d.drawRoundRect(xStiriKockeCetrti, yVseKocke, velikostKocke, velikostKocke, 20, 20);
 					g2d.setStroke(new BasicStroke(obroba));
 					g2d.setColor(barvaObrobeKocke);
 					g2d.drawRoundRect(xStiriKockePrvi, yVseKocke, velikostKocke, velikostKocke, 20, 20);
@@ -327,8 +336,8 @@ public class Platno extends JPanel implements MouseListener {
 				if (igra.trenutnoStanje == StanjeIgre.METANJE_KOCK) {
 					if (j == 1) EnaKocka = xEnaKockaBeli;
 					else EnaKocka = xEnaKockaCrni;
-					for (int i = 0; i < zaporedje.length; i = i + 2) {
-						PikaNaKocki(g2d, EnaKocka, velikostKocke, velikostPik, velikostPolja, yVseKocke, zaporedje[i], zaporedje[i + 1]);
+					for (int k = 0; k < zaporedje.length; k = k + 2) {
+						PikaNaKocki(g2d, EnaKocka, velikostKocke, velikostPik, velikostPolja, yVseKocke, zaporedje[k], zaporedje[k + 1]);
 					}
 				} else if (vrednostKock[0] == vrednostKock[1]) {
 					if (j == 1) {
@@ -339,15 +348,15 @@ public class Platno extends JPanel implements MouseListener {
 						StiriKockePrvic = xStiriKockeTretji;
 						StrirKockeDrugic = xStiriKockeCetrti;
 					}
-					for (int i = 0; i < zaporedje.length; i = i + 2) {
-						PikaNaKocki(g2d, StiriKockePrvic, velikostKocke, velikostPik, velikostPolja, yVseKocke, zaporedje[i], zaporedje[i + 1]);
-						PikaNaKocki(g2d, StrirKockeDrugic, velikostKocke, velikostPik, velikostPolja, yVseKocke, zaporedje[i], zaporedje[i + 1]);
+					for (int k = 0; k < zaporedje.length; k = k + 2) {
+						PikaNaKocki(g2d, StiriKockePrvic, velikostKocke, velikostPik, velikostPolja, yVseKocke, zaporedje[k], zaporedje[k + 1]);
+						PikaNaKocki(g2d, StrirKockeDrugic, velikostKocke, velikostPik, velikostPolja, yVseKocke, zaporedje[k], zaporedje[k + 1]);
 					}
 				} else {
 					if (j == 1) DveKocki = xDveKockiPrvi;
 					else DveKocki = xDveKockiDrugi;
-					for (int i = 0; i < zaporedje.length; i = i + 2) {
-						PikaNaKocki(g2d, DveKocki, velikostKocke, velikostPik, velikostPolja, yVseKocke, zaporedje[i], zaporedje[i + 1]);
+					for (int k = 0; k < zaporedje.length; k = k + 2) {
+						PikaNaKocki(g2d, DveKocki, velikostKocke, velikostPik, velikostPolja, yVseKocke, zaporedje[k], zaporedje[k + 1]);
 					}
 				}
 			}
@@ -356,6 +365,14 @@ public class Platno extends JPanel implements MouseListener {
 	
 	private void PikaNaKocki(Graphics2D g2d, int xKocki, int velikostKocke, int velikostPik, int velikostPolja, int yVseKocke, int faktorX, int faktorY) {
 		g2d.fillOval(xKocki + faktorX * velikostKocke / 7,  yVseKocke + faktorY * velikostKocke / 7, velikostPik, velikostPik);
+	}
+	
+	private	List<Integer> PotezeVInt(List<Poteza> poteze) {
+		List<Integer> stevila = Arrays.asList(27);
+		for (int i = 0; i < poteze.size(); i++) {
+			stevila.add(poteze.get(i).vrniCilj());
+		}
+		return stevila;
 	}
 	
 	@Override
