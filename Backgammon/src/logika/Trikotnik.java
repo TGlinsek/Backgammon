@@ -39,6 +39,6 @@ public class Trikotnik {
 	
 	@Override
 	public String toString() {
-		return Integer.toString((barvaFigur == Figura.CRNA ? 1 : (barvaFigur == Figura.BELA ? -1 : 0)) * stevilo) + "__";
+		return Integer.toString((barvaFigur == Figura.CRNA ? 1 : (barvaFigur == Figura.BELA ? -1 : 0)) * stevilo);
 	}
 }

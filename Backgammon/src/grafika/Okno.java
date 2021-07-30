@@ -11,8 +11,11 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
+
+import grafika.ColorChooserButton.ColorChangedListener;
 
 public class Okno extends JFrame{
 	
@@ -20,13 +23,19 @@ public class Okno extends JFrame{
 	private Color barva = new Color(131, 140, 150);
 	
 	//Izbira igralcev - zgornji del
-	private JLabel igralec1 = new JLabel("Igralec 1");
+	private JLabel labelIgralec1 = new JLabel("Igralec 1");
+	public VrstaIgralca igralec1; //Spremeni, če kliknjen clovek1/racunalnik1
 	private JButton clovek1 = new JButton("  Človek  ");
 	private JButton racunalnik1 = new JButton("Računalnik");
+	private ColorChooserButton colorChooser1 = new ColorChooserButton(Color.WHITE); //izbira barve igralca
+	public Color barvaIg1 = Color.WHITE;
 	
-	private JLabel igralec2 = new JLabel("Igralec 2");
+	private JLabel labelIgralec2 = new JLabel("Igralec 2");
+	public VrstaIgralca igralec2;
 	private JButton clovek2 = new JButton("  Človek  ");
 	private JButton racunalnik2 = new JButton("Računalnik");
+	private ColorChooserButton colorChooser2 = new ColorChooserButton(Color.BLACK);
+	public Color barvaIg2 = Color.BLACK;
 	
 	//Zacni igro
 	private JButton igra = new JButton("Nova igra"); 
@@ -74,14 +83,22 @@ public class Okno extends JFrame{
 		GridBagConstraints a = new GridBagConstraints();
 		a.gridx = 0; a.gridy = 0; a.gridwidth = 2;
 		a.anchor = GridBagConstraints.CENTER;
-		a.insets = new Insets(5,0,5,0); // top padding		
-		this.add(igralec1, a);
+		a.insets = new Insets(5,0,5,0); // top padding
+		JPanel platIg1 = new JPanel(); //V polju gridBagLayouta lahko le ne element
+		platIg1.add(labelIgralec1);
+		platIg1.add(colorChooser1);
+		this.add(platIg1, a);
+		
 		
 		GridBagConstraints b = new GridBagConstraints();
 		b.gridx = 2; b.gridy = 0; b.gridwidth = 2;
 		b.anchor = GridBagConstraints.CENTER;
 		b.insets = new Insets(5,0,5,0);
-		this.add(igralec2, b);
+		JPanel platIg2 = new JPanel();
+		platIg2.add(labelIgralec2);
+		platIg2.add(colorChooser2);
+		this.add(platIg2, b);
+		
 
 // ------- druga vrstica
 // Gumbi za izbiro računalnik ali človek
@@ -136,12 +153,26 @@ public class Okno extends JFrame{
 		l.anchor = GridBagConstraints.CENTER;
 		l.insets = new Insets(5,0,5,0);
 		this.add(status, l);
-		
-		
-		
+	
 		
 	
-// -------	actionListeners
+// -------	actionListeners ---------------------------------------------------------------
+		//izbira barve igralec1
+		colorChooser1.addColorChangedListener(new ColorChangedListener() {
+		    public void colorChanged(Color newColor) {
+		            barvaIg1 = newColor;
+		            // naj se tekst labelIgralec1 obrava z novo barvo
+		    }
+		});
+		
+		//izbira barve igralec2
+		colorChooser2.addColorChangedListener(new ColorChangedListener() {
+		    public void colorChanged(Color newColor) {
+		            barvaIg2 = newColor;
+		            //Kot igralec1
+		    }
+		});
+		
 		//igralec1 izbira
 		clovek1.addActionListener(new ActionListener()
 		{
@@ -149,11 +180,9 @@ public class Okno extends JFrame{
 		  {
 			  if(clovek1.getBackground() != barva) {
 				  clovek1.setBackground(barva);
-				  racunalnik1.setBackground(null);				  
+				  racunalnik1.setBackground(null);
+				  igralec1 = VrstaIgralca.C;
 			  } 
-			  
-			  //Nastavi prvega igralca na človek
-		  
 		  }
 		});
 	
@@ -164,10 +193,8 @@ public class Okno extends JFrame{
 			  if(racunalnik1.getBackground() != barva) {
 				  racunalnik1.setBackground(barva);
 				  clovek1.setBackground(null);
-			  }
-			  
-			  //Nastavi prvega igralca na računalnik
-			  
+				  igralec1 = VrstaIgralca.R;
+			  }			  
 		  }
 		});
 		
@@ -179,10 +206,8 @@ public class Okno extends JFrame{
 			  if(clovek2.getBackground() != barva) {
 				  clovek2.setBackground(barva);
 				  racunalnik2.setBackground(null);
+				  igralec2 = VrstaIgralca.C;
 			  }
-			  
-			  //Nastavi drugega igralca na človek
-			  
 		  }
 		});
 	
@@ -193,10 +218,8 @@ public class Okno extends JFrame{
 			  if(racunalnik2.getBackground() != barva) {
 				  racunalnik2.setBackground(barva);
 				  clovek2.setBackground(null);
+				  igralec2 = VrstaIgralca.R;
 			  } 	
-			  
-			  //Nastavi drugega igralca na računalnik
-			  
 		  }
 		});
 		
@@ -207,6 +230,8 @@ public class Okno extends JFrame{
 		  {
 		    //TODO
 			// Začni z igro (če kliknjen med igro resetiraj igro?)
+			  
+			//Če se barva Ig1 == Ig2 -> izpiši v statusno vrstico.
 		  }
 		});
 	

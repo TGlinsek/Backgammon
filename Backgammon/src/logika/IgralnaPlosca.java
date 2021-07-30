@@ -120,6 +120,32 @@ public class IgralnaPlosca {
 	}
 	
 	
+	@Override
+	public String toString() {  // črni začne desno spodaj, beli pa desno zgoraj
+		String str = "__________________________________________\n";
+		for (int i = 12; i < 24; i++) {
+			str += "\\" + plosca[i] + "/";  // lahko dodamo toString(), ni pa treba
+			if (i == 17) {
+				str += " || ";
+			}
+		}
+		str += "\n\n";
+		for (int j = 11; j >= 0; j--) {
+			str += "/" + plosca[j] + "\\";
+			if (j == 6) {
+				str += " || ";
+			}
+		}
+		str += "\n";
+		str += "__________________________________________\n";
+		str += "bela bariera: " + belaBariera + "\n";
+		str += "črna bariera: " + crnaBariera + "\n";
+		str += "beli cilj: " + beliCilj + "\n";
+		str += "črni cilj: " + crniCilj;
+		return str;
+	}
+	
+	
 	private Trikotnik pridobiTrikotnik(int relativnoPolje, Figura igralecNaVrsti) {
 		// relativno polje je lahko število med (vključno) 0-25 (skupaj 26 različnih možnosti). 0 pomeni bariero, 25 pomeni cilj, ostalih 24 pa predstavljajo trikotnike na plošči
 		if (relativnoPolje == 0) {

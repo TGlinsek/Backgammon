@@ -30,9 +30,10 @@ private static BufferedReader r = new BufferedReader(new InputStreamReader(Syste
 		while (true) {
 			{
 				System.out.println("Nova igra. Prosim, da izberete:");
-				System.out.println(" 1 - Ërni je Ëlovek, beli je raËunalnik");
-				System.out.println(" 2 - Ërni je raËunalnik, beli je Ëlovek");
-				System.out.println(" 3 - Ërni je Ëlovek, beli je Ëlovek");
+				System.out.println(" 1 - ƒçrni je ƒçlovek, beli je raƒçunalnik");
+				System.out.println(" 2 - ƒçrni je raƒçunalnik, beli je ƒçlovek");
+				System.out.println(" 3 - ƒçrni je ƒçlovek, beli je ƒçlovek");
+				// System.out.println(" 3 - ÔøΩ");
 				System.out.println(" 4 - izhod");
 				String s = r.readLine();
 				if (s.equals("1")) {
@@ -48,7 +49,7 @@ private static BufferedReader r = new BufferedReader(new InputStreamReader(Syste
 					System.out.println("Vnos ni veljaven");
 					continue;
 				}
-				// »e je s == "1", "2" ali "3"
+				// ƒçe je s == "1", "2" ali "3"
 			}
 			
 			
@@ -60,10 +61,10 @@ private static BufferedReader r = new BufferedReader(new InputStreamReader(Syste
 			boolean crniZacneSpodaj;
 			{
 				System.out.println("Nova igra. Prosim, da izberete:");
-				System.out.println(" 1 - Ërni gre SE -> NE");
-				System.out.println(" 2 - Ërni gre NE -> SE");
-				System.out.println(" 3 - Ërni gre SW -> NW");
-				System.out.println(" 4 - Ërni gre NW -> SW");
+				System.out.println(" 1 - ƒçrni gre SE -> NE");
+				System.out.println(" 2 - ƒçrni gre NE -> SE");
+				System.out.println(" 3 - ƒçrni gre SW -> NW");
+				System.out.println(" 4 - ƒçrni gre NW -> SW");
 				System.out.println(" 5 - daj mi default");
 				System.out.println(" 6 - zbogom!");
 				String ss = r.readLine();
@@ -101,9 +102,9 @@ private static BufferedReader r = new BufferedReader(new InputStreamReader(Syste
 			Igra igra;
 			{
 				System.out.println("Nova igra. Prosim, da izberete:");
-				System.out.println(" 1 - zaËne Ërni");
-				System.out.println(" 2 - zaËne beli");
-				System.out.println(" 3 - doloËitev s kockami");
+				System.out.println(" 1 - zaƒçne ƒçrni");
+				System.out.println(" 2 - zaƒçne beli");
+				System.out.println(" 3 - doloƒçitev s kockami");
 				System.out.println(" 4 - izhod");
 				String sss = r.readLine();
 				if (sss.equals("1")) {
@@ -128,12 +129,12 @@ private static BufferedReader r = new BufferedReader(new InputStreamReader(Syste
 					// System.out.println("Zmagovalne vrste: " + igra.zmagovalneVrste.toString());
 					break igranje;
 				case ZMAGA_CRNI:
-					System.out.println("Zmagal je Ërni igralec!");
+					System.out.println("Zmagal je ƒçrni igralec!");
 					// System.out.println("Zmagovalne vrste: " + igra.zmagovalneVrste.toString());
 					break igranje;
 				case IZBIRA_ZACETNEGA_IGRALCA:
-					System.out.println("Igra se priËenja!");
-					if (igra.igralecNaVrsti == null) {  // Ëe pustimo, da kocka odloËi zaËetnika
+					System.out.println("Igra se priƒçenja!");
+					if (igra.igralecNaVrsti == null) {  // ƒçe pustimo, da kocka odloƒçi zaƒçetnika
 						metanjeKock : while (true) {
 							igra.vrziKocki(true);
 							
@@ -146,27 +147,28 @@ private static BufferedReader r = new BufferedReader(new InputStreamReader(Syste
 							switch (Integer.compare(vrednostPrveKocke, vrednostDrugeKocke)) {
 							case 1:
 								igra.igralecNaVrsti = igra.pridobiLastnikaKocke(ImeKocke.PRVA_KOCKA);
-								System.out.println("Prvi igralec zaËne!");
+								System.out.println("Prvi igralec zaƒçne!");
 								break;
 							case -1:
 								igra.igralecNaVrsti = igra.pridobiLastnikaKocke(ImeKocke.DRUGA_KOCKA);
-								System.out.println("Drugi igralec zaËne!");
+								System.out.println("Drugi igralec zaƒçne!");
 								break;
 							case 0:
-								System.out.println("NeodloËeno! Ponovimo metanje ...");
+								System.out.println("Neodloƒçeno! Ponovimo metanje ...");
 								continue metanjeKock;
 							}
 							break metanjeKock;
 						}
 					}
-					igra.trenutnoStanje = StanjeIgre.METANJE_KOCK;  // priËnemo z igro
+					igra.trenutnoStanje = StanjeIgre.METANJE_KOCK;  // priƒçnemo z igro
 				case METANJE_KOCK:
 					Igralec igralec = igra.igralecNaVrsti;
 					VrstaIgralca vrstaNaPotezi = vrstaIgralca.get(igralec);
 					
 					metanje : switch (vrstaNaPotezi) {
 					case CLOVEK:
-						System.out.println("Kaköno kocko boö vrgel?");
+						System.out.println(igralec + ", na vrsti si!");
+						System.out.println("Kak≈°no kocko bo≈° vrgel?");
 						System.out.println("1 - dve navadni");
 						System.out.println("2 - double");
 						String ssss = r.readLine();
@@ -180,7 +182,7 @@ private static BufferedReader r = new BufferedReader(new InputStreamReader(Syste
 						}
 						break metanje;
 					case RACUNALNIK:
-						System.out.println("RaËunalnik je izbral navadni kocki!");
+						System.out.println("Raƒçunalnik je izbral navadni kocki!");
 						igra.vrziKocki(false);
 						break metanje;
 					}
@@ -190,6 +192,8 @@ private static BufferedReader r = new BufferedReader(new InputStreamReader(Syste
 					
 					break;
 				case PREMIKANJE_FIGUR:
+					System.out.println(igra.igralnaPlosca);
+					
 					Igralec igralec2 = igra.igralecNaVrsti;
 					VrstaIgralca vrstaNaPotezi2 = vrstaIgralca.get(igralec2);
 					Poteza poteza = null;
@@ -198,7 +202,7 @@ private static BufferedReader r = new BufferedReader(new InputStreamReader(Syste
 					
 					premikanje : switch (vrstaNaPotezi2) {
 					case CLOVEK:
-						System.out.println("Moûne poteze: " + igra.vrniVeljavnePotezeTePlosce());
+						System.out.println("Mo≈æne poteze: " + igra.vrniVeljavnePotezeTePlosce());
 						poteza = clovekovaPoteza(igra);
 						break premikanje;
 					case RACUNALNIK:
@@ -219,7 +223,7 @@ private static BufferedReader r = new BufferedReader(new InputStreamReader(Syste
 	
 	
 	public static Poteza racunalnikovaPoteza(Igra igra) {
-		return null;  // vrnemo nekaj samo zato, ker paË moramo
+		return null;  // vrnemo nekaj samo zato, ker paƒç moramo
 	}
 	
 	
@@ -230,7 +234,7 @@ private static BufferedReader r = new BufferedReader(new InputStreamReader(Syste
 			String s = r.readLine();
 			int i = s.indexOf(' ');  // pridobimo indeks presledka v nizu s
 			if (i == -1 || i  == s.length()) {
-				System.out.println("NapaËen format"); continue;
+				System.out.println("Napaƒçen format"); continue;
 			}
 			String xString = s.substring(0, i);
 			String yString = s.substring(i + 1);
@@ -239,13 +243,13 @@ private static BufferedReader r = new BufferedReader(new InputStreamReader(Syste
 				x = Integer.parseInt(xString);
 				y = Integer.parseInt(yString);
 			} catch (NumberFormatException e) {
-				System.out.println("NapaËen format"); continue;
+				System.out.println("Napaƒçen format"); continue;
 			}
-			// x bo ötevilka trikotnika, y bo za kolk naprej gremo
+			// x bo ≈°tevilka trikotnika, y bo za kolk naprej gremo
 			Poteza poteza = new Poteza(x, y, BarvaIgralca.barva(igra.igralecNaVrsti));  // igra.pridobiTrikotnik(x)
 			// if (igra.igraj(poteza)) return poteza;
 			if (igra.vrniVeljavnePotezeTePlosce().contains(poteza)) return poteza;
-			System.out.println(poteza.toString() + " ni moûna");
+			System.out.println(poteza.toString() + " ni mo≈æna");
 		}
 	}
 }
