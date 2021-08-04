@@ -209,9 +209,14 @@ private static BufferedReader r = new BufferedReader(new InputStreamReader(Syste
 						poteza = racunalnikovaPoteza(igra);
 						break premikanje;
 					}
-					System.out.println("Igralec " + igralec2 + " je igral " + poteza);
-					igra.zamenjajIgralca();
-					break;
+					boolean z = igra.odigraj(poteza);
+					if (z) {
+						System.out.println("Igralec " + igralec2 + " je igral " + poteza);
+						igra.zamenjajIgralca();
+						break;
+					} else {
+						System.out.println("Neveljavna poteza! Poskusi še enkrat.");
+					}
 				}
 				
 			}
@@ -248,7 +253,7 @@ private static BufferedReader r = new BufferedReader(new InputStreamReader(Syste
 			// x bo številka trikotnika, y bo za kolk naprej gremo
 			Poteza poteza = new Poteza(x, y, BarvaIgralca.barva(igra.igralecNaVrsti));  // igra.pridobiTrikotnik(x)
 			// if (igra.igraj(poteza)) return poteza;
-			if (igra.vrniVeljavnePotezeTePlosce().contains(poteza)) return poteza;
+			if (igra.potezaJeVeljavna(poteza)) return poteza;
 			System.out.println(poteza.toString() + " ni možna");
 		}
 	}

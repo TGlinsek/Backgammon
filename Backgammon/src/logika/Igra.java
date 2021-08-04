@@ -102,14 +102,16 @@ public class Igra {
 	}
 	
 	
-	// ali lahko premaknemo figuro iz tega trikotnika?
-	public boolean mozenPremik() {
-		return true; // TODO
+	// ali je poteza veljavna?
+	public boolean potezaJeVeljavna(Poteza poteza) {
+		return this.vrniVeljavnePotezeTePlosce().contains(poteza);
 	}
 	
+	
 	// vrne false, če je poteza neveljavna
-	public boolean odigraj(Poteza poteza) {
-		return false;  // TODO
+	public boolean odigraj(Poteza poteza) {  // a naj bo tu boolean al void?
+		if (!potezaJeVeljavna(poteza)) throw new java.lang.RuntimeException("To se ne bi smelo zgoditi.");
+		return this.igralnaPlosca.igrajPotezo(poteza);
 	}
 	
 	/*
@@ -165,7 +167,7 @@ public class Igra {
 		List<Poteza> seznamVsehPotez = new LinkedList<Poteza>();
 		for (int i = 0; i <= igralnaPlosca.plosca.length; i++) {
 			
-			Poteza poteza = new Poteza(i, kocka, BarvaIgralca.barva(igralecNaVrsti));
+			Poteza poteza = new Poteza(i + 1, kocka, BarvaIgralca.barva(igralecNaVrsti));  // i + 1 bo kvečjemu 25, in sicer takrat, ko bo to bela bariera
 			
 			Trikotnik trikotnik;  // predstavlja izhodiščni trikotnik poteze (od tam, od koder jemljemo figure)
 			
@@ -175,6 +177,7 @@ public class Igra {
 					trikotnik = igralnaPlosca.belaBariera;
 				} else {
 					trikotnik = igralnaPlosca.crnaBariera;
+					poteza = new Poteza(0, kocka, BarvaIgralca.barva(igralecNaVrsti));  // izhodišče je 0 za črno bariero
 				}
 			} else {  // če jemljemo figuro iz trikotnika in ne bariere
 				trikotnik = igralnaPlosca.plosca[i];

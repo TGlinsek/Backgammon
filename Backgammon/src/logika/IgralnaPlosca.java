@@ -142,7 +142,7 @@ public class IgralnaPlosca {
 		str += "črna bariera: " + crnaBariera + "\n";
 		str += "beli cilj: " + beliCilj + "\n";
 		str += "črni cilj: " + crniCilj;
-		return str;
+		return str;  // čist desno spodnji trikotnik ima indeks 1, ne glede na to, kateri igralec smo
 	}
 	
 	
@@ -169,6 +169,7 @@ public class IgralnaPlosca {
 	
 	
 	public boolean potezaNiVeljavna(Poteza poteza) {  // vrne true le, če poteza ni veljavna (torej, tja ne moremo prestaviti, saj so tam nasprotnikove figure)
+		// System.out.println(poteza);
 		Trikotnik ciljniTrikotnik = pridobiTrikotnik(poteza.vrniCilj(), poteza.vrniIgralca());
 		return ciljniTrikotnik.barvaFigur == poteza.vrniIgralca().pridobiNasprotnika() && ciljniTrikotnik.stevilo > 1;  // stevilo je število figur na trikotniku
 	}
@@ -177,6 +178,12 @@ public class IgralnaPlosca {
 	public boolean igrajPotezo(Poteza poteza) {  // vrne true iff je bila poteza veljavna in torej izpeljana
 		Trikotnik izhodiscniTrikotnik = pridobiTrikotnik(poteza.vrniIzhodisce(), poteza.vrniIgralca());
 		Trikotnik ciljniTrikotnik = pridobiTrikotnik(poteza.vrniCilj(), poteza.vrniIgralca());
+		
+		// System.out.println(izhodiscniTrikotnik);
+		// System.out.println(ciljniTrikotnik);
+		
+		// System.out.println(poteza.vrniIzhodisce());
+		// System.out.println(poteza.vrniCilj());
 		
 		if (izhodiscniTrikotnik.barvaFigur != poteza.vrniIgralca()) return false;  // če na izhodiščnem trikotniku sploh niso ta prave figure (a bi blo boljš kr throwat kak exception?)
 		// if (ciljniTrikotnik.barvaFigur == poteza.vrniIgralca().pridobiNasprotnika() && ciljniTrikotnik.stevilo > 1) return false;  // ne moremo prestaviti tja (tam so nasprotnikove figure)

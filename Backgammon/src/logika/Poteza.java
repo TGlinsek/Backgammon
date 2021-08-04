@@ -12,7 +12,10 @@ public class Poteza {  // 0 je izhodisce crnega oz. cilj belega, 25 je izhodisce
 	public Poteza(int izhodisce, int premik, Figura igralec) {
 		this.izhodisce = izhodisce;
 		this.premik = premik;  // vedno pozitiven
+		if (this.premik <= 0) throw new java.lang.RuntimeException("Neustrezen premik: " + this.premik);
+		
 		this.igralec = igralec;
+		if (this.igralec == Figura.PRAZNA) throw new java.lang.RuntimeException("Neustrezen igralec: " + this.igralec);
 	}
 	
 	@Override
@@ -29,7 +32,7 @@ public class Poteza {  // 0 je izhodisce crnega oz. cilj belega, 25 je izhodisce
 	}
 	
 	public Integer vrniCilj() {
-		return this.izhodisce + this.premik;
+		return this.izhodisce + this.premik * (this.vrniIgralca() == Figura.CRNA ? 1 : -1);
 	}
 	
 	public Figura vrniIgralca() {
@@ -46,7 +49,7 @@ public class Poteza {  // 0 je izhodisce crnega oz. cilj belega, 25 je izhodisce
 	*/
 	
 	
-	public void dodaj(Poteza p) {
+	public void dodaj(Poteza p) {  // za igralca od obeh potez se tukaj predpostavlja, da sta enaka
 		if (this.izhodisce != p.izhodisce) throw new java.lang.RuntimeException("Izhodišči potez morata biti enaki! To se ne bi smelo zgoditi ...");
 		this.premik += p.premik;
 	}
