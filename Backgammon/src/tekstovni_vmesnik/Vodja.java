@@ -174,8 +174,10 @@ private static BufferedReader r = new BufferedReader(new InputStreamReader(Syste
 						String ssss = r.readLine();
 						if (ssss.equals("1")) {
 							igra.vrziKocki(false);
+							igra.trenutnoJeDvojnaKocka = false;
 						} else if (ssss.equals("2")) {
 							igra.vrziDvojnoKocko();
+							igra.trenutnoJeDvojnaKocka = true;
 						} else {
 							System.out.println("Vnos ni veljaven");
 							continue;
@@ -192,33 +194,41 @@ private static BufferedReader r = new BufferedReader(new InputStreamReader(Syste
 					
 					break;
 				case PREMIKANJE_FIGUR:
-					System.out.println(igra.igralnaPlosca);
-					
 					Igralec igralec2 = igra.igralecNaVrsti;
 					VrstaIgralca vrstaNaPotezi2 = vrstaIgralca.get(igralec2);
 					Poteza poteza = null;
 					
+					int steviloPotez = igra.trenutnoJeDvojnaKocka ? 4 : 2;
 					
-					
-					premikanje : switch (vrstaNaPotezi2) {
-					case CLOVEK:
-						System.out.println("Možne poteze: " + igra.vrniVeljavnePotezeTePlosce());
-						poteza = clovekovaPoteza(igra);
-						break premikanje;
-					case RACUNALNIK:
-						poteza = racunalnikovaPoteza(igra);
-						break premikanje;
+					int stevec = 0;
+					opravljanjePotez : while (true) {
+						System.out.println(igra.igralnaPlosca);
+						premikanje : switch (vrstaNaPotezi2) {
+						case CLOVEK:
+							System.out.println("Možne poteze: " + igra.vrniVeljavnePotezeTePlosce());
+							poteza = clovekovaPoteza(igra);
+							break premikanje;
+						case RACUNALNIK:
+							poteza = racunalnikovaPoteza(igra);
+							break premikanje;
+						}
+						boolean potezaJeBilaUspesnoOdigrana = igra.odigraj(poteza);
+						if (potezaJeBilaUspesnoOdigrana) {
+							System.out.println("Igralec " + igralec2 + " je igral " + poteza);
+							igra.seznamKock.remove((Integer) poteza.premik);  // vrednost kocke, ki smo jo uporabili, odstranimo iz seznama
+							if (stevec >= steviloPotez - 1) {
+								if (igra.seznamKock.size() != 0) throw new java.lang.RuntimeException("To se ne bi smelo zgoditi.");
+								igra.zamenjajIgralca();
+								break opravljanjePotez;
+							}
+							stevec++;
+							System.out.println("Še druga poteza:");
+						} else {
+							System.out.println("Neveljavna poteza! Poskusi še enkrat.");
+						}
 					}
-					boolean z = igra.odigraj(poteza);
-					if (z) {
-						System.out.println("Igralec " + igralec2 + " je igral " + poteza);
-						igra.zamenjajIgralca();
-						break;
-					} else {
-						System.out.println("Neveljavna poteza! Poskusi še enkrat.");
-					}
+					break;
 				}
-				
 			}
 		}
 	}

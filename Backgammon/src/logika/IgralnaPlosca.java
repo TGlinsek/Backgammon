@@ -148,7 +148,7 @@ public class IgralnaPlosca {
 	
 	private Trikotnik pridobiTrikotnik(int relativnoPolje, Figura igralecNaVrsti) {
 		// relativno polje je lahko število med (vključno) 0-25 (skupaj 26 različnih možnosti). 0 pomeni bariero, 25 pomeni cilj, ostalih 24 pa predstavljajo trikotnike na plošči
-		if (relativnoPolje == 0) {
+		if (relativnoPolje <= 0) {  // recimo, če ima beli igralec potezo, ki gre preko cilja, takrat bo relativnoPolje negativno
 			if (igralecNaVrsti == Figura.CRNA) {
 				return crnaBariera;
 			} else {

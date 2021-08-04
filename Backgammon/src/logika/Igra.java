@@ -19,6 +19,8 @@ public class Igra {
 	// npr., če je uporabnik hotel prestaviti figuro, ki je ni možno prestaviti, se bo na zaslonu prikazalo sporočilo, ki bo vsebovalo tale string:
 	public String napaka;  // če je to null, ni napake, drugače pa je
 	
+	public LinkedList<Integer> seznamKock;
+	
 	public StanjeIgre trenutnoStanje;
 	
 	private Map<ImeKocke, Kocka> pridobiKocko;  // to bo važno samo, če izbiramo začetnega igralca z metanjem kock
@@ -71,6 +73,8 @@ public class Igra {
 		// napaka = null;  // itak bo na začetku null, tako da tega ni treba napisati
 		
 		trenutnoStanje = StanjeIgre.IZBIRA_ZACETNEGA_IGRALCA;
+		
+		seznamKock = new LinkedList<Integer>();
 	}
 	
 	/*  // default konstruktor, pač če bi igralec želel default nastavitve
@@ -86,7 +90,12 @@ public class Igra {
 		kocka2.vrziKocko();
 		if (!zrebanjeZacetnegaIgralca) this.trenutnoStanje = StanjeIgre.PREMIKANJE_FIGUR;
 		else this.trenutnoStanje = StanjeIgre.METANJE_KOCK;
-		return new int[] {kocka1.vrniVrednost(), kocka2.vrniVrednost()};
+		
+		seznamKock.clear();
+		seznamKock.add(kocka1.vrniVrednost());
+		seznamKock.add(kocka2.vrniVrednost());
+		
+		return new int[] {kocka1.vrniVrednost(), kocka2.vrniVrednost()};  // morda ne bomo rabili nič returnat
 	}
 	
 	public int primerjajKocki(ImeKocke prvaKocka, ImeKocke drugaKocka) {  // to morda ne bo uporabno, če bomo itak morali vsako vrednost posebej v vodji dobit
@@ -95,6 +104,11 @@ public class Igra {
 	
 	public void vrziDvojnoKocko() {
 		dvojnaKocka.vrziKocko();
+		
+		this.trenutnoStanje = StanjeIgre.PREMIKANJE_FIGUR;
+		
+		seznamKock.clear();
+		for (int i = 0; i < 4; i++) seznamKock.add(dvojnaKocka.vrniVrednost());
 	}
 	
 	public Trikotnik pridobiTrikotnik(int mesto) {
@@ -145,6 +159,7 @@ public class Igra {
 		return kopija;
 	}
 	
+	/*
 	public LinkedList<Integer> vrniSeznamKock() {
 		LinkedList<Integer> seznam = new LinkedList<Integer>();
 		if (trenutnoJeDvojnaKocka) {
@@ -156,6 +171,13 @@ public class Igra {
 			seznam.add(kocka2.vrniVrednost());
 		}
 		return seznam;
+	}
+	*/
+	
+	public LinkedList<Integer> vrniSeznamKock() {  // kopira seznamKock, ker seznama kock itak ne bomo spreminjali tukaj
+		LinkedList<Integer> kopija = new LinkedList<Integer>();
+		kopija = (LinkedList<Integer>) this.seznamKock.clone();
+		return kopija;
 	}
 	
 	public List<Poteza> vrniVeljavnePotezeTePlosce() {  // metoda je odvisna od spremenljivke trenutnoJeDvojnaKocka. Ta metoda se bo torej izvajala tik po koncu metanja kock
@@ -188,7 +210,7 @@ public class Igra {
 				
 				boolean preverimoPotezo;
 
-				preverimoPotezo = !igralnaPlosca.potezaNiVeljavna(poteza);
+				preverimoPotezo = !igralnaPlosca.potezaNiVeljavna(poteza);  // true, če je poteza veljavna
 
 				if (preverimoPotezo) {
 					seznamVsehPotez.add(poteza);  // če je poteza veljavna, jo dodamo med veljavne poteze
@@ -233,14 +255,23 @@ public class Igra {
 	
 	private List<Poteza> vrniVeljavnePoteze(LinkedList<Integer> seznamKock, Igralec igralecNaVrsti) {
 		// if (seznamKock.size() > 2) throw new java.lang.RuntimeException("To še ni implementirano za več kot dve kocki.");  // saj še bo
-		if (seznamKock.size() != 4 && seznamKock.size() != 2) throw new java.lang.RuntimeException("To se ne bi smelo zgoditi.");
-		if (seznamKock.size() == 4) {
+		// if (seznamKock.size() != 4 && seznamKock.size() != 2) throw new java.lang.RuntimeException("To se ne bi smelo zgoditi.");
+		// if (seznamKock.size() == 4) {
+		
+		System.out.println(seznamKock);
+		if (trenutnoJeDvojnaKocka) {
 			List<Poteza> dvojnaKockaPoteze = vrniVeljavnePotezeZaEnoKocko(dvojnaKocka.vrniVrednost(), igralecNaVrsti);
 			int stPotez = vrniPotezeDvojneKocke(dvojnaKocka.vrniVrednost(), dvojnaKockaPoteze);
-			if (stPotez < 4) {
+			// if (stPotez < 4) {
+			if (stPotez < seznamKock.size()) {
 				dvojnaKockaPoteze.clear();  // zato, da bomo returnali prazen seznam
 			}
 			return dvojnaKockaPoteze;
+		}
+		if (seznamKock.size() > 2) throw new java.lang.RuntimeException("To se ne bi smelo zgoditi.");
+		
+		if (seznamKock.size() == 1) {
+			return this.vrniVeljavnePotezeZaEnoKocko(seznamKock.get(0), igralecNaVrsti);  // pridobi edini element iz seznama
 		}
 		
 		// pridobi sezname veljavnih potez za vsako kocko posebej
