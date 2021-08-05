@@ -19,10 +19,10 @@ import grafika.ColorChooserButton.ColorChangedListener;
 
 public class Okno extends JFrame{
 	
-	//Barva označen gumb
+	//Barva označenega gumba
 	private Color barva = new Color(131, 140, 150);
 	
-	//Izbira igralcev - zgornji del
+	//Izbira igralcev - prva in druga vrstica
 	private JLabel labelIgralec1 = new JLabel("Igralec 1");
 	public VrstaIgralca igralec1; //Spremeni, če kliknjen clovek1/racunalnik1
 	private JButton clovek1 = new JButton("  Človek  ");
@@ -57,7 +57,7 @@ public class Okno extends JFrame{
 		this.setLayout(new GridBagLayout());
 
 // ------- referenčna vrstica
-//če tega ni ne poravna vredu (vrsta s praznimi Labels, se je ne vidi)
+	//če tega ni ne poravna vredu (vrsta s praznimi Labels, se je ne vidi)
 		JLabel test0= new JLabel();
 		GridBagConstraints t0 = new GridBagConstraints();
 		t0.gridx = 0; t0.gridy = 0; t0.weightx = 1.0;
@@ -79,7 +79,7 @@ public class Okno extends JFrame{
 		this.add(test3,t3);
 		
 // ------- prva vrstica
-// Labeli kateri igralci
+	// Labeli igralci in izbira barve
 		GridBagConstraints a = new GridBagConstraints();
 		a.gridx = 0; a.gridy = 0; a.gridwidth = 2;
 		a.anchor = GridBagConstraints.CENTER;
@@ -101,7 +101,7 @@ public class Okno extends JFrame{
 		
 
 // ------- druga vrstica
-// Gumbi za izbiro računalnik ali človek
+	// Gumbi za izbiro računalnik ali človek
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0; c.gridy = 1;
 		c.anchor = GridBagConstraints.LINE_END;
@@ -127,7 +127,7 @@ public class Okno extends JFrame{
 		this.add(racunalnik2, f);
 		
 // ------- tretja vrstica
-// Gumb za začetek igre
+	// Gumb za začetek igre
 		GridBagConstraints g = new GridBagConstraints();
 		g.gridx = 0; g.gridy = 2; g.gridwidth = 4;
 		g.anchor = GridBagConstraints.CENTER;
@@ -135,12 +135,12 @@ public class Okno extends JFrame{
 		this.add(igra, g);
 		
 // ------- četrta vrstica 
-		
+	// Igralno polje		
 		platno = new Platno(500,500);
 		GridBagConstraints p = new GridBagConstraints();
-	//PROBLEM: če je fill = BOTH in anchor = CENTER, prevlada fill samo razširi kolikor lahko ampak ne dada na sredino
-	// platno razširi samo do kvadrata, noče bit pravokotnik ???
-//		p.fill = GridBagConstraints.BOTH;
+	//  PROBLEM: če je fill = BOTH in anchor = CENTER, prevlada fill samo razširi kolikor lahko ampak ne da na sredino
+	//  platno razširi samo do kvadrata, noče bit pravokotnik ???
+	//	p.fill = GridBagConstraints.BOTH;
 		p.anchor = GridBagConstraints.CENTER;
 		p.gridx = 0; p.gridy = 3;
 		p.weightx = 1.0; p.weighty = 1.0;
@@ -148,20 +148,22 @@ public class Okno extends JFrame{
 		this.add(platno, p);
 
 // ------- peta vrstica
+	// Statusna vrstica
 		GridBagConstraints l = new GridBagConstraints();
 		l.gridx = 0; l.gridy = 4; l.gridwidth = 4;
 		l.anchor = GridBagConstraints.CENTER;
 		l.insets = new Insets(5,0,5,0);
 		this.add(status, l);
 	
-		
+//-------- componentListeners ------------------------------------------------------------
+		//opcija za resize
+//		this.addComponentListener(new ComponentResized());
 	
-// -------	actionListeners ---------------------------------------------------------------
+// ------- actionListeners ---------------------------------------------------------------
 		//izbira barve igralec1
 		colorChooser1.addColorChangedListener(new ColorChangedListener() {
 		    public void colorChanged(Color newColor) {
 		            barvaIg1 = newColor;
-		            // naj se tekst labelIgralec1 obrava z novo barvo
 		    }
 		});
 		
@@ -169,11 +171,10 @@ public class Okno extends JFrame{
 		colorChooser2.addColorChangedListener(new ColorChangedListener() {
 		    public void colorChanged(Color newColor) {
 		            barvaIg2 = newColor;
-		            //Kot igralec1
 		    }
 		});
 		
-		//igralec1 izbira
+		//igralec1 izbira (Človek/Računalnik)
 		clovek1.addActionListener(new ActionListener()
 		{
 		  public void actionPerformed(ActionEvent e)
@@ -230,8 +231,9 @@ public class Okno extends JFrame{
 		  {
 		    //TODO
 			// Začni z igro (če kliknjen med igro resetiraj igro?)
-			  
+			
 			//Če se barva Ig1 == Ig2 -> izpiši v statusno vrstico.
+			//Kaj pa če barve niso iste amapak samo podobne? 
 		  }
 		});
 	

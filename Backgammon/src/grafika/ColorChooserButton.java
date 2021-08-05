@@ -1,4 +1,7 @@
-// https://stackoverflow.com/questions/26565166/how-to-display-a-color-selector-when-clicking-a-button/26565256
+
+// Source : https://stackoverflow.com/questions/26565166/how-to-display-a-color-selector-when-clicking-a-button/26565256
+
+//JButton for choosing colors
 
 package grafika;
 
