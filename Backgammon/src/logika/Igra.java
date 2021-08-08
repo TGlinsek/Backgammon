@@ -238,11 +238,15 @@ public class Igra {
 	private int vrniPotezeDvojneKocke(int vrednostKocke, List<Poteza> poteze) {
 		int stevec = 0;
 		for (Poteza p : poteze) {
-			Poteza zacasnaPoteza = p;
+			Poteza zacasnaPoteza = new Poteza(p);  // naredi kopijo
+			int stevecPotezKiGredoDoCilja = 0;
 			while (true) {
-				if (igralnaPlosca.potezaNiVeljavna(zacasnaPoteza)) {
+				if (igralnaPlosca.potezaNiVeljavna(zacasnaPoteza) || stevecPotezKiGredoDoCilja == 1) {
 					break;
 				} else {
+					if (igralnaPlosca.potezaGreDoCilja(zacasnaPoteza)) {
+						stevecPotezKiGredoDoCilja += 1;  // samo eno potezo, ki gre do cilja, hočemo šteti. Zato breakamo ko pridemo do druge take (ki bo kar naslednja poteza)
+					}
 					stevec += 1;
 					// izhodišče od zacasnaPoteza in p bo vedno isto
 					zacasnaPoteza.dodaj(p);  // tk ko zacasnaPoteza += p
@@ -258,7 +262,7 @@ public class Igra {
 		// if (seznamKock.size() != 4 && seznamKock.size() != 2) throw new java.lang.RuntimeException("To se ne bi smelo zgoditi.");
 		// if (seznamKock.size() == 4) {
 		
-		System.out.println(seznamKock);
+		// System.out.println(seznamKock);  // izpiše seznam trenutnih vrednosti na kocki (seznam se krajša z vsako že porabljeno kocko/potezo)
 		if (trenutnoJeDvojnaKocka) {
 			List<Poteza> dvojnaKockaPoteze = vrniVeljavnePotezeZaEnoKocko(dvojnaKocka.vrniVrednost(), igralecNaVrsti);
 			int stPotez = vrniPotezeDvojneKocke(dvojnaKocka.vrniVrednost(), dvojnaKockaPoteze);

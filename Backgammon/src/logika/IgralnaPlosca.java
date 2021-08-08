@@ -172,6 +172,12 @@ public class IgralnaPlosca {
 		// System.out.println(poteza);
 		Trikotnik ciljniTrikotnik = pridobiTrikotnik(poteza.vrniCilj(), poteza.vrniIgralca());
 		return ciljniTrikotnik.barvaFigur == poteza.vrniIgralca().pridobiNasprotnika() && ciljniTrikotnik.stevilo > 1;  // stevilo je število figur na trikotniku
+	}  // poteza je veljavna tudi, če gre čez cilj (tj. vržemo preveliko vrednost na kocki, zato gremo preko cilja)
+	
+	
+	public boolean potezaGreDoCilja(Poteza poteza) {  // vrne true čee poteza popelje figuro do cilja
+		int cilj = poteza.vrniCilj();
+		return cilj <= 0 || cilj >= 25;
 	}
 	
 	

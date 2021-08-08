@@ -18,6 +18,14 @@ public class Poteza {  // 0 je izhodisce crnega oz. cilj belega, 25 je izhodisce
 		if (this.igralec == Figura.PRAZNA) throw new java.lang.RuntimeException("Neustrezen igralec: " + this.igralec);
 	}
 	
+	
+	public Poteza(Poteza p) {  // kopiranje
+		this.izhodisce = p.izhodisce;
+		this.premik = p.premik;
+		this.igralec = p.igralec;
+	}
+	
+	
 	@Override
 	public String toString() {
 		return "Izh: " + izhodisce + " Premik: " + premik + " Igralec: " + this.igralec;
@@ -32,7 +40,10 @@ public class Poteza {  // 0 je izhodisce crnega oz. cilj belega, 25 je izhodisce
 	}
 	
 	public Integer vrniCilj() {
-		return this.izhodisce + this.premik * (this.vrniIgralca() == Figura.CRNA ? 1 : -1);
+		int cilj = this.izhodisce + this.premik * (this.vrniIgralca() == Figura.CRNA ? 1 : -1);
+		if ((cilj <= 0 && igralec == Figura.CRNA) ||
+				(cilj >= 25 && igralec == Figura.BELA)) throw new java.lang.RuntimeException("To se ne bi smelo zgoditi!");  // poteza ne more premakniti figure nazaj na štart
+		return cilj;
 	}
 	
 	public Figura vrniIgralca() {
