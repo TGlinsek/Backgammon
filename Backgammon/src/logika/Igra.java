@@ -16,6 +16,9 @@ public class Igra {
 	
 	public boolean trenutnoJeDvojnaKocka;  // je true, če trenutni igralec uporablja dvojno kocko
 	
+	boolean beliLahkoGreNaCilj;
+	boolean crniLahkoGreNaCilj;
+	
 	// npr., če je uporabnik hotel prestaviti figuro, ki je ni možno prestaviti, se bo na zaslonu prikazalo sporočilo, ki bo vsebovalo tale string:
 	public String napaka;  // če je to null, ni napake, drugače pa je
 	
@@ -75,6 +78,9 @@ public class Igra {
 		trenutnoStanje = StanjeIgre.IZBIRA_ZACETNEGA_IGRALCA;
 		
 		seznamKock = new LinkedList<Integer>();
+		
+		beliLahkoGreNaCilj = false;
+		crniLahkoGreNaCilj = false;
 	}
 	
 	/*  // default konstruktor, pač če bi igralec želel default nastavitve
@@ -317,6 +323,8 @@ public class Igra {
 					if (i + manjša ustrezna poteza) {
 						dodaj i v poteze
 					}
+				if poteze prazen:
+					return večjepoteze
 				return poteze
 						
 				alternativno:
@@ -324,6 +332,8 @@ public class Igra {
 					if (i + manjša is not ustrezna poteza) {
 						odstrani i iz potez
 					}
+				if poteze prazno:
+					return večjepoteze (ta prvotne, preden zbrišemo katerokoli potezo)
 				return večja U manjša
 			}
 		} 
@@ -335,7 +345,9 @@ public class Igra {
 					if ((manjša + večja) is ustrezna poteza):
 						return večja U manjša
 					else:
-						return prazno
+						// popravljam tole kodo: prej sem predpostavljal, da če ne moreš vseh kock porabit, potem nobene ne smeš porabit. Ampak to dejansko ni res: porabit moraš maksimalno število potez
+						return potezaZVečjoVrednostjo  // baje je pravilo v backgammonu, da če ima vsaka kocka le eno možno potezo, ampak med seboj nista združljivi (kompatibilni), potem mora igralec igrati tisto izmed obeh potez, ki ima daljši premik
+						// če imata obe potezi enak premik, potem sta to ena in ista poteza (saj se ujemata tako v izhodišču kot v premiku)
 				else:
 					return večja U manjša
 			else:
@@ -343,6 +355,9 @@ public class Igra {
 					if i.izhodisce == manjša.izhodisce:
 						if (i + manjša is not ustrezna poteza):
 							i remove from večjaKockaPoteze
+				// tu se ne more zgoditi, da bi večja.size == 0.
+				return večja U manjša
+				
 				
 		}
 		*/
@@ -368,11 +383,9 @@ public class Igra {
 					if (igralnaPlosca.potezaNiVeljavna(skupnaPoteza)) {
 						vecPotez.remove(poteza);
 					}
-				} else {
-					continue;
 				}
 			}
-			if (vecPotez.size() == 0) {
+			if (vecPotez.size() == 0) {  // če je ta pogoj izpolnjen in manjPotez.size() == 1, potem je prej morala vecPotez vsebovati natanko eno potezo in izhodišče obeh potez je isto 
 				manjPotez.clear();  // to že pomeni, da bomo returnali prazen seznam
 			}
 		}
