@@ -263,6 +263,7 @@ public class Igra {
 	}
 	
 	
+	// popravil to metodo: prej sem predpostavljal, da če ne moreš vseh kock porabit, potem nobene ne smeš porabit. Ampak to dejansko ni res: porabit moraš maksimalno število potez
 	private List<Poteza> vrniVeljavnePoteze(LinkedList<Integer> seznamKock, Igralec igralecNaVrsti) {
 		// if (seznamKock.size() > 2) throw new java.lang.RuntimeException("To še ni implementirano za več kot dve kocki.");  // saj še bo
 		// if (seznamKock.size() != 4 && seznamKock.size() != 2) throw new java.lang.RuntimeException("To se ne bi smelo zgoditi.");
@@ -271,11 +272,13 @@ public class Igra {
 		// System.out.println(seznamKock);  // izpiše seznam trenutnih vrednosti na kocki (seznam se krajša z vsako že porabljeno kocko/potezo)
 		if (trenutnoJeDvojnaKocka) {
 			List<Poteza> dvojnaKockaPoteze = vrniVeljavnePotezeZaEnoKocko(dvojnaKocka.vrniVrednost(), igralecNaVrsti);
+			/*
 			int stPotez = vrniPotezeDvojneKocke(dvojnaKocka.vrniVrednost(), dvojnaKockaPoteze);
 			// if (stPotez < 4) {
 			if (stPotez < seznamKock.size()) {
 				dvojnaKockaPoteze.clear();  // zato, da bomo returnali prazen seznam
 			}
+			*/
 			return dvojnaKockaPoteze;
 		}
 		if (seznamKock.size() > 2) throw new java.lang.RuntimeException("To se ne bi smelo zgoditi.");
@@ -345,7 +348,6 @@ public class Igra {
 					if ((manjša + večja) is ustrezna poteza):
 						return večja U manjša
 					else:
-						// popravljam tole kodo: prej sem predpostavljal, da če ne moreš vseh kock porabit, potem nobene ne smeš porabit. Ampak to dejansko ni res: porabit moraš maksimalno število potez
 						return potezaZVečjoVrednostjo  // baje je pravilo v backgammonu, da če ima vsaka kocka le eno možno potezo, ampak med seboj nista združljivi (kompatibilni), potem mora igralec igrati tisto izmed obeh potez, ki ima daljši premik
 						// če imata obe potezi enak premik, potem sta to ena in ista poteza (saj se ujemata tako v izhodišču kot v premiku)
 				else:
@@ -375,18 +377,37 @@ public class Igra {
 		return manjše U večje
 		*/
 		if (manjPotez.size() <= 1) {  // če obe kocki data vsaj dve možni potezi, potem lahko kot prvo potezo izberemo katerokoli izmed potez
-			
+			List<Poteza> novePoteze = new LinkedList<Poteza>(vecPotez);  // kopiramo
 			for (Poteza poteza : vecPotez) {
 				Poteza skupnaPoteza;
 				if (manjPotez.size() == 0 || poteza.izhodisce == manjPotez.get(0).izhodisce) {  // short-circuit
 					skupnaPoteza = new Poteza(poteza.vrniIzhodisce(), poteza.premik + manjsaKocka.vrniVrednost(), poteza.igralec);
 					if (igralnaPlosca.potezaNiVeljavna(skupnaPoteza)) {
-						vecPotez.remove(poteza);
+						if (vecPotez.size() == 1) {  // vrnemo maksimalno izmed obeh potez
+							if (manjPotez.size() == 0 || vecPotez.get(0).premik >= manjPotez.get(0).premik) {  // če sta premika enaka, potem je vseeno, katero izmed obeh potez vrnemo, saj sta enaki
+								return vecPotez;
+							}
+							return manjPotez;
+						}
+						novePoteze.remove(poteza);
 					}
 				}
 			}
-			if (vecPotez.size() == 0) {  // če je ta pogoj izpolnjen in manjPotez.size() == 1, potem je prej morala vecPotez vsebovati natanko eno potezo in izhodišče obeh potez je isto 
+			/*  // ta zakomentirana koda tule nič ne spremeni, saj smo zgoraj dodali dodaten pogoj: if (vecPotez.size() == 1) ...
+			if (novePoteze.size() == 0) {  // če je ta pogoj izpolnjen in manjPotez.size() == 1, potem je prej morala vecPotez vsebovati natanko eno potezo in izhodišče obeh potez je isto 
 				manjPotez.clear();  // to že pomeni, da bomo returnali prazen seznam
+			}
+			*/
+			
+			
+			/* psevdokoda.
+			if (novePoteze.size() == 0) {  // se lahko zgodi le če manj.size == 0, zaradi pogoja zgoraj: if (vecPotez.size() == 1) ...
+				return vecPotez;
+			} else
+				return novepoteze U manjpotez;
+			*/
+			if (novePoteze.size() != 0) {
+				vecPotez = novePoteze;
 			}
 		}
 		return vrniUnijoSeznamov(vecPotez, manjPotez);
