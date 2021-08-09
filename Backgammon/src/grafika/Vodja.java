@@ -23,7 +23,7 @@ public class Vodja {
 	
 	public static Igra igra = null;
 	
-	public static boolean clovekNaVrsti = false;
+	public static boolean clovekNaVrsti = false;  // ni važno, kaj je na začetku
 	
 	private static Igralec igralecKiZacne = Igralec.CRNI;  // default nastavitve
 	private static boolean crniGreVSmeriUrinegaKazalca = true;  // default nastavitve
@@ -88,16 +88,37 @@ public class Vodja {
 		case METANJE_KOCK: 
 			Igralec igralec = igra.igralecNaVrsti;
 			VrstaIgralca vrstaNaPotezi = vrstaIgralca.get(igralec);
-			clovekNaVrsti = false;  // če tega ne bi bilo, bi lahko uporabnik "prenesel" potezo iz enega načina igre v drugega, kar pa se ne sme zgoditi
+			
 			switch (vrstaNaPotezi) {
 			case C: 
 				clovekNaVrsti = true;
 				break;
 			case R:
-				igrajRacunalnikovoPotezo();
+				clovekNaVrsti = false;
 				break;
 			}
-		case PREMIKANJE_FIGUR: throw new java.lang.RuntimeException("To bi se moralo na tem mestu že izvesti in spremeniti nazaj na metanje kock.");
+			
+			igra.vrziKocki(false);
+			igra.trenutnoStanje = StanjeIgre.PREMIKANJE_FIGUR;
+			
+			if (vrstaNaPotezi == VrstaIgralca.R) {
+				igramo();
+			}
+			break;
+		case PREMIKANJE_FIGUR:
+			Igralec igralec2 = igra.igralecNaVrsti;
+			VrstaIgralca vrstaNaPotezi2 = vrstaIgralca.get(igralec2);
+			
+			premikanje : switch (vrstaNaPotezi2) {
+			case C:
+				// TODO
+				throw new java.lang.RuntimeException("Ni še implementirano.");
+			case R:
+				igrajRacunalnikovoPotezo();
+				break premikanje;
+			}
+			
+			break;
 		case IZBIRA_ZACETNEGA_IGRALCA: throw new java.lang.RuntimeException("Na tem mestu bi morali že biti čez to fazo.");
 		default: throw new java.lang.RuntimeException("Napaka");
 		}
@@ -136,7 +157,11 @@ public class Vodja {
 	
 	
 	public static void igrajClovekovoPotezo(Poteza poteza) {
-		if (igra.odigraj(poteza)) clovekNaVrsti = false;
+		boolean potezaJeBilaUspesnoOdigrana = igra.odigraj(poteza);
+		if (potezaJeBilaUspesnoOdigrana) { 
+			clovekNaVrsti = false;
+		}
+		
 		igramo();
 	}
 }
