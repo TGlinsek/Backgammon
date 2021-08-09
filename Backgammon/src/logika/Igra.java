@@ -12,9 +12,6 @@ public class Igra {
 	
 	private Kocka kocka1;
 	private Kocka kocka2;
-	private Kocka dvojnaKocka;
-	
-	public boolean trenutnoJeDvojnaKocka;  // je true, če trenutni igralec uporablja dvojno kocko
 	
 	
 	// npr., če je uporabnik hotel prestaviti figuro, ki je ni možno prestaviti, se bo na zaslonu prikazalo sporočilo, ki bo vsebovalo tale string:
@@ -60,7 +57,6 @@ public class Igra {
 	public Igra(Igralec igralecKiZacne, boolean crniGreVSmeriUrinegaKazalca, boolean crniZacneSpodaj) {
 		kocka1 = new Kocka();
 		kocka2 = new Kocka();
-		dvojnaKocka = new Kocka();
 		
 		napolniSlovarIgralcevaKocka();
 		napolniSlovarPridobiKocko();
@@ -96,6 +92,11 @@ public class Igra {
 		seznamKock.add(kocka1.vrniVrednost());
 		seznamKock.add(kocka2.vrniVrednost());
 		
+		if (kockiImataEnakoVrednost()) {
+			seznamKock.add(kocka1.vrniVrednost());  // samo dvakrat še dodamo kocke, da imamo na koncu štiri enake vrednosti
+			seznamKock.add(kocka2.vrniVrednost());
+		}
+		
 		return new int[] {kocka1.vrniVrednost(), kocka2.vrniVrednost()};  // morda ne bomo rabili nič returnat
 	}
 	
@@ -103,6 +104,7 @@ public class Igra {
 		return Integer.compare(pridobiVrednostKocke(prvaKocka), pridobiVrednostKocke(drugaKocka));
 	}
 	
+	/*
 	public void vrziDvojnoKocko() {
 		dvojnaKocka.vrziKocko();
 		
@@ -111,6 +113,7 @@ public class Igra {
 		seznamKock.clear();
 		for (int i = 0; i < 4; i++) seznamKock.add(dvojnaKocka.vrniVrednost());
 	}
+	*/
 	
 	public Trikotnik pridobiTrikotnik(int mesto) {
 		return igralnaPlosca.plosca[mesto];
@@ -236,6 +239,7 @@ public class Igra {
 	}
 	
 	
+	/*
 	private int vrniPotezeDvojneKocke(int vrednostKocke, List<Poteza> poteze) {
 		int stevec = 0;
 		for (Poteza p : poteze) {
@@ -256,6 +260,7 @@ public class Igra {
 		}
 		return stevec;
 	}
+	*/
 	
 	
 	// popravil to metodo: prej sem predpostavljal, da če ne moreš vseh kock porabit, potem nobene ne smeš porabit. Ampak to dejansko ni res: porabit moraš maksimalno število potez
@@ -265,8 +270,11 @@ public class Igra {
 		// if (seznamKock.size() == 4) {
 		
 		// System.out.println(seznamKock);  // izpiše seznam trenutnih vrednosti na kocki (seznam se krajša z vsako že porabljeno kocko/potezo)
-		if (trenutnoJeDvojnaKocka) {
-			List<Poteza> dvojnaKockaPoteze = vrniVeljavnePotezeZaEnoKocko(dvojnaKocka.vrniVrednost(), igralecNaVrsti);
+		if (seznamKock.size() > 2) {
+			if (!kockiImataEnakoVrednost()) throw new java.lang.RuntimeException("Na tem mestu bi vrednosti morali biti enaki.");
+			
+			
+			List<Poteza> dvojnaKockaPoteze = vrniVeljavnePotezeZaEnoKocko(kocka1.vrniVrednost(), igralecNaVrsti);
 			/*
 			int stPotez = vrniPotezeDvojneKocke(dvojnaKocka.vrniVrednost(), dvojnaKockaPoteze);
 			// if (stPotez < 4) {
@@ -276,7 +284,6 @@ public class Igra {
 			*/
 			return dvojnaKockaPoteze;
 		}
-		if (seznamKock.size() > 2) throw new java.lang.RuntimeException("To se ne bi smelo zgoditi.");
 		
 		if (seznamKock.size() == 1) {
 			return this.vrniVeljavnePotezeZaEnoKocko(seznamKock.get(0), igralecNaVrsti);  // pridobi edini element iz seznama
@@ -432,5 +439,8 @@ public class Igra {
 		this.trenutnoStanje = StanjeIgre.METANJE_KOCK;  // spremenimo stanje
 	}
 	
-
+	
+	public boolean kockiImataEnakoVrednost() {
+		return kocka1.vrniVrednost() == kocka2.vrniVrednost();
+	}
 }

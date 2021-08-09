@@ -174,10 +174,9 @@ private static BufferedReader r = new BufferedReader(new InputStreamReader(Syste
 						String ssss = r.readLine();
 						if (ssss.equals("1")) {
 							igra.vrziKocki(false);
-							igra.trenutnoJeDvojnaKocka = false;
 						} else if (ssss.equals("2")) {
-							igra.vrziDvojnoKocko();
-							igra.trenutnoJeDvojnaKocka = true;
+							System.out.println("Žal ta možnost ni več mogoča.");
+							continue;
 						} else {
 							System.out.println("Vnos ni veljaven");
 							continue;
@@ -198,7 +197,7 @@ private static BufferedReader r = new BufferedReader(new InputStreamReader(Syste
 					VrstaIgralca vrstaNaPotezi2 = vrstaIgralca.get(igralec2);
 					Poteza poteza = null;
 					
-					int steviloPotez = igra.trenutnoJeDvojnaKocka ? 4 : 2;
+					int steviloPotez = igra.kockiImataEnakoVrednost() ? 4 : 2;
 					
 					int stevec = 0;
 					opravljanjePotez : while (true) {
