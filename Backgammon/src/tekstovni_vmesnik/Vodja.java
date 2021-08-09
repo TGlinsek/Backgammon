@@ -214,6 +214,12 @@ private static BufferedReader r = new BufferedReader(new InputStreamReader(Syste
 						}
 						boolean potezaJeBilaUspesnoOdigrana = igra.odigraj(poteza);
 						if (potezaJeBilaUspesnoOdigrana) {
+							igra.igralnaPlosca.crniLahkoGreNaCilj = igra.igralnaPlosca.crniImaVseVHomeBoardu();
+							igra.igralnaPlosca.beliLahkoGreNaCilj = igra.igralnaPlosca.beliImaVseVHomeBoardu();
+							
+							igra.igralnaPlosca.beliImaPrazenZacetek = igra.igralnaPlosca.beliImaPrazenZacetek();
+							igra.igralnaPlosca.crniImaPrazenZacetek = igra.igralnaPlosca.crniImaPrazenZacetek();
+							
 							System.out.println("Igralec " + igralec2 + " je igral " + poteza);
 							igra.seznamKock.remove((Integer) poteza.premik);  // vrednost kocke, ki smo jo uporabili, odstranimo iz seznama
 							if (stevec >= steviloPotez - 1) {

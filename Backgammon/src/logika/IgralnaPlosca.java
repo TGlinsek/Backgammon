@@ -15,11 +15,16 @@ public class IgralnaPlosca {
 	
 	public Trikotnik[] plosca;  // indeksi od 0 do 23
 	
-	public Trikotnik belaBariera = new Trikotnik(Figura.BELA, 0);  // na začetku so vse bele figure v barieri belega igralca
-	public Trikotnik crnaBariera = new Trikotnik(Figura.CRNA, 0);  // bariera črnega
-	public Trikotnik beliCilj = new Trikotnik(Figura.BELA, 0);  // figure belega igralca, ki so že prišle na cilj
-	public Trikotnik crniCilj = new Trikotnik(Figura.CRNA, 0);  // cilj črnega igralca
+	public Trikotnik belaBariera = new Trikotnik(Figura.PRAZNA, 0);  // na začetku so vse bele figure v barieri belega igralca
+	public Trikotnik crnaBariera = new Trikotnik(Figura.PRAZNA, 0);  // bariera črnega
+	public Trikotnik beliCilj = new Trikotnik(Figura.PRAZNA, 0);  // figure belega igralca, ki so že prišle na cilj
+	public Trikotnik crniCilj = new Trikotnik(Figura.PRAZNA, 0);  // cilj črnega igralca
 	
+	public boolean beliLahkoGreNaCilj;
+	public boolean crniLahkoGreNaCilj;
+	
+	public boolean beliImaPrazenZacetek;
+	public boolean crniImaPrazenZacetek;
 	
 	private static Trikotnik[] vrniEnoPolovicoPlosce(Figura zacetna, Figura koncna) {  // pomožna metoda za ploščo
 		if (zacetna == Figura.PRAZNA || koncna == Figura.PRAZNA) throw new java.lang.RuntimeException("Figura ne more biti prazna tukaj!");
@@ -103,6 +108,11 @@ public class IgralnaPlosca {
 			new Trikotnik(Figura.BELA, 2)
 		 }
 		 */
+		beliLahkoGreNaCilj = false;
+		crniLahkoGreNaCilj = false;
+		
+		beliImaPrazenZacetek = true;
+		crniImaPrazenZacetek = true;
 	}  // popravil sem, da zdaj igralnaPlosca začne vedno na črnem štartu, ne glede na to, kje črni začne
 	
 	
@@ -170,6 +180,27 @@ public class IgralnaPlosca {
 	
 	public boolean potezaNiVeljavna(Poteza poteza) {  // vrne true le, če poteza ni veljavna (torej, tja ne moremo prestaviti, saj so tam nasprotnikove figure)
 		// System.out.println(poteza);
+		
+		// ne dovolimo potez, ki gredo na cilj
+		if (poteza.vrniIgralca() == Figura.BELA && !beliLahkoGreNaCilj) {
+			if (poteza.vrniCilj() <= 0) return true;
+		}
+		
+		if (poteza.vrniIgralca() == Figura.CRNA && !crniLahkoGreNaCilj) {
+			if (poteza.vrniCilj() >= 25) return true;
+		}
+		
+		
+		// ne dovolimo potez, ki ne spravijo figur iz bariere, če so tam kakšne figure
+		if (poteza.vrniIgralca() == Figura.CRNA && !crniImaPrazenZacetek) {
+			if (poteza.izhodisce != 0) return true;
+		}
+		
+		if (poteza.vrniIgralca() == Figura.BELA && !beliImaPrazenZacetek) {
+			if (poteza.izhodisce != 25) return true;
+		}
+		
+		
 		Trikotnik ciljniTrikotnik = pridobiTrikotnik(poteza.vrniCilj(), poteza.vrniIgralca());
 		return ciljniTrikotnik.barvaFigur == poteza.vrniIgralca().pridobiNasprotnika() && ciljniTrikotnik.stevilo > 1;  // stevilo je število figur na trikotniku
 	}  // poteza je veljavna tudi, če gre čez cilj (tj. vržemo preveliko vrednost na kocki, zato gremo preko cilja)
@@ -196,8 +227,43 @@ public class IgralnaPlosca {
 		if (potezaNiVeljavna(poteza)) return false;  // sicer zdej dvakrat definiramo "ciljniTrikotnik", ampak nima veze
 		
 		izhodiscniTrikotnik.odstraniFiguro();
-		ciljniTrikotnik.dodajFiguro(poteza.vrniIgralca());
+		boolean zbijanje = ciljniTrikotnik.dodajFiguro(poteza.vrniIgralca());
+		if (zbijanje) {
+			if (poteza.vrniIgralca().pridobiNasprotnika() == Figura.BELA) {
+				belaBariera.dodajFiguro(Figura.BELA);
+			} else if (poteza.vrniIgralca().pridobiNasprotnika() == Figura.CRNA) {
+				crnaBariera.dodajFiguro(Figura.CRNA);
+			}
+		}
 		
 		return true;  // poteza je bila uspešno odigrana
+	}
+	
+	
+	public boolean crniImaVseVHomeBoardu() {
+		for (int i = 0; i < 18; i++) {  // od 18 do 23 je home board od črnega
+			Trikotnik trikotnik = plosca[i];
+			if (trikotnik.barvaFigur == Figura.CRNA) return false;
+		}
+		return true;
+	}
+	
+	
+	public boolean beliImaVseVHomeBoardu() {
+		for (int i = 6; i < 24; i++) {  // od 0 do 5 je home board od belega
+			Trikotnik trikotnik = plosca[i];
+			if (trikotnik.barvaFigur == Figura.BELA) return false;
+		}
+		return true;
+	}
+	
+	
+	public boolean beliImaPrazenZacetek() {
+		return belaBariera.stevilo == 0;
+	}
+	
+	
+	public boolean crniImaPrazenZacetek() {
+		return crnaBariera.stevilo == 0;
 	}
 }

@@ -15,12 +15,15 @@ public class Trikotnik {
 		this.stevilo = original.stevilo;
 	}
 	
-	public void dodajFiguro(Figura barva) {
+	public boolean dodajFiguro(Figura barva) {
+		boolean zbijanje = false;
 		if (this.stevilo == 1 && this.barvaFigur != barva) {  // zbijamo
+			zbijanje = true;
 			this.stevilo = 0;
 		}
 		if (this.stevilo == 0) this.barvaFigur = barva;  // zasedemo nov trikotnik, torej spremenimo barvo iz PRAZNO v barvaFigur
 		this.stevilo += 1; // dodaj figuro
+		return zbijanje;
 	}
 	
 	public void odstraniFiguro() {

@@ -16,8 +16,6 @@ public class Igra {
 	
 	public boolean trenutnoJeDvojnaKocka;  // je true, če trenutni igralec uporablja dvojno kocko
 	
-	boolean beliLahkoGreNaCilj;
-	boolean crniLahkoGreNaCilj;
 	
 	// npr., če je uporabnik hotel prestaviti figuro, ki je ni možno prestaviti, se bo na zaslonu prikazalo sporočilo, ki bo vsebovalo tale string:
 	public String napaka;  // če je to null, ni napake, drugače pa je
@@ -78,9 +76,6 @@ public class Igra {
 		trenutnoStanje = StanjeIgre.IZBIRA_ZACETNEGA_IGRALCA;
 		
 		seznamKock = new LinkedList<Integer>();
-		
-		beliLahkoGreNaCilj = false;
-		crniLahkoGreNaCilj = false;
 	}
 	
 	/*  // default konstruktor, pač če bi igralec želel default nastavitve
