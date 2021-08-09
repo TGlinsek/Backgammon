@@ -266,4 +266,16 @@ public class IgralnaPlosca {
 	public boolean crniImaPrazenZacetek() {
 		return crnaBariera.stevilo == 0;
 	}
+	
+	
+	public boolean beliImaVseNaCilju() {
+		if (beliCilj.stevilo > 15) throw new java.lang.RuntimeException("To se ne bi smelo zgoditi.");
+		return beliCilj.stevilo == 15;
+	}
+	
+	
+	public boolean crniImaVseNaCilju() {
+		if (crniCilj.stevilo > 15) throw new java.lang.RuntimeException("To se ne bi smelo zgoditi.");
+		return crniCilj.stevilo == 15;
+	}
 }

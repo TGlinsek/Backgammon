@@ -129,7 +129,24 @@ public class Igra {
 	// vrne false, če je poteza neveljavna
 	public boolean odigraj(Poteza poteza) {  // a naj bo tu boolean al void?
 		if (!potezaJeVeljavna(poteza)) throw new java.lang.RuntimeException("To se ne bi smelo zgoditi.");
-		return this.igralnaPlosca.igrajPotezo(poteza);
+		boolean potezaJeBilaUspesnoOdigrana = this.igralnaPlosca.igrajPotezo(poteza);
+		if (!potezaJeBilaUspesnoOdigrana) return false;
+		
+		if (igralnaPlosca.beliImaVseNaCilju()) {
+			this.trenutnoStanje = StanjeIgre.ZMAGA_BELI;
+			return true;
+		} else if (igralnaPlosca.crniImaVseNaCilju()) {
+			this.trenutnoStanje = StanjeIgre.ZMAGA_CRNI;
+			return true;
+		}
+		
+		this.igralnaPlosca.crniLahkoGreNaCilj = this.igralnaPlosca.crniImaVseVHomeBoardu();
+		this.igralnaPlosca.beliLahkoGreNaCilj = this.igralnaPlosca.beliImaVseVHomeBoardu();
+		
+		this.igralnaPlosca.beliImaPrazenZacetek = this.igralnaPlosca.beliImaPrazenZacetek();
+		this.igralnaPlosca.crniImaPrazenZacetek = this.igralnaPlosca.crniImaPrazenZacetek();
+		
+		return true;
 	}
 	
 	/*

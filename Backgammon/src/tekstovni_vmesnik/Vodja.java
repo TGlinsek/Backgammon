@@ -213,13 +213,12 @@ private static BufferedReader r = new BufferedReader(new InputStreamReader(Syste
 						}
 						boolean potezaJeBilaUspesnoOdigrana = igra.odigraj(poteza);
 						if (potezaJeBilaUspesnoOdigrana) {
-							igra.igralnaPlosca.crniLahkoGreNaCilj = igra.igralnaPlosca.crniImaVseVHomeBoardu();
-							igra.igralnaPlosca.beliLahkoGreNaCilj = igra.igralnaPlosca.beliImaVseVHomeBoardu();
-							
-							igra.igralnaPlosca.beliImaPrazenZacetek = igra.igralnaPlosca.beliImaPrazenZacetek();
-							igra.igralnaPlosca.crniImaPrazenZacetek = igra.igralnaPlosca.crniImaPrazenZacetek();
-							
 							System.out.println("Igralec " + igralec2 + " je igral " + poteza);
+							
+							if (igra.trenutnoStanje == StanjeIgre.ZMAGA_BELI || igra.trenutnoStanje == StanjeIgre.ZMAGA_CRNI) {
+								break opravljanjePotez;
+							}
+							
 							igra.seznamKock.remove((Integer) poteza.premik);  // vrednost kocke, ki smo jo uporabili, odstranimo iz seznama
 							if (stevec >= steviloPotez - 1) {
 								if (igra.seznamKock.size() != 0) throw new java.lang.RuntimeException("To se ne bi smelo zgoditi.");
