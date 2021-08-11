@@ -156,16 +156,16 @@ public class IgralnaPlosca {
 	}
 	
 	
-	private Trikotnik pridobiTrikotnik(int relativnoPolje, Figura igralecNaVrsti) {
-		// relativno polje je lahko število med (vključno) 0-25 (skupaj 26 različnih možnosti). 0 pomeni bariero, 25 pomeni cilj, ostalih 24 pa predstavljajo trikotnike na plošči
-		if (relativnoPolje <= 0) {  // recimo, če ima beli igralec potezo, ki gre preko cilja, takrat bo relativnoPolje negativno
+	private Trikotnik pridobiTrikotnik(int poljePoteze, Figura igralecNaVrsti) {
+		// poljePoteze polje je lahko število med (vključno) 0-25 (skupaj 26 različnih možnosti). 0 pomeni bariero, 25 pomeni cilj, ostalih 24 pa predstavljajo trikotnike na plošči
+		if (poljePoteze <= 0) {  // recimo, če ima beli igralec potezo, ki gre preko cilja, takrat bo poljePoteze negativno
 			if (igralecNaVrsti == Figura.CRNA) {
 				return crnaBariera;
 			} else {
 				// return belaBariera;
 				return beliCilj;
 			}
-		} else if (relativnoPolje >= 25) {
+		} else if (poljePoteze >= 25) {
 			if (igralecNaVrsti == Figura.CRNA) {
 				return crniCilj;
 			} else {
@@ -173,8 +173,15 @@ public class IgralnaPlosca {
 				return belaBariera;
 			}
 		} else {
-			return this.plosca[relativnoPolje - 1];  // pri plosci ne upoštevamo bariere (plošča ima 24 trikotnikov, torej bariere in cilja ni zraven), zato se vse za eno zamakne
+			return this.plosca[poljePoteze - 1];  // pri plosci ne upoštevamo bariere (plošča ima 24 trikotnikov, torej bariere in cilja ni zraven), zato se vse za eno zamakne
 		}
+		// pretvorili smo polje iz poteze v dejanski trikotnik s plošče
+	}
+	
+	
+	public Trikotnik vrniTrikotnik(int poljePoteze, Figura igralec) {
+		Trikotnik trikotnik = pridobiTrikotnik(poljePoteze, igralec);
+		return trikotnik;
 	}
 	
 	
@@ -277,5 +284,39 @@ public class IgralnaPlosca {
 	public boolean crniImaVseNaCilju() {
 		if (crniCilj.stevilo > 15) throw new java.lang.RuntimeException("To se ne bi smelo zgoditi.");
 		return crniCilj.stevilo == 15;
+	}
+	
+	
+	static public int relativnoVPoljePoteze(int relativno, Figura igralec) {  // poljePoteze je v nekem smislu 'absolutno'
+		// relativno:
+		// 0 je vedno bariera, 1 je trikotnik takoj zanjo, ..., 25 je cilj
+		// ne glede na barvo figure
+		if (igralec == Figura.CRNA) {
+			return relativno;
+		} else if (igralec == Figura.BELA) {
+			return 25 - relativno;
+		} else {
+			throw new java.lang.RuntimeException("Napačen argument!");
+		}
+	}
+	
+	
+	// inverzna metoda metodi relativnoVPoljePoteze
+	static public int poljePotezeVRelativno(int poljePoteze, Figura igralec) {
+		// pri poljuPoteze je 1 vedno prvi trikotnik od črnega, 0 pa ali bariera črnega ali pa cilj belega
+		if (igralec == Figura.CRNA) {
+			return poljePoteze;
+		} else if (igralec == Figura.BELA) {
+			return 25 - poljePoteze;
+		} else {
+			throw new java.lang.RuntimeException("Napačen argument!");
+		}
+	}
+	
+	
+	public Trikotnik relativnoVTrikotnik(int relativno, Figura naseFigure) {
+		int poljePoteze = IgralnaPlosca.relativnoVPoljePoteze(relativno, naseFigure);
+		Trikotnik trikotnik = vrniTrikotnik(poljePoteze, naseFigure);
+		return trikotnik;
 	}
 }
