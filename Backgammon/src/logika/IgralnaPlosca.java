@@ -228,7 +228,7 @@ public class IgralnaPlosca {
 		
 		// System.out.println(poteza.vrniIzhodisce());
 		// System.out.println(poteza.vrniCilj());
-		
+
 		if (izhodiscniTrikotnik.barvaFigur != poteza.vrniIgralca()) return false;  // če na izhodiščnem trikotniku sploh niso ta prave figure (a bi blo boljš kr throwat kak exception?)
 		// if (ciljniTrikotnik.barvaFigur == poteza.vrniIgralca().pridobiNasprotnika() && ciljniTrikotnik.stevilo > 1) return false;  // ne moremo prestaviti tja (tam so nasprotnikove figure)
 		if (potezaNiVeljavna(poteza)) return false;  // sicer zdej dvakrat definiramo "ciljniTrikotnik", ampak nima veze
@@ -242,7 +242,6 @@ public class IgralnaPlosca {
 				crnaBariera.dodajFiguro(Figura.CRNA);
 			}
 		}
-		
 		return true;  // poteza je bila uspešno odigrana
 	}
 	
@@ -318,5 +317,19 @@ public class IgralnaPlosca {
 		int poljePoteze = IgralnaPlosca.relativnoVPoljePoteze(relativno, naseFigure);
 		Trikotnik trikotnik = vrniTrikotnik(poljePoteze, naseFigure);
 		return trikotnik;
+	}
+	
+	
+	public int najvecjaRazdaljaDoCilja(Figura igralec) {
+		// vrne razdaljo žetona, ki ima največjo razdaljo do svojega cilja
+		// predpostavljamo, da so vsi v zadnji četrtini
+		int najvisjaRazdalja = 0;
+		for (int i = 1; i <= 6; i++) {
+			Trikotnik trikotnik = this.plosca[relativnoVPoljePoteze(i, igralec.pridobiNasprotnika()) - 1];
+			if (trikotnik.barvaFigur == igralec) {
+				najvisjaRazdalja = i;
+			}
+		}
+		return najvisjaRazdalja;
 	}
 }

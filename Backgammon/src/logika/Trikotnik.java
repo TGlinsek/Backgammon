@@ -6,6 +6,7 @@ public class Trikotnik {
 	public int stevilo;
 	
 	public Trikotnik(Figura barvaFigur, int stevilo) {
+		if (barvaFigur != Figura.PRAZNA && stevilo == 0) throw new java.lang.RuntimeException("joj");
 		this.barvaFigur = barvaFigur;
 		this.stevilo = stevilo;
 	}
@@ -27,7 +28,7 @@ public class Trikotnik {
 	}
 	
 	public void odstraniFiguro() {
-		// if (this.stevilo == 0) throw new java.lang.RuntimeException("Ne moreš odstraniti ničesar, saj je trikotnik prazen!");  // to se ne bo moglo zgodit, ker bomo itak sproti to preverili
+		if (this.stevilo == 0) throw new java.lang.RuntimeException("Ne moreš odstraniti ničesar, saj je trikotnik prazen!");
 		this.stevilo -= 1;
 		if (this.stevilo == 0) this.barvaFigur = Figura.PRAZNA;
 	}

@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import logika.Figura;
 import logika.Igra;
 import logika.Igralec;
+import logika.IgralnaPlosca;
 import logika.Poteza;
 import logika.StanjeIgre;
 import logika.Trikotnik;
@@ -248,18 +249,18 @@ public class Platno extends JPanel implements MouseListener {
 				boolean zetonNaBarieriCrni = false;
 				
 				if (i == 6) {
-					trenutniTrikotnik = igra.igralnaPlosca.crnaBariera;
+					trenutniTrikotnik = new Trikotnik(igra.igralnaPlosca.crnaBariera);
 					trenutniTrikotnik.barvaFigur = Figura.CRNA;
 					if (igra.igralecNaVrsti == Igralec.CRNI && trenutniTrikotnik.stevilo > 0) zetonNaBarieriCrni = true;
 				}
 				else if (i == 19) {
-					trenutniTrikotnik = igra.igralnaPlosca.belaBariera;
+					trenutniTrikotnik = new Trikotnik(igra.igralnaPlosca.belaBariera);
 					trenutniTrikotnik.barvaFigur = Figura.BELA;
 					if (igra.igralecNaVrsti == Igralec.BELI && trenutniTrikotnik.stevilo > 0) zetonNaBarieriBeli = true;
 				}
-				else if (i == 26) trenutniTrikotnik = igra.igralnaPlosca.beliCilj;
-				else if (i == 27) trenutniTrikotnik = igra.igralnaPlosca.crniCilj;
-				else trenutniTrikotnik = igra.igralnaPlosca.plosca[trikotnikNaPlosci];
+				else if (i == 26) trenutniTrikotnik = new Trikotnik(igra.igralnaPlosca.beliCilj);
+				else if (i == 27) trenutniTrikotnik = new Trikotnik(igra.igralnaPlosca.crniCilj);
+				else trenutniTrikotnik = new Trikotnik(igra.igralnaPlosca.plosca[trikotnikNaPlosci]);
 				
 				// pogledamo kaksno barvo imamo na tem trikotniku
 				if (trenutniTrikotnik.barvaFigur == Figura.BELA) {
@@ -431,7 +432,11 @@ public class Platno extends JPanel implements MouseListener {
 		// taka poteza bo vedno obstajala
 		List<Poteza> veljavnePoteze = igra.vrniVeljavnePotezeTePlosce();
 		for (Poteza poteza : veljavnePoteze) {
-			if (poteza.vrniIzhodisce() == izhodisce && poteza.premik >= premik && poteza.igralec == igralec) {
+			Poteza novaPoteza = new Poteza(izhodisce, premik, igralec);  // poteza, ki jo sestavimo iz parametrov. Ni nujno v seznamu veljavnePoteze
+			boolean potezaGreNaCilj = IgralnaPlosca.poljePotezeVRelativno(novaPoteza.vrniCilj(), igralec) >= 25;
+			if (poteza.vrniIzhodisce() == izhodisce &&  // izhodišči se ujemata
+					(poteza.premik == premik || (poteza.premik >= premik && potezaGreNaCilj)) &&  // parameter premik je lahko tudi manjši kot pa dejanski premik poteze, če gre poteza na cilj
+					poteza.igralec == igralec) {  // igralca se ujemata
 				return poteza;
 			}
 		}

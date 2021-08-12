@@ -226,7 +226,6 @@ public class Igra {
 				trikotnik = igralnaPlosca.plosca[i];
 			}
 			
-			
 			if (trikotnik.barvaFigur == BarvaIgralca.barva(igralecNaVrsti)) {
 				
 				boolean preverimoPotezo;
@@ -286,7 +285,8 @@ public class Igra {
 		// if (seznamKock.size() != 4 && seznamKock.size() != 2) throw new java.lang.RuntimeException("To se ne bi smelo zgoditi.");
 		// if (seznamKock.size() == 4) {
 		
-		// System.out.println(seznamKock);  // izpiše seznam trenutnih vrednosti na kocki (seznam se krajša z vsako že porabljeno kocko/potezo)
+		System.out.println("Seznam kock: " + seznamKock);  // izpiše seznam trenutnih vrednosti na kocki (seznam se krajša z vsako že porabljeno kocko/potezo)
+		
 		if (seznamKock.size() > 2) {
 			if (!kockiImataEnakoVrednost()) throw new java.lang.RuntimeException("Na tem mestu bi vrednosti morali biti enaki.");
 			
@@ -309,6 +309,11 @@ public class Igra {
 		// pridobi sezname veljavnih potez za vsako kocko posebej
 		List<Poteza> prvaKocka = vrniVeljavnePotezeZaEnoKocko(kocka1.vrniVrednost(), igralecNaVrsti);
 		List<Poteza> drugaKocka = vrniVeljavnePotezeZaEnoKocko(kocka2.vrniVrednost(), igralecNaVrsti);
+		
+		// System.out.println("Prva kocka size: " + prvaKocka.size());
+		// System.out.println("Druga kocka size: " + drugaKocka.size());
+		// System.out.println("Prva kocka: " + prvaKocka);
+		// System.out.println("Druga kocka: " + drugaKocka);
 		
 		/*
 		 Ko naredimo prvo potezo, ne moremo ustvariti novih potez za drugo kocko, razen če isto figuro premaknemo.
@@ -395,6 +400,8 @@ public class Igra {
 		if večjakocka == 0: manjše.clear()  // oz. return prazno
 		return manjše U večje
 		*/
+		// System.out.println("manjPotez: " + manjPotez);
+		// System.out.println("večPotez: " + vecPotez);
 		if (manjPotez.size() <= 1) {  // če obe kocki data vsaj dve možni potezi, potem lahko kot prvo potezo izberemo katerokoli izmed potez
 			List<Poteza> novePoteze = new LinkedList<Poteza>(vecPotez);  // kopiramo
 			for (Poteza poteza : vecPotez) {
@@ -430,19 +437,12 @@ public class Igra {
 			}
 		}
 		List<Poteza> unija = vrniUnijoSeznamov(vecPotez, manjPotez);
-		
+		System.out.println("Unija: " + unija);
 		// če so vse naše figure v zadnji četrtini (v home boardu)
 		if ((igralecNaVrsti == Igralec.CRNI && igralnaPlosca.crniLahkoGreNaCilj) || (igralecNaVrsti == Igralec.BELI && igralnaPlosca.beliLahkoGreNaCilj)) {
+			int najvecjaRazdalja = igralnaPlosca.najvecjaRazdaljaDoCilja(igralecNaVrsti.pridobiFiguro());
+			// gledati moramo največjo razdaljo vseh naših žetonov, ne le tistih, ki jih lahko premaknemo (to sem se prej zmotil)
 			for (int vrednostPosamezneKocke : seznamKock) {
-				int najvecjaRazdalja = 0;
-				for (Poteza poteza : unija) {
-					if (poteza.premik == vrednostPosamezneKocke) {
-						// razdalja figure od cilja
-						int razdalja = IgralnaPlosca.poljePotezeVRelativno(poteza.vrniIzhodisce(), igralecNaVrsti.pridobiNasprotnika().pridobiFiguro());  // vrne recimo 1, če smo eno polje stran od cilja
-						if (razdalja > najvecjaRazdalja) najvecjaRazdalja = razdalja;
-					}
-				}
-				
 				for (Poteza poteza : unija) {  // druga zanka, kjer pa odstranjujemo poteze, ki niso veljavne
 					if (poteza.premik == vrednostPosamezneKocke) {
 						// razdalja figure od cilja
