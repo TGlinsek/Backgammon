@@ -26,28 +26,41 @@ public class Okno extends JFrame{
 	private JLabel naslov = new JLabel("Backgammon");
 	
 	//teme
-	s
+	private JPanel teme;
+		private JLabel temeLabel = new JLabel("Teme : ");
+		private JButton jungleButton = new JButton("Jungle");
+		//-------
+		private JButton bubbleGumButton = new JButton("BubbleGum");
+		//-------
+		private JButton navyButton = new JButton("Navy");
+		//-------
+		private JButton blackAndWhiteButton = new JButton("Black and White");
+		//-------
+		private JButton standardButton = new JButton("Standard");
 	
 	//Izbira igralcev 
 	private JLabel labelIgralec1 = new JLabel("Igralec 1");
 	public VrstaIgralca igralec1; //Spremeni, če kliknjen clovek1/racunalnik1
 	private JButton clovek1 = new JButton("  Človek  ");
 	private JButton racunalnik1 = new JButton("Računalnik");
-	private ColorChooserButton colorChooser1 = new ColorChooserButton(Color.WHITE); //izbira barve igralca
-	public Color barvaIg1 = Color.WHITE;
+//	private ColorChooserButton colorChooser1 = new ColorChooserButton(Color.WHITE); //izbira barve igralca
+//	public Color barvaIg1 = Color.WHITE;
 	
 	private JLabel labelIgralec2 = new JLabel("Igralec 2");
 	public VrstaIgralca igralec2;
 	private JButton clovek2 = new JButton("  Človek  ");
 	private JButton racunalnik2 = new JButton("Računalnik");
-	private ColorChooserButton colorChooser2 = new ColorChooserButton(Color.BLACK);
-	public Color barvaIg2 = Color.BLACK;
+//	private ColorChooserButton colorChooser2 = new ColorChooserButton(Color.BLACK);
+//	public Color barvaIg2 = Color.BLACK;
 	
 	//Zacni igro
 	private JButton igra = new JButton("Nova igra"); 
 	
 	//Igralno polje 
 	public Platno platno;
+	
+	//vrži kocke
+	private JButton vrziKocke = new JButton("Vrzi kocki");
 	
 	//Statusna vrstica v spodnjem delu okna
 	private JLabel status = new JLabel("Izberite igralce");
@@ -87,92 +100,166 @@ public class Okno extends JFrame{
 		t3.gridx = 3; t3.gridy = 0; t3.weightx = 1.0;
 		this.add(test3,t3);
 		
-// ------- prva vrstica
-	// Labeli igralci in izbira barve
+// ------- prva vrstica - naslov
+		GridBagConstraints n = new GridBagConstraints();
+		n.gridx = 0; n.gridy = 0; n.gridwidth = 4;
+		n.anchor = GridBagConstraints.CENTER;
+		n.insets = new Insets(5,0,5,0);
+		this.add(naslov, n);
+		
+// ------- druga vrstica - teme
+		
+		jungleButton.setForeground(new Color(255, 244, 230));
+		jungleButton.setBackground(new Color(102, 58, 0));
+		bubbleGumButton.setForeground(new Color(255, 128, 128));
+		bubbleGumButton.setBackground(new Color(172, 108, 108));
+		navyButton.setForeground(Color.WHITE);
+		navyButton.setBackground(new Color(179, 241, 255));
+		blackAndWhiteButton.setBackground(Color.BLACK);
+		blackAndWhiteButton.setForeground(Color.WHITE);
+		standardButton.setBackground(new Color(210, 166, 121));
+		standardButton.setForeground(new Color(255, 242, 230));
+		
+		teme = new JPanel();
+		teme.add(temeLabel); teme.add(jungleButton); teme.add(bubbleGumButton); teme.add(navyButton);teme.add(blackAndWhiteButton); teme.add(standardButton);
+		
+		GridBagConstraints t = new GridBagConstraints();
+		t.gridx = 0; t.gridy = 1; t.gridwidth = 4;
+		t.anchor = GridBagConstraints.CENTER;
+		t.insets = new Insets(5,0,5,0);
+		this.add(teme, t);
+		
+// ------- tretja vrstica - Labeli igralci in izbira barve
 		GridBagConstraints a = new GridBagConstraints();
-		a.gridx = 0; a.gridy = 0; a.gridwidth = 2;
+		a.gridx = 0; a.gridy = 2; a.gridwidth = 2;
 		a.anchor = GridBagConstraints.CENTER;
 		a.insets = new Insets(5,0,5,0); // top padding
 		JPanel platIg1 = new JPanel(); //V polju gridBagLayouta lahko le en element
 		platIg1.add(labelIgralec1);
-		platIg1.add(colorChooser1);
+//		platIg1.add(colorChooser1);
 		this.add(platIg1, a);
 		
 		
 		GridBagConstraints b = new GridBagConstraints();
-		b.gridx = 2; b.gridy = 0; b.gridwidth = 2;
+		b.gridx = 2; b.gridy = 2; b.gridwidth = 2;
 		b.anchor = GridBagConstraints.CENTER;
 		b.insets = new Insets(5,0,5,0);
 		JPanel platIg2 = new JPanel();
 		platIg2.add(labelIgralec2);
-		platIg2.add(colorChooser2);
+//		platIg2.add(colorChooser2);
 		this.add(platIg2, b);
 		
 
-// ------- druga vrstica
-	// Gumbi za izbiro računalnik ali človek
+// ------- četrta vrstica - Gumbi za izbiro računalnik ali človek
 		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0; c.gridy = 1;
+		c.gridx = 0; c.gridy = 3;
 		c.anchor = GridBagConstraints.LINE_END;
 		c.insets = new Insets(5,10,5,5);
 		this.add(clovek1, c);
 		
 		GridBagConstraints d = new GridBagConstraints();
-		d.gridx = 1; d.gridy = 1;
+		d.gridx = 1; d.gridy = 3;
 		d.anchor = GridBagConstraints.LINE_START;
 		d.insets = new Insets(5,5,5,10);
 		this.add(racunalnik1, d);
 		
 		GridBagConstraints e = new GridBagConstraints();
-		e.gridx = 2; e.gridy = 1;
+		e.gridx = 2; e.gridy = 3;
 		e.anchor = GridBagConstraints.LINE_END;
 		e.insets = new Insets(5,10,5,5);
 		this.add(clovek2, e);
 		
 		GridBagConstraints f = new GridBagConstraints();
-		f.gridx = 3; f.gridy = 1;
+		f.gridx = 3; f.gridy = 3;
 		f.anchor = GridBagConstraints.LINE_START;
 		f.insets = new Insets(5,5,5,10);
 		this.add(racunalnik2, f);
 		
-// ------- tretja vrstica
-	// Gumb za začetek igre
+// ------- peta vrstica - Gumb za začetek igre
 		GridBagConstraints g = new GridBagConstraints();
-		g.gridx = 0; g.gridy = 2; g.gridwidth = 4;
+		g.gridx = 0; g.gridy = 4; g.gridwidth = 4;
 		g.anchor = GridBagConstraints.CENTER;
 		g.insets = new Insets(5,0,20,0);
 		this.add(igra, g);
 		
-// ------- četrta vrstica 
+// ------- šesta vrstica 
 	// Igralno polje		
 		platno = new Platno(500,500);
 		GridBagConstraints p = new GridBagConstraints();
 		p.anchor = GridBagConstraints.PAGE_END;
-		p.gridx = 0; p.gridy = 3;
+		p.gridx = 0; p.gridy = 5;
 		p.gridwidth = 4;
 		this.add(platno, p);
 
-// ------- peta vrstica
-	// Statusna vrstica
+// ------- sedma vrstica - met kocke
+		GridBagConstraints k = new GridBagConstraints();
+		k.gridx = 0; k.gridy = 6; k.gridwidth = 4;
+		k.anchor = GridBagConstraints.PAGE_START;
+		k.insets = new Insets(5,0,5,0);
+		this.add(vrziKocke, k);
+		
+// ------- osma vrstica - Statusna vrstica
 		GridBagConstraints l = new GridBagConstraints();
-		l.gridx = 0; l.gridy = 4; l.gridwidth = 4;
+		l.gridx = 0; l.gridy = 7; l.gridwidth = 4;
 		l.anchor = GridBagConstraints.PAGE_START;
 		l.insets = new Insets(5,0,5,0);
 		this.add(status, l);
 	
 // ------- actionListeners ---------------------------------------------------------------
 		//izbira barve igralec1
-		colorChooser1.addColorChangedListener(new ColorChangedListener() {
-		    public void colorChanged(Color newColor) {
-		            barvaIg1 = newColor;
-		    }
-		});
+//		colorChooser1.addColorChangedListener(new ColorChangedListener() {
+//		    public void colorChanged(Color newColor) {
+//		            barvaIg1 = newColor;
+//		    }
+//		});
+//		
+//		//izbira barve igralec2
+//		colorChooser2.addColorChangedListener(new ColorChangedListener() {
+//		    public void colorChanged(Color newColor) {
+//		            barvaIg2 = newColor;
+//		    }
+//		});
 		
-		//izbira barve igralec2
-		colorChooser2.addColorChangedListener(new ColorChangedListener() {
-		    public void colorChanged(Color newColor) {
-		            barvaIg2 = newColor;
-		    }
+		//Teme
+		jungleButton.addActionListener(new ActionListener()
+		{
+		  public void actionPerformed(ActionEvent e)
+		  {
+			  platno.nastaviTemo("Jungle");
+			  platno.repaint();
+		  }
+		});
+		bubbleGumButton.addActionListener(new ActionListener()
+		{
+		  public void actionPerformed(ActionEvent e)
+		  {
+			  platno.nastaviTemo("BubbleGum");
+			  platno.repaint();
+		  }
+		});
+		navyButton.addActionListener(new ActionListener()
+		{
+		  public void actionPerformed(ActionEvent e)
+		  {
+			  platno.nastaviTemo("Navy");
+			  platno.repaint();
+		  }
+		});
+		blackAndWhiteButton.addActionListener(new ActionListener()
+		{
+		  public void actionPerformed(ActionEvent e)
+		  {
+			  platno.nastaviTemo("BlackAndWhite");
+			  platno.repaint();
+		  }
+		});
+		standardButton.addActionListener(new ActionListener()
+		{
+		  public void actionPerformed(ActionEvent e)
+		  {
+			  platno.nastaviTemo("Standard");
+			  platno.repaint();
+		  }
 		});
 		
 		//igralec1 izbira (Človek/Računalnik)

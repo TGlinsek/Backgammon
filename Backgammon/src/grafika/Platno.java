@@ -62,6 +62,39 @@ public class Platno extends JPanel implements MouseListener {
 		super();
 		setPreferredSize(new Dimension(sirina, visina));
 		
+		this.barvaOzadja = new Color(210, 166, 121);
+		this.barvaRoba = new Color(77, 42, 0);
+		this.barvaParnihTrikotnikov = new Color(102, 51, 0);
+		this.barvaNeparnihTrikotnokov = new Color(247, 231, 212);
+		this.barvaZetonaCrni = Color.BLACK;
+		this.barvaZetonaBeli = new Color(255, 242, 230);
+		this.barvaKocke = new Color(246, 205, 162);
+		
+		this.barvaPik = Color.BLACK;
+		this.barvaObrobeKocke = Color.BLACK;
+		this.barvaObrobeOznacen = Color.YELLOW;
+		
+		this.debelinaObrobeRelativna = 0.004;
+		this.debelinaRobaRelativna = 0.05;
+		this.debelinaObrobeOznacen = 0.005;
+		this.odmikRelativen = 0.09;
+		this.velikostKockeRelativna = 0.081;
+		this.velikostPikRelativna = 0.015;
+		this.razmerjeStranic = 0.7;
+		
+		this.izhodisce = 30;
+		
+		addMouseListener(this);
+		
+//		samo za preverjanje kode
+		igra = new Igra(Igralec.CRNI, true, true);
+//		igra.trenutnoStanje = StanjeIgre.METANJE_KOCK;
+	}
+	
+	@Override
+	protected void paintComponent(Graphics g) {
+		
+		//da se nastavi ko se pokliče repaint();
 		if (Jungle) {
 			this.barvaOzadja = new Color(134, 161, 125);
 			this.barvaRoba = new Color(102, 58, 0);
@@ -108,25 +141,6 @@ public class Platno extends JPanel implements MouseListener {
 		this.barvaObrobeKocke = Color.BLACK;
 		this.barvaObrobeOznacen = Color.YELLOW;
 		
-		this.debelinaObrobeRelativna = 0.004;
-		this.debelinaRobaRelativna = 0.05;
-		this.debelinaObrobeOznacen = 0.005;
-		this.odmikRelativen = 0.09;
-		this.velikostKockeRelativna = 0.081;
-		this.velikostPikRelativna = 0.015;
-		this.razmerjeStranic = 0.7;
-		
-		this.izhodisce = 30;
-		
-		addMouseListener(this);
-		
-//		samo za preverjanje kode
-		igra = new Igra(Igralec.CRNI, true, true);
-//		igra.trenutnoStanje = StanjeIgre.METANJE_KOCK;
-	}
-	
-	@Override
-	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
 
@@ -472,6 +486,28 @@ public class Platno extends JPanel implements MouseListener {
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
+		
+	}
+	
+	public void nastaviTemo(String tema) {
+		//uporabljeno v oknu za nastavljanje tem
+		
+		Jungle = false;
+		BubbleGum = false;
+		Navy = false;
+		BlackAndWhite = false;
+		
+		if(tema == "Jungle") {
+			Jungle = true;
+		}else if(tema == "BubbleGum") {
+			BubbleGum = true;
+		}else if(tema == "Navy"){
+			Navy = true;
+		}else if(tema == "BlackAndWhite") {
+			BlackAndWhite = true;
+		}else {
+			
+		}
 		
 	}
 
