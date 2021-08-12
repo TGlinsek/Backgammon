@@ -125,7 +125,7 @@ public class Vodja {
 	}
 	
 	
-	public static Inteligenca racunalnikovaInteligenca = new Inteligenca();
+	public static Inteligenca racunalnikovaInteligenca = new Inteligenca(igra);
 	
 	
 	public static void igrajRacunalnikovoPotezo() {
@@ -134,7 +134,7 @@ public class Vodja {
 
 			@Override
 			protected Poteza doInBackground() {
-				Poteza poteza = racunalnikovaInteligenca.izberiPotezo(igra);
+				Poteza poteza = racunalnikovaInteligenca.izberiPotezo();
 				
 				// try {TimeUnit.SECONDS.sleep(1);} catch (Exception e) {};
 				try {TimeUnit.MILLISECONDS.sleep(1000);} catch (Exception e) {};
