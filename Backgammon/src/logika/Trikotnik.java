@@ -6,7 +6,7 @@ public class Trikotnik {
 	public int stevilo;
 	
 	public Trikotnik(Figura barvaFigur, int stevilo) {
-		if (barvaFigur != Figura.PRAZNA && stevilo == 0) throw new java.lang.RuntimeException("joj");
+		if (barvaFigur != Figura.PRAZNA && stevilo == 0) throw new java.lang.RuntimeException("To se ne sme zgoditi.");
 		this.barvaFigur = barvaFigur;
 		this.stevilo = stevilo;
 	}

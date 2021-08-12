@@ -333,8 +333,7 @@ public class Okno extends JFrame{
 		  public void actionPerformed(ActionEvent e)
 		  {
 			//Ali bomo tu preverjali, če lahko vrže kocki?
-		    platno.igra.kocka1.vrziKocko();
-		    platno.igra.kocka2.vrziKocko();
+		    platno.igra.vrziKocki(false);
 			
 		    platno.repaint();
 		  }

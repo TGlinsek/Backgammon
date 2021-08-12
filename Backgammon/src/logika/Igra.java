@@ -17,7 +17,7 @@ public class Igra {
 	// npr., če je uporabnik hotel prestaviti figuro, ki je ni možno prestaviti, se bo na zaslonu prikazalo sporočilo, ki bo vsebovalo tale string:
 	public String napaka;  // če je to null, ni napake, drugače pa je
 	
-	public LinkedList<Integer> seznamKock;
+	private LinkedList<Integer> seznamKock;
 	
 	public StanjeIgre trenutnoStanje;
 	
@@ -55,8 +55,14 @@ public class Igra {
 	}
 	
 	public Igra(Igralec igralecKiZacne, boolean crniGreVSmeriUrinegaKazalca, boolean crniZacneSpodaj) {
+		seznamKock = new LinkedList<Integer>();
+		
 		kocka1 = new Kocka();
 		kocka2 = new Kocka();
+		
+		// kocke smo ravnokar vrgli, zato jih kar damo v seznam 
+		seznamKock.add(kocka1.vrniVrednost());
+		seznamKock.add(kocka2.vrniVrednost());
 		
 		napolniSlovarIgralcevaKocka();
 		napolniSlovarPridobiKocko();
@@ -70,8 +76,6 @@ public class Igra {
 		// napaka = null;  // itak bo na začetku null, tako da tega ni treba napisati
 		
 		trenutnoStanje = StanjeIgre.IZBIRA_ZACETNEGA_IGRALCA;
-		
-		seznamKock = new LinkedList<Integer>();
 	}
 	
 	/*  // default konstruktor, pač če bi igralec želel default nastavitve
