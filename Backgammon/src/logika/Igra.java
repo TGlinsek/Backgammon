@@ -429,8 +429,32 @@ public class Igra {
 				vecPotez = novePoteze;
 			}
 		}
-		return vrniUnijoSeznamov(vecPotez, manjPotez);
+		List<Poteza> unija = vrniUnijoSeznamov(vecPotez, manjPotez);
 		
+		// če so vse naše figure v zadnji četrtini (v home boardu)
+		if ((igralecNaVrsti == Igralec.CRNI && igralnaPlosca.crniLahkoGreNaCilj) || (igralecNaVrsti == Igralec.BELI && igralnaPlosca.beliLahkoGreNaCilj)) {
+			for (int vrednostPosamezneKocke : seznamKock) {
+				int najvecjaRazdalja = 0;
+				for (Poteza poteza : unija) {
+					if (poteza.premik == vrednostPosamezneKocke) {
+						// razdalja figure od cilja
+						int razdalja = IgralnaPlosca.poljePotezeVRelativno(poteza.vrniIzhodisce(), igralecNaVrsti.pridobiNasprotnika().pridobiFiguro());  // vrne recimo 1, če smo eno polje stran od cilja
+						if (razdalja > najvecjaRazdalja) najvecjaRazdalja = razdalja;
+					}
+				}
+				
+				for (Poteza poteza : unija) {  // druga zanka, kjer pa odstranjujemo poteze, ki niso veljavne
+					if (poteza.premik == vrednostPosamezneKocke) {
+						// razdalja figure od cilja
+						int razdalja = IgralnaPlosca.poljePotezeVRelativno(poteza.vrniIzhodisce(), igralecNaVrsti.pridobiNasprotnika().pridobiFiguro());  // vrne recimo 1, če smo eno polje stran od cilja
+						if (razdalja < poteza.premik && razdalja < najvecjaRazdalja) {  // oz. če je razdalja manjša od minimuma teh dveh
+							unija.remove(poteza);
+						}
+					}
+				}
+			}
+		}
+		return unija;
 		
 		/*
 		if (prvaKocka.size() == 1) {  // le ena veljavna poteza za prvo kocko

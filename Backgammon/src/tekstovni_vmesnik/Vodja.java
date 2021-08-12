@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import inteligenca.Inteligenca;
 import logika.BarvaIgralca;
 import logika.Igra;
 import logika.Igralec;
@@ -19,6 +20,8 @@ public class Vodja {
 private static BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
 	
 	private static Map<Igralec, VrstaIgralca> vrstaIgralca;
+	
+	public static Inteligenca racunalnikovaInteligenca;
 	
 	private static void napolniSlovarZaVrsteIgralcev(VrstaIgralca beliIgralec, VrstaIgralca crniIgralec) {
 		vrstaIgralca = new EnumMap<Igralec, VrstaIgralca>(Igralec.class);
@@ -121,7 +124,9 @@ private static BufferedReader r = new BufferedReader(new InputStreamReader(Syste
 					continue;
 				}
 			}
-
+			
+			racunalnikovaInteligenca = new Inteligenca(igra);
+			
 			igranje : while (true) {
 				switch (igra.trenutnoStanje) {
 				case ZMAGA_BELI:
@@ -209,6 +214,7 @@ private static BufferedReader r = new BufferedReader(new InputStreamReader(Syste
 							break premikanje;
 						case RACUNALNIK:
 							poteza = racunalnikovaPoteza(igra);
+							System.out.println("Poteza: " + poteza);
 							break premikanje;
 						}
 						boolean potezaJeBilaUspesnoOdigrana = igra.odigraj(poteza);
@@ -240,9 +246,8 @@ private static BufferedReader r = new BufferedReader(new InputStreamReader(Syste
 	
 	// private static Random random = new Random ();
 	
-	
 	public static Poteza racunalnikovaPoteza(Igra igra) {
-		return null;  // vrnemo nekaj samo zato, ker pač moramo
+		return racunalnikovaInteligenca.izberiPotezo();
 	}
 	
 	

@@ -1,6 +1,8 @@
 package inteligenca;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import logika.Figura;
 import logika.Igra;
@@ -13,12 +15,14 @@ public class Inteligenca {
 	
 	// navdihnjeno po https://www.thesprucecrafts.com/how-to-win-at-backgammon-411041
 	
+	public Igra igra;
 	public Igralec cigavaPoteza;
 	public IgralnaPlosca plosca;
 	public List<Poteza> moznePoteze;
 	
 	
 	public Inteligenca(Igra igra) {
+		this.igra = igra;
 		this.cigavaPoteza = igra.igralecNaVrsti;
 		this.plosca = igra.igralnaPlosca;
 		this.moznePoteze = igra.vrniVeljavnePotezeTePlosce();
@@ -126,9 +130,14 @@ public class Inteligenca {
 	}
 	
 	
+	private static Random random = new Random ();
+	
+	
 	public Poteza izberiPotezo() {
-		double najvisjaVrednost = 0;
-		Poteza najboljsaPoteza = null;
+		double najvisjaVrednost = Double.NEGATIVE_INFINITY;
+		List<Poteza> najboljsePoteze = new LinkedList<Poteza>();
+		this.moznePoteze = igra.vrniVeljavnePotezeTePlosce();  // treba je posodobiti veljavne poteze
+		
 		for (Poteza poteza : moznePoteze) {
 			int vrednost1; 
 			int stevilo1 = steviloFigurNaIzhodiscnemTrikotniku(poteza);
@@ -177,16 +186,28 @@ public class Inteligenca {
 				if (ciljniTrikotnikJeVNasprotnikovemHomeBoardu(poteza) && steviloFigurNaCiljnemTrikotniku(poteza) == 1) {  // Če poteza daje na trikotnik, ki je v nasprotnikovem home boardu in kjer je že natanko ena naša figura, dodamo bonus
 					vrednost5 = 3;  // dodamo majhen bonus
 				}
-			}
+			}  // mogoče to ne bi samo za tiste v home boardu ... TODO
 			
 			
 			double novaVrednost = vrednost1 + vrednost2 + vrednost3 + vrednost4 + vrednost5;
 			
-			if (novaVrednost > najvisjaVrednost) {
+			
+			if (novaVrednost > najvisjaVrednost) {  // lahko bi dali tudi >
 				najvisjaVrednost = novaVrednost;
-				najboljsaPoteza = poteza;
+				najboljsePoteze.clear();
+			}
+			
+			if (novaVrednost >= najvisjaVrednost) {
+				najboljsePoteze.add(poteza);
 			}
 		}
+		
+		if (najboljsePoteze.size() == 0) return null;  // ni nobene možne poteze
+		// TODO
+		
+		// izberi naključno izmed najboljših potez
+		int randomIndex = random.nextInt(najboljsePoteze.size());
+		Poteza najboljsaPoteza = moznePoteze.get(randomIndex);
 		return najboljsaPoteza;
 	}
 	
