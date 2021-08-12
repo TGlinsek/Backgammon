@@ -19,38 +19,49 @@ public class Vodja {
 	public static Map<Igralec, VrstaIgralca> vrstaIgralca;
 	// public static Map<Igralec, KdoIgra> kdoIgra;  // tega verjetno ne bomo rabili
 	
-	public static Okno okno;
+	public Okno okno;
 	
-	public static Igra igra = null;
+	public Igra igra;
 	
-	public static boolean clovekNaVrsti = false;  // ni važno, kaj je na začetku
+	// public boolean clovekNaVrsti = false;  // ni važno, kaj je na začetku
+	public boolean clovekNaVrsti;  // ne rabimo v konstruktorju definirat, se bo sproti definiralo
 	
+	/*
 	private static Igralec igralecKiZacne = Igralec.CRNI;  // default nastavitve
 	private static boolean crniGreVSmeriUrinegaKazalca = true;  // default nastavitve
 	private static boolean crniZacneSpodaj = true;  // default nastavitve
+	*/
 	
-	public static void igramoNovoIgro() {
-		igra = new Igra(igralecKiZacne, crniGreVSmeriUrinegaKazalca, crniZacneSpodaj);  // nastavi velikost (brez parametra za default)
-		if (igralecKiZacne == null) {
-			sKockamiDolociZacetnegaIgralca();
-		}
+	public Vodja(Okno okno) {
+		// igra = new Igra(igralecKiZacne, crniGreVSmeriUrinegaKazalca, crniZacneSpodaj);  // nastavi velikost (brez parametra za default)
+		igra = new Igra();  // verjetno na koncu ne bo nobenih parametrov tule
+		this.okno = okno;
+	}
+	
+	
+	public void igramoNovoIgro() {
+		
+		sKockamiDolociZacetnegaIgralca();
+		
 		// okno.nastaviVelikostPlosce();  hipotetična metoda, ki nastavi velikost okna v odvisnosti od getWidth() in getHeight()
 		igramo();
 	}
 	
-	public static void nastaviZacetnoBarvo(Igralec igralec) {
+	/*
+	public void nastaviZacetnoBarvo(Igralec igralec) {
 		igralecKiZacne = igralec;
 	}
 	
-	public static void nastaviStran(boolean leva) {
+	public void nastaviStran(boolean leva) {
 		crniGreVSmeriUrinegaKazalca = leva != crniZacneSpodaj;
 	}
 	
-	public static void nastaviPolovico(boolean crniZacneSpodaj1) {
+	public void nastaviPolovico(boolean crniZacneSpodaj1) {
 		crniZacneSpodaj = crniZacneSpodaj1;
 	}
+	*/
 	
-	public static void sKockamiDolociZacetnegaIgralca() {
+	public void sKockamiDolociZacetnegaIgralca() {
 		metanjeKock : while (true) {
 			igra.vrziKocki(true);
 			
@@ -78,7 +89,7 @@ public class Vodja {
 		igra.trenutnoStanje = StanjeIgre.METANJE_KOCK;  // pričnemo z igro
 	}
 	
-	public static void igramo() {
+	public void igramo() {
 		// okno.osveziGUI();  to je npr. za posodabljanje napisa na oknu oz. napake
 		// igra.spremeniStanjeIgre();
 		
@@ -125,10 +136,10 @@ public class Vodja {
 	}
 	
 	
-	public static Inteligenca racunalnikovaInteligenca = new Inteligenca(igra);
+	public Inteligenca racunalnikovaInteligenca = new Inteligenca(igra);
 	
 	
-	public static void igrajRacunalnikovoPotezo() {
+	public void igrajRacunalnikovoPotezo() {
 		Igra zacetkaIgra = igra;
 		SwingWorker<Poteza, Void> worker = new SwingWorker<Poteza, Void> () {
 
@@ -156,7 +167,7 @@ public class Vodja {
 	}
 	
 	
-	public static void igrajClovekovoPotezo(Poteza poteza) {
+	public void igrajClovekovoPotezo(Poteza poteza) {
 		boolean potezaJeBilaUspesnoOdigrana = igra.odigraj(poteza);
 		if (potezaJeBilaUspesnoOdigrana) { 
 			clovekNaVrsti = false;
