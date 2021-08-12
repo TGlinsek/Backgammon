@@ -130,7 +130,7 @@ public class Platno extends JPanel implements MouseListener {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
 
-		int vodoravnaStranica = (int) (Math.min(getWidth(), getHeight()));
+		int vodoravnaStranica = (int) (getWidth());
 		int navpicnaStranica = (int) (razmerjeStranic * vodoravnaStranica);
 				
 		int rob = (int) (debelinaRobaRelativna * vodoravnaStranica);

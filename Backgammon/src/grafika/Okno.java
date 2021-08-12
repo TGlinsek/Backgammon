@@ -22,7 +22,13 @@ public class Okno extends JFrame{
 	//Barva označenega gumba
 	private Color barva = new Color(131, 140, 150);
 	
-	//Izbira igralcev - prva in druga vrstica
+	//Naslov
+	private JLabel naslov = new JLabel("Backgammon");
+	
+	//teme
+	s
+	
+	//Izbira igralcev 
 	private JLabel labelIgralec1 = new JLabel("Igralec 1");
 	public VrstaIgralca igralec1; //Spremeni, če kliknjen clovek1/racunalnik1
 	private JButton clovek1 = new JButton("  Človek  ");
