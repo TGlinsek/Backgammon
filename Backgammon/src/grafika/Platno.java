@@ -426,6 +426,19 @@ public class Platno extends JPanel implements MouseListener {
 		g2d.fillOval(xKocki + faktorX * velikostKocke / 7,  yVseKocke + faktorY * velikostKocke / 7, velikostPik, velikostPik);
 	}
 	
+	
+	private Poteza izberiPotezoIzmedMoznihPotez(int izhodisce, int premik, Figura igralec) {  // vrne potezo s temi parametri, razen premik je lahka tut večji
+		// taka poteza bo vedno obstajala
+		List<Poteza> veljavnePoteze = igra.vrniVeljavnePotezeTePlosce();
+		for (Poteza poteza : veljavnePoteze) {
+			if (poteza.vrniIzhodisce() == izhodisce && poteza.premik >= premik && poteza.igralec == igralec) {
+				return poteza;
+			}
+		}
+		throw new java.lang.RuntimeException("Ni bilo najdene ustrezne poteze!");
+	}
+	
+	
 	boolean izbiramoCilj = false;
 	int prejsnjiTrikotnik;
 	
@@ -480,8 +493,11 @@ public class Platno extends JPanel implements MouseListener {
 		System.out.println("Cilj:  " + cilj);
 		
 		if (cilj != 30) {
-			System.out.println("Poteza:   " + (new Poteza(prejsnjiTrikotnik, cilj - prejsnjiTrikotnik, igra.igralecNaVrsti.pridobiFiguro())));
-			igra.odigraj(new Poteza(prejsnjiTrikotnik, cilj - prejsnjiTrikotnik, igra.igralecNaVrsti.pridobiFiguro()));
+			Poteza poteza = izberiPotezoIzmedMoznihPotez(prejsnjiTrikotnik, cilj - prejsnjiTrikotnik, igra.igralecNaVrsti.pridobiFiguro());
+			
+			// System.out.println("Poteza:   " + (new Poteza(prejsnjiTrikotnik, cilj - prejsnjiTrikotnik, igra.igralecNaVrsti.pridobiFiguro())));
+			System.out.println("Poteza: " + poteza);
+			igra.odigraj(poteza);
 			izhodisce = 30;
 			cilj = 30;
 		}
