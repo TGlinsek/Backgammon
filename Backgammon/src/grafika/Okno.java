@@ -48,10 +48,13 @@ public class Okno extends JFrame{
 	
 	
 	
-	public Okno() {
+	public Okno() { //----------------------------------------------------------------------------------------------
 		
 		super();
 		setTitle("Backgammon");
+		setResizable(false);
+		
+		getRootPane().setBorder(BorderFactory.createMatteBorder(6, 6, 6, 6, Color.WHITE));
 		
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLayout(new GridBagLayout());
@@ -84,7 +87,7 @@ public class Okno extends JFrame{
 		a.gridx = 0; a.gridy = 0; a.gridwidth = 2;
 		a.anchor = GridBagConstraints.CENTER;
 		a.insets = new Insets(5,0,5,0); // top padding
-		JPanel platIg1 = new JPanel(); //V polju gridBagLayouta lahko le ne element
+		JPanel platIg1 = new JPanel(); //V polju gridBagLayouta lahko le en element
 		platIg1.add(labelIgralec1);
 		platIg1.add(colorChooser1);
 		this.add(platIg1, a);
@@ -131,19 +134,15 @@ public class Okno extends JFrame{
 		GridBagConstraints g = new GridBagConstraints();
 		g.gridx = 0; g.gridy = 2; g.gridwidth = 4;
 		g.anchor = GridBagConstraints.CENTER;
-		g.insets = new Insets(5,0,5,0);
+		g.insets = new Insets(5,0,20,0);
 		this.add(igra, g);
 		
 // ------- četrta vrstica 
 	// Igralno polje		
 		platno = new Platno(500,500);
 		GridBagConstraints p = new GridBagConstraints();
-	//  PROBLEM: če je fill = BOTH in anchor = CENTER, prevlada fill samo razširi kolikor lahko ampak ne da na sredino
-	//  platno razširi samo do kvadrata, noče bit pravokotnik ???
-	//	p.fill = GridBagConstraints.BOTH;
-		p.anchor = GridBagConstraints.CENTER;
+		p.anchor = GridBagConstraints.PAGE_END;
 		p.gridx = 0; p.gridy = 3;
-		p.weightx = 1.0; p.weighty = 1.0;
 		p.gridwidth = 4;
 		this.add(platno, p);
 
@@ -151,13 +150,9 @@ public class Okno extends JFrame{
 	// Statusna vrstica
 		GridBagConstraints l = new GridBagConstraints();
 		l.gridx = 0; l.gridy = 4; l.gridwidth = 4;
-		l.anchor = GridBagConstraints.CENTER;
+		l.anchor = GridBagConstraints.PAGE_START;
 		l.insets = new Insets(5,0,5,0);
 		this.add(status, l);
-	
-//-------- componentListeners ------------------------------------------------------------
-		//opcija za resize
-//		this.addComponentListener(new ComponentResized());
 	
 // ------- actionListeners ---------------------------------------------------------------
 		//izbira barve igralec1
@@ -238,6 +233,6 @@ public class Okno extends JFrame{
 		});
 	
 	
-	}
+	}//------------------------------------------------------------------------------------------------------------
 
 }
