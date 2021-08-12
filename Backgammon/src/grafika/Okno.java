@@ -1,6 +1,7 @@
 package grafika;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -101,6 +102,8 @@ public class Okno extends JFrame{
 		this.add(test3,t3);
 		
 // ------- prva vrstica - naslov
+		naslov.setFont(new Font("Serif", Font.BOLD, 28));		
+		
 		GridBagConstraints n = new GridBagConstraints();
 		n.gridx = 0; n.gridy = 0; n.gridwidth = 4;
 		n.anchor = GridBagConstraints.CENTER;
@@ -121,6 +124,7 @@ public class Okno extends JFrame{
 		standardButton.setForeground(new Color(255, 242, 230));
 		
 		teme = new JPanel();
+		teme.setBorder(BorderFactory.createLineBorder(Color.black));
 		teme.add(temeLabel); teme.add(jungleButton); teme.add(bubbleGumButton); teme.add(navyButton);teme.add(blackAndWhiteButton); teme.add(standardButton);
 		
 		GridBagConstraints t = new GridBagConstraints();
@@ -182,8 +186,7 @@ public class Okno extends JFrame{
 		g.insets = new Insets(5,0,20,0);
 		this.add(igra, g);
 		
-// ------- šesta vrstica 
-	// Igralno polje		
+// ------- šesta vrstica - platno - Igralno polje		
 		platno = new Platno(500,500);
 		GridBagConstraints p = new GridBagConstraints();
 		p.anchor = GridBagConstraints.PAGE_END;
@@ -220,7 +223,7 @@ public class Okno extends JFrame{
 //		    }
 //		});
 		
-		//Teme
+	//Teme
 		jungleButton.addActionListener(new ActionListener()
 		{
 		  public void actionPerformed(ActionEvent e)
@@ -262,7 +265,7 @@ public class Okno extends JFrame{
 		  }
 		});
 		
-		//igralec1 izbira (Človek/Računalnik)
+	//igralec1 izbira (Človek/Računalnik)
 		clovek1.addActionListener(new ActionListener()
 		{
 		  public void actionPerformed(ActionEvent e)
@@ -287,7 +290,7 @@ public class Okno extends JFrame{
 		  }
 		});
 		
-		//igalec2 izbira
+	//igralec2 izbira
 		clovek2.addActionListener(new ActionListener()
 		{
 		  public void actionPerformed(ActionEvent e)
@@ -312,7 +315,7 @@ public class Okno extends JFrame{
 		  }
 		});
 		
-		//Zacni igro
+	//Zacni igro
 		igra.addActionListener(new ActionListener()
 		{
 		  public void actionPerformed(ActionEvent e)
@@ -324,6 +327,19 @@ public class Okno extends JFrame{
 			//Kaj pa če barve niso iste amapak samo podobne? 
 		  }
 		});
+		
+		vrziKocke.addActionListener(new ActionListener()
+		{
+		  public void actionPerformed(ActionEvent e)
+		  {
+			//Ali bomo tu preverjali, če lahko vrže kocki?
+		    platno.igra.kocka1.vrziKocko();
+		    platno.igra.kocka2.vrziKocko();
+			
+		    platno.repaint();
+		  }
+		});
+		
 	
 	
 	}//------------------------------------------------------------------------------------------------------------

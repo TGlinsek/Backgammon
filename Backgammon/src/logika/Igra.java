@@ -10,8 +10,8 @@ public class Igra {
 	public IgralnaPlosca igralnaPlosca;
 	public Igralec igralecNaVrsti;
 	
-	private Kocka kocka1;
-	private Kocka kocka2;
+	public Kocka kocka1;
+	public Kocka kocka2;
 	
 	
 	// npr., če je uporabnik hotel prestaviti figuro, ki je ni možno prestaviti, se bo na zaslonu prikazalo sporočilo, ki bo vsebovalo tale string:
