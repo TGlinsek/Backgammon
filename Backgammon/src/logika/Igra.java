@@ -72,7 +72,7 @@ public class Igra {
 		
 		// napaka = null;  // itak bo na začetku null, tako da tega ni treba napisati
 		
-		trenutnoStanje = StanjeIgre.METANJE_KOCK;
+		trenutnoStanje = StanjeIgre.PREMIKANJE_FIGUR;
 	}
 	
 	/*  // default konstruktor, pač če bi igralec želel default nastavitve
@@ -318,11 +318,11 @@ public class Igra {
 		List<Poteza> prvaKocka = vrniVeljavnePotezeZaEnoKocko(kocka1.vrniVrednost(), igralecNaVrsti);
 		List<Poteza> drugaKocka = vrniVeljavnePotezeZaEnoKocko(kocka2.vrniVrednost(), igralecNaVrsti);
 		
-		System.out.println("Prva kocka size: " + prvaKocka.size());
-		System.out.println("Druga kocka size: " + drugaKocka.size());
-		System.out.println("Prva kocka: " + prvaKocka);
-		System.out.println("Druga kocka: " + drugaKocka);
-		
+		// System.out.println("Prva kocka size: " + prvaKocka.size());
+//		System.out.println("Druga kocka size: " + drugaKocka.size());
+//		System.out.println("Prva kocka: " + prvaKocka);
+//		System.out.println("Druga kocka: " + drugaKocka);
+//		
 		/*
 		 Ko naredimo prvo potezo, ne moremo ustvariti novih potez za drugo kocko, razen če isto figuro premaknemo.
 		 Prav tako ne moremo izgubiti potez, razen če bi isto figuro premaknili.
@@ -445,7 +445,7 @@ public class Igra {
 			}
 		}
 		List<Poteza> unija = vrniUnijoSeznamov(vecPotez, manjPotez);
-		System.out.println("Unija: " + unija);
+		// System.out.println("Unija: " + unija);
 		// če so vse naše figure v zadnji četrtini (v home boardu)
 		if ((igralecNaVrsti == Igralec.CRNI && igralnaPlosca.crniLahkoGreNaCilj) || (igralecNaVrsti == Igralec.BELI && igralnaPlosca.beliLahkoGreNaCilj)) {
 			int najvecjaRazdalja = igralnaPlosca.najvecjaRazdaljaDoCilja(igralecNaVrsti.pridobiFiguro());
@@ -485,7 +485,7 @@ public class Igra {
 	public void zamenjajIgralca() {
 		this.igralecNaVrsti = this.igralecNaVrsti.pridobiNasprotnika();
 		// if (this.trenutnoStanje != StanjeIgre.PREMIKANJE_FIGUR) throw new java.lang.RuntimeException("To se ne bi smelo zgoditi!" + this.trenutnoStanje);  // le v stanju PREMIKANJE_FIGUR se bo lahko igralec zamenjal
-		this.trenutnoStanje = StanjeIgre.METANJE_KOCK;  // spremenimo stanje
+		this.trenutnoStanje = StanjeIgre.PREMIKANJE_FIGUR;  // spremenimo stanje
 	}
 	
 	

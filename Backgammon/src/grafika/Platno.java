@@ -529,12 +529,14 @@ public class Platno extends JPanel implements MouseListener {
 				
 				// System.out.println("Poteza:   " + (new Poteza(prejsnjiTrikotnik, cilj - prejsnjiTrikotnik, igra.igralecNaVrsti.pridobiFiguro())));
 //				System.out.println("Poteza: " + poteza);
-				igra.odigraj(poteza);
+				// igra.odigraj(poteza);
+				
 				List<Integer> seznamKock = igra.vrniSeznamKock();
-				if (seznamKock.size() == 0) {
+				if (seznamKock.size() == 1) {
 					igra.zamenjajIgralca();
 					igra.vrziKocki();
 				}
+				vodja.igrajClovekovoPotezo(poteza);
 				izhodisce = 30;
 				cilj = 30;
 			}

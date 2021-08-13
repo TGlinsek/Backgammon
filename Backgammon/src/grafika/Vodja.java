@@ -1,5 +1,6 @@
 package grafika;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.SwingWorker;
@@ -93,6 +94,7 @@ public class Vodja {
 	*/
 	
 	public void igramo() {
+		System.out.println(clovekNaVrsti);
 		okno.osveziGUI();  // to je npr. za posodabljanje napisa na oknu oz. napake
 		// igra.spremeniStanjeIgre();
 		
@@ -121,17 +123,19 @@ public class Vodja {
 		case PREMIKANJE_FIGUR:
 			Igralec igralec2 = igra.igralecNaVrsti;
 			VrstaIgralca vrstaNaPotezi2 = vrstaIgralca.get(igralec2);
-			/*
+			
 			premikanje : switch (vrstaNaPotezi2) {
 			case C:
 				clovekNaVrsti = true;
+				break premikanje;
 			case R:
+				clovekNaVrsti = false;
 				igrajRacunalnikovoPotezo();
 				break premikanje;
 			}
-			*/
 			
-			if (vrstaNaPotezi2 == VrstaIgralca.R) igrajRacunalnikovoPotezo();
+			
+			// if (vrstaNaPotezi2 == VrstaIgralca.R) igrajRacunalnikovoPotezo();
 			
 			break;
 		default: throw new java.lang.RuntimeException("Napaka");
@@ -159,7 +163,13 @@ public class Vodja {
 				
 				if (igra == zacetkaIgra) {
 					igra.odigraj(poteza);
-					// zdaj bo na vrsti nasprotnik (recimo človek)
+					List<Integer> seznamKock = igra.vrniSeznamKock();
+					if (seznamKock.size() == 0) {
+						// zdaj bo na vrsti nasprotnik (recimo človek)
+						igra.zamenjajIgralca();
+						igra.vrziKocki();
+						clovekNaVrsti = true;
+					}
 					igramo();
 				}
 			}
@@ -170,7 +180,7 @@ public class Vodja {
 	
 	public void igrajClovekovoPotezo(Poteza poteza) {
 		boolean potezaJeBilaUspesnoOdigrana = igra.odigraj(poteza);
-		if (potezaJeBilaUspesnoOdigrana) { 
+		if (potezaJeBilaUspesnoOdigrana) {
 			clovekNaVrsti = false;
 		}
 		
