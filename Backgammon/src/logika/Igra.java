@@ -80,29 +80,28 @@ public class Igra {
 	
 //	!!popravi, da bo vodja dal vrednost kock: TODO
 	public void vrziKocki(boolean zrebanjeZacetnegaIgralca) {  // parameter true -> izbira igralca s kockami, false -> navadno metanje kock v teku igre
-		kocka1.vrziKocko();
-		kocka2.vrziKocko();
-		if (!zrebanjeZacetnegaIgralca) this.trenutnoStanje = StanjeIgre.PREMIKANJE_FIGUR;
-		else {
-			if (!kockiImataEnakoVrednost()) {
-				this.trenutnoStanje = StanjeIgre.METANJE_KOCK;
-				return;
-			} else {
-				vrziKocki(true);
-				return;
-			}
-		}
-		
-		seznamKock.clear();
-		seznamKock.add(kocka1.vrniVrednost());
-		seznamKock.add(kocka2.vrniVrednost());
-		
-		if (kockiImataEnakoVrednost()) {
-			seznamKock.add(kocka1.vrniVrednost());  // samo dvakrat še dodamo kocke, da imamo na koncu štiri enake vrednosti
+		if (!zrebanjeZacetnegaIgralca) {
+			this.trenutnoStanje = StanjeIgre.PREMIKANJE_FIGUR;
+			
+			seznamKock.clear();
+			seznamKock.add(kocka1.vrniVrednost());
 			seznamKock.add(kocka2.vrniVrednost());
+			
+			if (kockiImataEnakoVrednost()) {
+				seznamKock.add(kocka1.vrniVrednost());  // samo dvakrat še dodamo kocke, da imamo na koncu štiri enake vrednosti
+				seznamKock.add(kocka2.vrniVrednost());
+			}
+			return;
+		} else {
+			kocka1.vrziKocko();
+			kocka2.vrziKocko();
+			while (kockiImataEnakoVrednost()) {
+				kocka1.vrziKocko();
+				kocka2.vrziKocko();
+			}
+			this.trenutnoStanje = StanjeIgre.METANJE_KOCK;
+			return;
 		}
-		
-		return;
 	}
 	
 	public int primerjajKocki(ImeKocke prvaKocka, ImeKocke drugaKocka) {  // to morda ne bo uporabno, če bomo itak morali vsako vrednost posebej v vodji dobit
