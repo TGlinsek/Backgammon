@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -224,28 +225,28 @@ public class Platno extends JPanel implements MouseListener {
 			if (i >= 13 && i <= 18) trikotnik = i;
 			if (i >= 20 && i <= 25) trikotnik = i - 1;
 			
-//			izhodiscni trikotnik je bil izbran
-			if (izhodisce != 30) {
+			if (igra != null && igra.igralecNaVrsti != null) {
 				List<Poteza> veljavnePoteze = igra.vrniVeljavnePotezeTePlosce();
-				System.out.println(veljavnePoteze);
-				for (Poteza poteza : veljavnePoteze){
-					if (poteza.vrniIzhodisce() == izhodisce && poteza.vrniCilj() <= 0) {
-						izbraniTrikotniki.add(0);
-						g2d.drawRoundRect(koordinateZaCiljBelega[0], koordinateZaCiljBelega[1], koordinateZaCiljBelega[2], koordinateZaCiljBelega[3], koordinateZaCiljBelega[4], koordinateZaCiljBelega[5]);
-					} else if (poteza.vrniIzhodisce() == izhodisce && poteza.vrniCilj() >= 25) {
-						izbraniTrikotniki.add(25);
-						g2d.drawRoundRect(koordinateZaCiljCrnega[0], koordinateZaCiljCrnega[1], koordinateZaCiljCrnega[2], koordinateZaCiljCrnega[3], koordinateZaCiljCrnega[4], koordinateZaCiljCrnega[5]);
-					} else if (poteza.vrniIzhodisce() == izhodisce && trikotnik == poteza.vrniCilj()){
-						izbraniTrikotniki.add(trikotnik);
-						g2d.drawPolygon(p);
-						System.out.println("Izbranitrikotniki:  " + izbraniTrikotniki);
+	//			izhodiscni trikotnik je bil izbran
+				if (izhodisce != 30) {
+//					System.out.println(veljavnePoteze);
+					for (Poteza poteza : veljavnePoteze){
+						if (poteza.vrniIzhodisce() == izhodisce && poteza.vrniCilj() <= 0) {
+							izbraniTrikotniki.add(0);
+							g2d.drawRoundRect(koordinateZaCiljBelega[0], koordinateZaCiljBelega[1], koordinateZaCiljBelega[2], koordinateZaCiljBelega[3], koordinateZaCiljBelega[4], koordinateZaCiljBelega[5]);
+						} else if (poteza.vrniIzhodisce() == izhodisce && poteza.vrniCilj() >= 25) {
+							izbraniTrikotniki.add(25);
+							g2d.drawRoundRect(koordinateZaCiljCrnega[0], koordinateZaCiljCrnega[1], koordinateZaCiljCrnega[2], koordinateZaCiljCrnega[3], koordinateZaCiljCrnega[4], koordinateZaCiljCrnega[5]);
+						} else if (poteza.vrniIzhodisce() == izhodisce && trikotnik == poteza.vrniCilj()){
+							izbraniTrikotniki.add(trikotnik);
+							g2d.drawPolygon(p);
+//							System.out.println("Izbranitrikotniki:  " + izbraniTrikotniki);
+						}
 					}
 				}
-			}
 			
 //			narisemo zetone na triktoniku, ce imamo igro
 		
-			if (igra != null && igra.igralecNaVrsti != null) {
 				// dolocimo kateri trikotnik iz plosce risemo
 				if (0 <= i && i <= 5) trikotnikNaPlosci = -i + 11; 
 				if (7 <= i && i <= 12) trikotnikNaPlosci = -i + 12;
@@ -321,10 +322,10 @@ public class Platno extends JPanel implements MouseListener {
 					} else {
 						g2d.setColor(barvaFigure);
 						g2d.fillOval(xTrikotnik[0] - odmikMedTrikotniki, yKoordinata, sirinaTrikotnika, sirinaTrikotnika);
-						if (j == trenutniTrikotnik.stevilo - 1 && i == 6 && zetonNaBarieriCrni) g2d.setColor(barvaObrobeOznacen);
-						else if (j == trenutniTrikotnik.stevilo - 1 && i == 19 && zetonNaBarieriBeli) g2d.setColor(barvaObrobeOznacen);
-						else if (j == trenutniTrikotnik.stevilo - 1 && trenutniTrikotnik.barvaFigur == Figura.CRNA && izhodisce == 30 && igra.igralecNaVrsti.pridobiFiguro() == Figura.CRNA && !zetonNaBarieriCrni) g2d.setColor(barvaObrobeOznacen);
-						else if (j == trenutniTrikotnik.stevilo - 1 && trenutniTrikotnik.barvaFigur == Figura.BELA && izhodisce == 30 && igra.igralecNaVrsti.pridobiFiguro() == Figura.BELA && !zetonNaBarieriBeli) g2d.setColor(barvaObrobeOznacen);
+						if (j == trenutniTrikotnik.stevilo - 1 && i == 6 && zetonNaBarieriCrni && pridobiZacetek(veljavnePoteze).contains(0)) g2d.setColor(barvaObrobeOznacen);
+						else if (j == trenutniTrikotnik.stevilo - 1 && i == 19 && zetonNaBarieriBeli && pridobiZacetek(veljavnePoteze).contains(25)) g2d.setColor(barvaObrobeOznacen);
+						else if (j == trenutniTrikotnik.stevilo - 1 && trenutniTrikotnik.barvaFigur == Figura.CRNA && izhodisce == 30 && igra.igralecNaVrsti.pridobiFiguro() == Figura.CRNA && !zetonNaBarieriCrni && pridobiZacetek(veljavnePoteze).contains(trikotnikNaPlosci + 1)) g2d.setColor(barvaObrobeOznacen);
+						else if (j == trenutniTrikotnik.stevilo - 1 && trenutniTrikotnik.barvaFigur == Figura.BELA && izhodisce == 30 && igra.igralecNaVrsti.pridobiFiguro() == Figura.BELA && !zetonNaBarieriBeli && pridobiZacetek(veljavnePoteze).contains(trikotnikNaPlosci + 1)) g2d.setColor(barvaObrobeOznacen);
 						else g2d.setColor(barvaObrobe);
 						g2d.setStroke(new BasicStroke((float) obroba));
 						g2d.drawOval(xTrikotnik[0] - odmikMedTrikotniki, yKoordinata, sirinaTrikotnika, sirinaTrikotnika);
@@ -355,8 +356,7 @@ public class Platno extends JPanel implements MouseListener {
 			int xStiriKockeCetrti = (int) (rob + (3 + premikKock) * sirinaTrikotnika + 1.2 * velikostKocke + 0.5 * odmikMedTrikotniki);
 			
 			int yVseKocke = (int) (navpicnaStranica / 2 - velikostKocke / 2); 
-			
-			/* IZBIRA_ZACETNEGA_IGRALCA
+			/*
 			if (igra.trenutnoStanje == StanjeIgre.IZBIRA_ZACETNEGA_IGRALCA) {
 				g2d.setColor(barvaKocke);
 				g2d.fillRoundRect(xEnaKockaBeli, yVseKocke, velikostKocke, velikostKocke, 20, 20);
@@ -406,14 +406,14 @@ public class Platno extends JPanel implements MouseListener {
 			
 			for (int j = 0; j < vrednostKock.length; j++) {
 				int [] zaporedje = pikeNaKocki.get(vrednostKock[j]);
-				/*  // IZBIRA_ZACETNEGA_IGRALCA
-				{
+				/*
+				if (igra.trenutnoStanje == StanjeIgre.IZBIRA_ZACETNEGA_IGRALCA) {
 					if (j == 1) EnaKocka = xEnaKockaBeli;
 					else EnaKocka = xEnaKockaCrni;
 					for (int k = 0; k < zaporedje.length; k = k + 2) {
 						PikaNaKocki(g2d, EnaKocka, velikostKocke, velikostPik, yVseKocke, zaporedje[k], zaporedje[k + 1]);
 					}
-				}
+				} 
 				*/
 				if (vrednostKock[0] == vrednostKock[1]) {
 					if (j == 1) {
@@ -457,6 +457,16 @@ public class Platno extends JPanel implements MouseListener {
 			}
 		}
 		throw new java.lang.RuntimeException("Ni bilo najdene ustrezne poteze!");
+	}
+	
+	private List<Integer> pridobiZacetek(List<Poteza> veljavnePoteze) {
+		int velikost = veljavnePoteze.size();
+		Integer[] zacetki = new Integer[velikost];
+		for (int i = 0; i < veljavnePoteze.size(); i++) {
+			zacetki[i] = veljavnePoteze.get(i).izhodisce;
+		}
+		List <Integer >zacetki1 = Arrays.asList(zacetki);
+		return zacetki1;
 	}
 	
 	
@@ -503,26 +513,24 @@ public class Platno extends JPanel implements MouseListener {
 			else if (trikotnik == 0 && igra.igralnaPlosca.crnaBariera.stevilo > 0 && igra.igralecNaVrsti.pridobiFiguro() == Figura.CRNA) izhodisce = trikotnik;
 			else if (trikotnik == 25 && igra.igralnaPlosca.belaBariera.stevilo > 0 && igra.igralecNaVrsti.pridobiFiguro() == Figura.BELA) izhodisce = trikotnik;
 			else izhodisce = 30;
-			// System.out.println("Trikotnik:    " + trikotnik);
-			// System.out.println("Izbrani trikotniki klikanje:   " + izbraniTrikotniki);
+//			System.out.println("Trikotnik:    " + trikotnik);
+//			System.out.println("Izbrani trikotniki klikanje:   " + izbraniTrikotniki);
 			if (izbraniTrikotniki != null) {		
 				if (izbraniTrikotniki.size() > 0 && izbraniTrikotniki.contains(trikotnik)) {
 					cilj = trikotnik;
 				}
 				else cilj = 30;
 			} 
-			// System.out.println("Prejsnji trikotnik:    " + prejsnjiTrikotnik);
-			// System.out.println("Izhodisce:   " + izhodisce);
-			// System.out.println("Cilj:  " + cilj);
-			
-			if (cilj != 30) {
-				// Poteza poteza = izberiPotezoIzmedMoznihPotez(prejsnjiTrikotnik, Math.abs(cilj - prejsnjiTrikotnik), igra.igralecNaVrsti.pridobiFiguro());
-				Poteza poteza = new Poteza(prejsnjiTrikotnik, Math.abs(cilj - prejsnjiTrikotnik), igra.igralecNaVrsti.pridobiFiguro());
+//			System.out.println("Prejsnji trikotnik:    " + prejsnjiTrikotnik);
+//			System.out.println("Izhodisce:   " + izhodisce);
+//			System.out.println("Cilj:  " + cilj);
+			if (cilj != 30 && vodja.clovekNaVrsti) {
+				Poteza poteza = izberiPotezoIzmedMoznihPotez(prejsnjiTrikotnik, Math.abs(cilj - prejsnjiTrikotnik), igra.igralecNaVrsti.pridobiFiguro());
+				
 				// System.out.println("Poteza:   " + (new Poteza(prejsnjiTrikotnik, cilj - prejsnjiTrikotnik, igra.igralecNaVrsti.pridobiFiguro())));
-				System.out.println("Poteza: " + poteza);
+//				System.out.println("Poteza: " + poteza);
 				igra.odigraj(poteza);
 				List<Integer> seznamKock = igra.vrniSeznamKock();
-				System.out.println(igra.trenutnoStanje);
 				if (seznamKock.size() == 0) {
 					igra.zamenjajIgralca();
 				}

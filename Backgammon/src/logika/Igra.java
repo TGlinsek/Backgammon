@@ -58,10 +58,12 @@ public class Igra {
 		kocka1 = new Kocka();
 		kocka2 = new Kocka();
 		
+		this.vrziKocki();  // vržemo kocke in jih damo v seznam
+		/*
 		// kocke smo ravnokar vrgli, zato jih kar damo v seznam 
 		seznamKock.add(kocka1.vrniVrednost());
 		seznamKock.add(kocka2.vrniVrednost());
-		
+		*/
 		napolniSlovarIgralcevaKocka();
 		napolniSlovarPridobiKocko();
 		
@@ -83,7 +85,7 @@ public class Igra {
 //	!!popravi, da bo vodja dal vrednost kock: TODO
 	public void vrziKocki() {
 		this.trenutnoStanje = StanjeIgre.PREMIKANJE_FIGUR;
-		
+		System.out.println("test");
 		seznamKock.clear();
 		seznamKock.add(kocka1.vrniVrednost());
 		seznamKock.add(kocka2.vrniVrednost());
@@ -473,7 +475,7 @@ public class Igra {
 	
 	public void zamenjajIgralca() {
 		this.igralecNaVrsti = this.igralecNaVrsti.pridobiNasprotnika();
-		if (this.trenutnoStanje != StanjeIgre.PREMIKANJE_FIGUR) throw new java.lang.RuntimeException("To se ne bi smelo zgoditi!" + this.trenutnoStanje);  // le v stanju PREMIKANJE_FIGUR se bo lahko igralec zamenjal
+		// if (this.trenutnoStanje != StanjeIgre.PREMIKANJE_FIGUR) throw new java.lang.RuntimeException("To se ne bi smelo zgoditi!" + this.trenutnoStanje);  // le v stanju PREMIKANJE_FIGUR se bo lahko igralec zamenjal
 		this.trenutnoStanje = StanjeIgre.METANJE_KOCK;  // spremenimo stanje
 	}
 	
