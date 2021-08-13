@@ -227,12 +227,18 @@ public class Igra {
 			
 			if (trikotnik.barvaFigur == BarvaIgralca.barva(igralecNaVrsti)) {
 				
+				int kolicinaPotez = trikotnik.stevilo;  // stevilo potez
+				
+				if (trikotnik.stevilo == 0) throw new java.lang.RuntimeException("To se ne bi smelo zgoditi.");
+				
 				boolean preverimoPotezo;
 
 				preverimoPotezo = !igralnaPlosca.potezaNiVeljavna(poteza);  // true, če je poteza veljavna
 
 				if (preverimoPotezo) {
-					seznamVsehPotez.add(poteza);  // če je poteza veljavna, jo dodamo med veljavne poteze
+					for (int j = 0; j < kolicinaPotez; j++) {
+						seznamVsehPotez.add(poteza);  // če je poteza veljavna, jo dodamo med veljavne poteze
+					}
 				}
 			}
 		}
@@ -405,7 +411,7 @@ public class Igra {
 			List<Poteza> novePoteze = new LinkedList<Poteza>(vecPotez);  // kopiramo
 			for (Poteza poteza : vecPotez) {
 				Poteza skupnaPoteza;
-				if ((manjPotez.size() == 0 || poteza.izhodisce == manjPotez.get(0).izhodisce) && igralnaPlosca.vrniTrikotnik(poteza.izhodisce, poteza.igralec).stevilo == 1) {  // short-circuit
+				if (manjPotez.size() == 0 || poteza.izhodisce == manjPotez.get(0).izhodisce) {  // short-circuit
 					skupnaPoteza = new Poteza(poteza.vrniIzhodisce(), poteza.premik + manjsaKocka.vrniVrednost(), poteza.igralec);
 					if (igralnaPlosca.potezaNiVeljavna(skupnaPoteza)) {
 						if (vecPotez.size() == 1) {  // vrnemo maksimalno izmed obeh potez
