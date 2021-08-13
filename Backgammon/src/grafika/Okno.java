@@ -66,7 +66,7 @@ public class Okno extends JFrame{
 	public Platno platno;
 	
 	//vrži kocke
-	private JButton vrziKocke = new JButton("Vrzi kocki");
+//	private JButton vrziKocke = new JButton("Vrzi kocki");
 	
 	//Statusna vrstica v spodnjem delu okna
 	private JLabel status = new JLabel("Izberite igralce");
@@ -202,15 +202,15 @@ public class Okno extends JFrame{
 		this.add(platno, p);
 
 // ------- sedma vrstica - met kocke
-		GridBagConstraints k = new GridBagConstraints();
-		k.gridx = 0; k.gridy = 6; k.gridwidth = 4;
-		k.anchor = GridBagConstraints.PAGE_START;
-		k.insets = new Insets(5,0,5,0);
-		this.add(vrziKocke, k);
+//		GridBagConstraints k = new GridBagConstraints();
+//		k.gridx = 0; k.gridy = 6; k.gridwidth = 4;
+//		k.anchor = GridBagConstraints.PAGE_START;
+//		k.insets = new Insets(5,0,5,0);
+//		this.add(vrziKocke, k);
 		
 // ------- osma vrstica - Statusna vrstica
 		GridBagConstraints l = new GridBagConstraints();
-		l.gridx = 0; l.gridy = 7; l.gridwidth = 4;
+		l.gridx = 0; l.gridy = 6; l.gridwidth = 4;
 		l.anchor = GridBagConstraints.PAGE_START;
 		l.insets = new Insets(5,0,5,0);
 		this.add(status, l);
