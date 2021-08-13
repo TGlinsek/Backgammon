@@ -24,10 +24,6 @@ public class Igra {
 	private Map<ImeKocke, Kocka> pridobiKocko;  // to bo važno samo, če izbiramo začetnega igralca z metanjem kock
 	private Map<ImeKocke, Igralec> igralcevaKocka;  // to bo važno samo, če izbiramo začetnega igralca z metanjem kock
 	
-	// spremenljivke, ki določajo postavitev plošče glede na platno
-	public final boolean crniGreVSmeriUrinegaKazalca;
-	public final boolean crniZacneSpodaj;
-	
 	
 	// naslednji dve metodi se kličeta samo v konstruktorju, saj samo ustvarita slovar (map)
 	private void napolniSlovarPridobiKocko() {
@@ -54,7 +50,7 @@ public class Igra {
 		return igralcevaKocka.get(kocka);
 	}
 	
-	public Igra(Igralec igralecKiZacne, boolean crniGreVSmeriUrinegaKazalca, boolean crniZacneSpodaj) {
+	public Igra() {
 		seznamKock = new LinkedList<Integer>();
 		
 		kocka1 = new Kocka();
@@ -67,11 +63,8 @@ public class Igra {
 		napolniSlovarIgralcevaKocka();
 		napolniSlovarPridobiKocko();
 		
-		this.crniGreVSmeriUrinegaKazalca = crniGreVSmeriUrinegaKazalca;
-		this.crniZacneSpodaj = crniZacneSpodaj;
 		
 		igralnaPlosca = new IgralnaPlosca();  // črni gre v smeri urinega kazalca po defaultu
-		igralecNaVrsti = igralecKiZacne;
 		
 		// napaka = null;  // itak bo na začetku null, tako da tega ni treba napisati
 		
@@ -314,10 +307,10 @@ public class Igra {
 		List<Poteza> prvaKocka = vrniVeljavnePotezeZaEnoKocko(kocka1.vrniVrednost(), igralecNaVrsti);
 		List<Poteza> drugaKocka = vrniVeljavnePotezeZaEnoKocko(kocka2.vrniVrednost(), igralecNaVrsti);
 		
-		// System.out.println("Prva kocka size: " + prvaKocka.size());
-		// System.out.println("Druga kocka size: " + drugaKocka.size());
-		// System.out.println("Prva kocka: " + prvaKocka);
-		// System.out.println("Druga kocka: " + drugaKocka);
+		System.out.println("Prva kocka size: " + prvaKocka.size());
+		System.out.println("Druga kocka size: " + drugaKocka.size());
+		System.out.println("Prva kocka: " + prvaKocka);
+		System.out.println("Druga kocka: " + drugaKocka);
 		
 		/*
 		 Ko naredimo prvo potezo, ne moremo ustvariti novih potez za drugo kocko, razen če isto figuro premaknemo.
@@ -410,7 +403,7 @@ public class Igra {
 			List<Poteza> novePoteze = new LinkedList<Poteza>(vecPotez);  // kopiramo
 			for (Poteza poteza : vecPotez) {
 				Poteza skupnaPoteza;
-				if (manjPotez.size() == 0 || poteza.izhodisce == manjPotez.get(0).izhodisce) {  // short-circuit
+				if ((manjPotez.size() == 0 || poteza.izhodisce == manjPotez.get(0).izhodisce) && igralnaPlosca.vrniTrikotnik(poteza.izhodisce, poteza.igralec).stevilo == 1) {  // short-circuit
 					skupnaPoteza = new Poteza(poteza.vrniIzhodisce(), poteza.premik + manjsaKocka.vrniVrednost(), poteza.igralec);
 					if (igralnaPlosca.potezaNiVeljavna(skupnaPoteza)) {
 						if (vecPotez.size() == 1) {  // vrnemo maksimalno izmed obeh potez

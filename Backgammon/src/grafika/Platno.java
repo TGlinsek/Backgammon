@@ -26,9 +26,9 @@ import logika.Trikotnik;
 @SuppressWarnings("serial")
 public class Platno extends JPanel implements MouseListener {
 	
-	public Igra igra;
-	
 	public Vodja vodja;
+	
+	public Igra igra;
 	
 	protected Color barvaOzadja;
 	protected Color barvaRoba;
@@ -81,9 +81,10 @@ public class Platno extends JPanel implements MouseListener {
 		
 		addMouseListener(this);
 		
-//		igra = vodja.igra;
+		vodja = new Vodja();
+		igra = vodja.igra;
 //		samo za preverjanje kode
-		igra = new Igra(Igralec.CRNI, true, true);
+		
 //		igra.igralnaPlosca.belaBariera.stevilo = 5;
 //		igra.igralnaPlosca.crnaBariera.stevilo = 4;
 //		igra.trenutnoStanje = StanjeIgre.METANJE_KOCK;
@@ -345,7 +346,7 @@ public class Platno extends JPanel implements MouseListener {
 			
 			int yVseKocke = (int) (navpicnaStranica / 2 - velikostKocke / 2); 
 			
-			if (igra.trenutnoStanje == StanjeIgre.METANJE_KOCK) {
+			if (igra.trenutnoStanje == StanjeIgre.IZBIRA_ZACETNEGA_IGRALCA) {
 				g2d.setColor(barvaKocke);
 				g2d.fillRoundRect(xEnaKockaBeli, yVseKocke, velikostKocke, velikostKocke, 20, 20);
 				g2d.fillRoundRect(xEnaKockaCrni, yVseKocke, velikostKocke, velikostKocke, 20, 20);
@@ -393,7 +394,7 @@ public class Platno extends JPanel implements MouseListener {
 			
 			for (int j = 0; j < vrednostKock.length; j++) {
 				int [] zaporedje = pikeNaKocki.get(vrednostKock[j]);
-				if (igra.trenutnoStanje == StanjeIgre.METANJE_KOCK) {
+				if (igra.trenutnoStanje == StanjeIgre.IZBIRA_ZACETNEGA_IGRALCA) {
 					if (j == 1) EnaKocka = xEnaKockaBeli;
 					else EnaKocka = xEnaKockaCrni;
 					for (int k = 0; k < zaporedje.length; k = k + 2) {

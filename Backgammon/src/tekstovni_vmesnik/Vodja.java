@@ -111,11 +111,11 @@ private static BufferedReader r = new BufferedReader(new InputStreamReader(Syste
 				System.out.println(" 4 - izhod");
 				String sss = r.readLine();
 				if (sss.equals("1")) {
-					igra = new Igra(Igralec.CRNI, crniGreVSmeriUrinegaKazalca, crniZacneSpodaj);
+					igra = new Igra();
 				} else if (sss.equals("2")) {
-					igra = new Igra(Igralec.BELI, crniGreVSmeriUrinegaKazalca, crniZacneSpodaj);
+					igra = new Igra();
 				} else if (sss.equals("3")) {
-					igra = new Igra(null, crniGreVSmeriUrinegaKazalca, crniZacneSpodaj);
+					igra = new Igra();
 				} else if (sss.equals("4")) {
 					System.out.println("Nasvidenje!");
 					break;

@@ -32,10 +32,10 @@ public class Vodja {
 	private static boolean crniZacneSpodaj = true;  // default nastavitve
 	*/
 	
-	public Vodja(Okno okno) {
+	public Vodja() {
 		// igra = new Igra(igralecKiZacne, crniGreVSmeriUrinegaKazalca, crniZacneSpodaj);  // nastavi velikost (brez parametra za default)
 		igra = new Igra();  // verjetno na koncu ne bo nobenih parametrov tule
-		this.okno = okno;
+		okno = new Okno();
 	}
 	
 	
@@ -43,7 +43,6 @@ public class Vodja {
 		
 		sKockamiDolociZacetnegaIgralca();
 		
-		// okno.nastaviVelikostPlosce();  hipotetična metoda, ki nastavi velikost okna v odvisnosti od getWidth() in getHeight()
 		igramo();
 	}
 	
@@ -90,7 +89,7 @@ public class Vodja {
 	}
 	
 	public void igramo() {
-		// okno.osveziGUI();  to je npr. za posodabljanje napisa na oknu oz. napake
+		okno.osveziGUI();  // to je npr. za posodabljanje napisa na oknu oz. napake
 		// igra.spremeniStanjeIgre();
 		
 		switch (igra.trenutnoStanje) {
@@ -159,6 +158,7 @@ public class Vodja {
 				
 				if (igra == zacetkaIgra) {
 					igra.odigraj(poteza);
+					// zdaj bo na vrsti nasprotnik (recimo človek)
 					igramo();
 				}
 			}

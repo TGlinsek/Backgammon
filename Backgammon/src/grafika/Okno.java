@@ -17,6 +17,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
 import grafika.ColorChooserButton.ColorChangedListener;
+import logika.Igralec;
 
 public class Okno extends JFrame{
 	
@@ -320,6 +321,8 @@ public class Okno extends JFrame{
 		{
 		  public void actionPerformed(ActionEvent e)
 		  {
+			  
+			  platno.vodja.igramoNovoIgro();
 		    //TODO
 			// Začni z igro (če kliknjen med igro resetiraj igro?)
 			
@@ -342,5 +345,36 @@ public class Okno extends JFrame{
 	
 	
 	}//------------------------------------------------------------------------------------------------------------
-
+	
+	
+	public void osveziGUI() {
+		if (platno.vodja.igra == null) {
+			status.setText("Igra ne poteka");
+		}
+		else {
+			switch(platno.vodja.igra.trenutnoStanje) {
+			case IZBIRA_ZACETNEGA_IGRALCA:
+				status.setText("Začne tisti, ki vrže večjo vrednost.");
+				break;
+			case METANJE_KOCK:  // samo če je človek na vrsti
+				status.setText(platno.vodja.igra.igralecNaVrsti + ", lahko vržeš kocke!");
+				break;
+			case PREMIKANJE_FIGUR:
+				status.setText("Na potezi je " + platno.vodja.igra.igralecNaVrsti + 
+						" (" + Vodja.vrstaIgralca.get(platno.vodja.igra.igralecNaVrsti) + 
+						")"); 
+				break;
+			
+			case ZMAGA_CRNI:
+				status.setText("ZMAGAL ČRNI - " + 
+						Vodja.vrstaIgralca.get(Igralec.CRNI));
+				break;
+			case ZMAGA_BELI:
+				status.setText("ZMAGAL BELI - " + 
+						Vodja.vrstaIgralca.get(Igralec.BELI));
+				break;
+			}
+		}
+		platno.repaint();
+	}
 }

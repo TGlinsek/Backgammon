@@ -10,4 +10,9 @@ public enum Igralec {
 	public Figura pridobiFiguro() {
 		return this == CRNI ? Figura.CRNA : Figura.BELA;
 	}
+	
+	
+	public String toString() {
+		return this == CRNI ? "Igralec 2" : "Igralec 1";
+	}
 }
