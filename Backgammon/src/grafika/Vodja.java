@@ -121,15 +121,17 @@ public class Vodja {
 		case PREMIKANJE_FIGUR:
 			Igralec igralec2 = igra.igralecNaVrsti;
 			VrstaIgralca vrstaNaPotezi2 = vrstaIgralca.get(igralec2);
-			
+			/*
 			premikanje : switch (vrstaNaPotezi2) {
 			case C:
-				// TODO
-				throw new java.lang.RuntimeException("Ni še implementirano.");
+				clovekNaVrsti = true;
 			case R:
 				igrajRacunalnikovoPotezo();
 				break premikanje;
 			}
+			*/
+			
+			if (vrstaNaPotezi2 == VrstaIgralca.R) igrajRacunalnikovoPotezo();
 			
 			break;
 		default: throw new java.lang.RuntimeException("Napaka");

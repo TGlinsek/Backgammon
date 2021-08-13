@@ -85,7 +85,10 @@ public class Igra {
 //	!!popravi, da bo vodja dal vrednost kock: TODO
 	public void vrziKocki() {
 		this.trenutnoStanje = StanjeIgre.PREMIKANJE_FIGUR;
-		System.out.println("test");
+		
+		kocka1.vrziKocko();
+		kocka2.vrziKocko();
+		
 		seznamKock.clear();
 		seznamKock.add(kocka1.vrniVrednost());
 		seznamKock.add(kocka2.vrniVrednost());
