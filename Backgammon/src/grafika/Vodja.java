@@ -113,7 +113,7 @@ public class Vodja {
 			}
 			
 			if (!clovekNaVrsti) {
-				igra.vrziKocki(false);
+				igra.vrziKocki();
 				igra.trenutnoStanje = StanjeIgre.PREMIKANJE_FIGUR;
 				igramo();
 			}
@@ -131,8 +131,6 @@ public class Vodja {
 				break premikanje;
 			}
 			
-			break;
-		case IZBIRA_ZACETNEGA_IGRALCA:
 			break;
 		default: throw new java.lang.RuntimeException("Napaka");
 		}

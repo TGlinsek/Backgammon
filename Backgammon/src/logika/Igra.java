@@ -51,6 +51,8 @@ public class Igra {
 	}
 	
 	public Igra() {
+		igralecNaVrsti = Igralec.BELI;  // vedno začne beli
+		
 		seznamKock = new LinkedList<Integer>();
 		
 		kocka1 = new Kocka();
@@ -68,7 +70,7 @@ public class Igra {
 		
 		// napaka = null;  // itak bo na začetku null, tako da tega ni treba napisati
 		
-		trenutnoStanje = StanjeIgre.IZBIRA_ZACETNEGA_IGRALCA;
+		trenutnoStanje = StanjeIgre.METANJE_KOCK;
 	}
 	
 	/*  // default konstruktor, pač če bi igralec želel default nastavitve
@@ -79,29 +81,18 @@ public class Igra {
 	
 	
 //	!!popravi, da bo vodja dal vrednost kock: TODO
-	public void vrziKocki(boolean zrebanjeZacetnegaIgralca) {  // parameter true -> izbira igralca s kockami, false -> navadno metanje kock v teku igre
-		if (!zrebanjeZacetnegaIgralca) {
-			this.trenutnoStanje = StanjeIgre.PREMIKANJE_FIGUR;
-			
-			seznamKock.clear();
-			seznamKock.add(kocka1.vrniVrednost());
+	public void vrziKocki() {
+		this.trenutnoStanje = StanjeIgre.PREMIKANJE_FIGUR;
+		
+		seznamKock.clear();
+		seznamKock.add(kocka1.vrniVrednost());
+		seznamKock.add(kocka2.vrniVrednost());
+		
+		if (kockiImataEnakoVrednost()) {
+			seznamKock.add(kocka1.vrniVrednost());  // samo dvakrat še dodamo kocke, da imamo na koncu štiri enake vrednosti
 			seznamKock.add(kocka2.vrniVrednost());
-			
-			if (kockiImataEnakoVrednost()) {
-				seznamKock.add(kocka1.vrniVrednost());  // samo dvakrat še dodamo kocke, da imamo na koncu štiri enake vrednosti
-				seznamKock.add(kocka2.vrniVrednost());
-			}
-			return;
-		} else {
-			kocka1.vrziKocko();
-			kocka2.vrziKocko();
-			while (kockiImataEnakoVrednost()) {
-				kocka1.vrziKocko();
-				kocka2.vrziKocko();
-			}
-			this.trenutnoStanje = StanjeIgre.METANJE_KOCK;
-			return;
 		}
+		return;
 	}
 	
 	public int primerjajKocki(ImeKocke prvaKocka, ImeKocke drugaKocka) {  // to morda ne bo uporabno, če bomo itak morali vsako vrednost posebej v vodji dobit
@@ -132,7 +123,7 @@ public class Igra {
 	
 	// vrne false, če je poteza neveljavna
 	public boolean odigraj(Poteza poteza) {  // a naj bo tu boolean al void?
-		if (!potezaJeVeljavna(poteza)) throw new java.lang.RuntimeException("To se ne bi smelo zgoditi.");
+		// if (!potezaJeVeljavna(poteza)) throw new java.lang.RuntimeException("To se ne bi smelo zgoditi.");
 		boolean potezaJeBilaUspesnoOdigrana = this.igralnaPlosca.igrajPotezo(poteza);
 		if (!potezaJeBilaUspesnoOdigrana) return false;
 		
@@ -482,7 +473,7 @@ public class Igra {
 	
 	public void zamenjajIgralca() {
 		this.igralecNaVrsti = this.igralecNaVrsti.pridobiNasprotnika();
-		if (this.trenutnoStanje != StanjeIgre.PREMIKANJE_FIGUR) throw new java.lang.RuntimeException("To se ne bi smelo zgoditi!");  // le v stanju PREMIKANJE_FIGUR se bo lahko igralec zamenjal
+		if (this.trenutnoStanje != StanjeIgre.PREMIKANJE_FIGUR) throw new java.lang.RuntimeException("To se ne bi smelo zgoditi!" + this.trenutnoStanje);  // le v stanju PREMIKANJE_FIGUR se bo lahko igralec zamenjal
 		this.trenutnoStanje = StanjeIgre.METANJE_KOCK;  // spremenimo stanje
 	}
 	

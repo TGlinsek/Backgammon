@@ -328,19 +328,21 @@ public class Okno extends JFrame{
 		  public void actionPerformed(ActionEvent e)
 		  {
 
-
+			  if (igralec1 == null || igralec2 == null) {
+				  status.setText("Najprej moraš nastaviti igralce!");
+			  } else {
 			  
-			  Vodja vodja = new Vodja(vrniOkno());
-
-			  platno.nastaviIgro(vodja);
-			  
-
-			  vodja.vrstaIgralca = new EnumMap<Igralec, VrstaIgralca>(Igralec.class);
-			  vodja.vrstaIgralca.put(Igralec.BELI, igralec1);
-			  vodja.vrstaIgralca.put(Igralec.CRNI, igralec2);
-			  
-			  platno.vodja.igramoNovoIgro();
-			  
+				  Vodja vodja = new Vodja(vrniOkno());
+	
+				  platno.nastaviIgro(vodja);
+				  
+				  
+				  vodja.vrstaIgralca = new EnumMap<Igralec, VrstaIgralca>(Igralec.class);
+				  vodja.vrstaIgralca.put(Igralec.BELI, igralec1);
+				  vodja.vrstaIgralca.put(Igralec.CRNI, igralec2);
+				  
+				  platno.vodja.igramoNovoIgro();
+			  }
 		    //TODO
 			// Začni z igro (če kliknjen med igro resetiraj igro?)
 			
@@ -355,13 +357,7 @@ public class Okno extends JFrame{
 		  {
 			  if (platno.igra.trenutnoStanje == StanjeIgre.METANJE_KOCK) {
 			//Ali bomo tu preverjali, če lahko vrže kocki?
-				  	platno.igra.vrziKocki(false);
-			  } else if (platno.igra.trenutnoStanje == StanjeIgre.IZBIRA_ZACETNEGA_IGRALCA) {
-				  platno.igra.vrziKocki(true);
-				  platno.igra.igralecNaVrsti = (
-						  Integer.compare(platno.igra.kocka1.vrniVrednost(), platno.igra.kocka2.vrniVrednost())
-						  ) == 1 ? Igralec.BELI : Igralec.CRNI;
-				  if (platno.igra.trenutnoStanje != StanjeIgre.METANJE_KOCK) throw new java.lang.RuntimeException("napaka");
+				  	platno.igra.vrziKocki();
 			  }
 				else {
 				  status.setText("Ne moreš še metati kock!");
@@ -381,9 +377,6 @@ public class Okno extends JFrame{
 		}
 		else {
 			switch(platno.vodja.igra.trenutnoStanje) {
-			case IZBIRA_ZACETNEGA_IGRALCA:
-				status.setText("Začne tisti, ki vrže večjo vrednost.");
-				break;
 			case METANJE_KOCK:  // samo če je človek na vrsti
 				status.setText(platno.vodja.igra.igralecNaVrsti + ", lahko vržeš kocke!");
 				break;

@@ -356,6 +356,7 @@ public class Platno extends JPanel implements MouseListener {
 			
 			int yVseKocke = (int) (navpicnaStranica / 2 - velikostKocke / 2); 
 			
+			/* IZBIRA_ZACETNEGA_IGRALCA
 			if (igra.trenutnoStanje == StanjeIgre.IZBIRA_ZACETNEGA_IGRALCA) {
 				g2d.setColor(barvaKocke);
 				g2d.fillRoundRect(xEnaKockaBeli, yVseKocke, velikostKocke, velikostKocke, 20, 20);
@@ -365,7 +366,8 @@ public class Platno extends JPanel implements MouseListener {
 				g2d.drawRoundRect(xEnaKockaBeli, yVseKocke, velikostKocke, velikostKocke, 20, 20);
 				g2d.drawRoundRect(xEnaKockaCrni, yVseKocke, velikostKocke, velikostKocke, 20, 20);
 			}
-			else {
+			*/
+			{
 //				ali potrebujemo stiri kocke ali le dve
 				if (vrednostKock[0] == vrednostKock[1]) {
 					velikostKocke = (int) (velikostKocke * 0.9);
@@ -404,13 +406,16 @@ public class Platno extends JPanel implements MouseListener {
 			
 			for (int j = 0; j < vrednostKock.length; j++) {
 				int [] zaporedje = pikeNaKocki.get(vrednostKock[j]);
-				if (igra.trenutnoStanje == StanjeIgre.IZBIRA_ZACETNEGA_IGRALCA) {
+				/*  // IZBIRA_ZACETNEGA_IGRALCA
+				{
 					if (j == 1) EnaKocka = xEnaKockaBeli;
 					else EnaKocka = xEnaKockaCrni;
 					for (int k = 0; k < zaporedje.length; k = k + 2) {
 						PikaNaKocki(g2d, EnaKocka, velikostKocke, velikostPik, yVseKocke, zaporedje[k], zaporedje[k + 1]);
 					}
-				} else if (vrednostKock[0] == vrednostKock[1]) {
+				}
+				*/
+				if (vrednostKock[0] == vrednostKock[1]) {
 					if (j == 1) {
 						StiriKockePrvic = xStiriKockePrvi;
 						StrirKockeDrugic = xStiriKockeDrugi;
@@ -498,25 +503,26 @@ public class Platno extends JPanel implements MouseListener {
 			else if (trikotnik == 0 && igra.igralnaPlosca.crnaBariera.stevilo > 0 && igra.igralecNaVrsti.pridobiFiguro() == Figura.CRNA) izhodisce = trikotnik;
 			else if (trikotnik == 25 && igra.igralnaPlosca.belaBariera.stevilo > 0 && igra.igralecNaVrsti.pridobiFiguro() == Figura.BELA) izhodisce = trikotnik;
 			else izhodisce = 30;
-			System.out.println("Trikotnik:    " + trikotnik);
-			System.out.println("Izbrani trikotniki klikanje:   " + izbraniTrikotniki);
+			// System.out.println("Trikotnik:    " + trikotnik);
+			// System.out.println("Izbrani trikotniki klikanje:   " + izbraniTrikotniki);
 			if (izbraniTrikotniki != null) {		
 				if (izbraniTrikotniki.size() > 0 && izbraniTrikotniki.contains(trikotnik)) {
 					cilj = trikotnik;
 				}
 				else cilj = 30;
 			} 
-			System.out.println("Prejsnji trikotnik:    " + prejsnjiTrikotnik);
-			System.out.println("Izhodisce:   " + izhodisce);
-			System.out.println("Cilj:  " + cilj);
+			// System.out.println("Prejsnji trikotnik:    " + prejsnjiTrikotnik);
+			// System.out.println("Izhodisce:   " + izhodisce);
+			// System.out.println("Cilj:  " + cilj);
 			
 			if (cilj != 30) {
-				Poteza poteza = izberiPotezoIzmedMoznihPotez(prejsnjiTrikotnik, Math.abs(cilj - prejsnjiTrikotnik), igra.igralecNaVrsti.pridobiFiguro());
-				
+				// Poteza poteza = izberiPotezoIzmedMoznihPotez(prejsnjiTrikotnik, Math.abs(cilj - prejsnjiTrikotnik), igra.igralecNaVrsti.pridobiFiguro());
+				Poteza poteza = new Poteza(prejsnjiTrikotnik, Math.abs(cilj - prejsnjiTrikotnik), igra.igralecNaVrsti.pridobiFiguro());
 				// System.out.println("Poteza:   " + (new Poteza(prejsnjiTrikotnik, cilj - prejsnjiTrikotnik, igra.igralecNaVrsti.pridobiFiguro())));
 				System.out.println("Poteza: " + poteza);
 				igra.odigraj(poteza);
 				List<Integer> seznamKock = igra.vrniSeznamKock();
+				System.out.println(igra.trenutnoStanje);
 				if (seznamKock.size() == 0) {
 					igra.zamenjajIgralca();
 				}
