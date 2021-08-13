@@ -533,6 +533,7 @@ public class Platno extends JPanel implements MouseListener {
 				List<Integer> seznamKock = igra.vrniSeznamKock();
 				if (seznamKock.size() == 0) {
 					igra.zamenjajIgralca();
+					igra.vrziKocki();
 				}
 				izhodisce = 30;
 				cilj = 30;

@@ -350,7 +350,7 @@ public class Okno extends JFrame{
 			//Kaj pa če barve niso iste amapak samo podobne? 
 		  }
 		});
-		
+		/*
 		vrziKocke.addActionListener(new ActionListener()
 		{
 		  public void actionPerformed(ActionEvent e)
@@ -365,7 +365,7 @@ public class Okno extends JFrame{
 		    platno.repaint();
 		  }
 		});
-		
+		*/
 	
 	
 	}//------------------------------------------------------------------------------------------------------------
