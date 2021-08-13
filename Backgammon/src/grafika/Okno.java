@@ -21,6 +21,7 @@ import grafika.ColorChooserButton.ColorChangedListener;
 import logika.Igralec;
 import logika.ImeKocke;
 import logika.Kocka;
+import logika.StanjeIgre;
 
 public class Okno extends JFrame{
 	
@@ -352,9 +353,19 @@ public class Okno extends JFrame{
 		{
 		  public void actionPerformed(ActionEvent e)
 		  {
+			  if (platno.igra.trenutnoStanje == StanjeIgre.METANJE_KOCK) {
 			//Ali bomo tu preverjali, če lahko vrže kocki?
-		    platno.igra.vrziKocki(false);
-			
+				  	platno.igra.vrziKocki(false);
+			  } else if (platno.igra.trenutnoStanje == StanjeIgre.IZBIRA_ZACETNEGA_IGRALCA) {
+				  platno.igra.vrziKocki(true);
+				  platno.igra.igralecNaVrsti = (
+						  Integer.compare(platno.igra.kocka1.vrniVrednost(), platno.igra.kocka2.vrniVrednost())
+						  ) == 1 ? Igralec.BELI : Igralec.CRNI;
+				  if (platno.igra.trenutnoStanje != StanjeIgre.METANJE_KOCK) throw new java.lang.RuntimeException("napaka");
+			  }
+				else {
+				  status.setText("Ne moreš še metati kock!");
+			  }
 		    platno.repaint();
 		  }
 		});

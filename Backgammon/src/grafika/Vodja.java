@@ -43,7 +43,7 @@ public class Vodja {
 	
 	public void igramoNovoIgro() {
 		
-		sKockamiDolociZacetnegaIgralca();
+		// sKockamiDolociZacetnegaIgralca();
 		
 		igramo();
 	}
@@ -62,6 +62,7 @@ public class Vodja {
 	}
 	*/
 	
+	/*
 	public void sKockamiDolociZacetnegaIgralca() {
 		metanjeKock : while (true) {
 			igra.vrziKocki(true);
@@ -89,6 +90,7 @@ public class Vodja {
 		}
 		igra.trenutnoStanje = StanjeIgre.METANJE_KOCK;  // pričnemo z igro
 	}
+	*/
 	
 	public void igramo() {
 		okno.osveziGUI();  // to je npr. za posodabljanje napisa na oknu oz. napake
@@ -110,10 +112,9 @@ public class Vodja {
 				break;
 			}
 			
-			igra.vrziKocki(false);
-			igra.trenutnoStanje = StanjeIgre.PREMIKANJE_FIGUR;
-			
-			if (vrstaNaPotezi == VrstaIgralca.R) {
+			if (!clovekNaVrsti) {
+				igra.vrziKocki(false);
+				igra.trenutnoStanje = StanjeIgre.PREMIKANJE_FIGUR;
 				igramo();
 			}
 			break;
@@ -131,7 +132,8 @@ public class Vodja {
 			}
 			
 			break;
-		case IZBIRA_ZACETNEGA_IGRALCA: throw new java.lang.RuntimeException("Na tem mestu bi morali že biti čez to fazo.");
+		case IZBIRA_ZACETNEGA_IGRALCA:
+			break;
 		default: throw new java.lang.RuntimeException("Napaka");
 		}
 	}

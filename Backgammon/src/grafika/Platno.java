@@ -245,7 +245,7 @@ public class Platno extends JPanel implements MouseListener {
 			
 //			narisemo zetone na triktoniku, ce imamo igro
 		
-			if (igra != null) {
+			if (igra != null && igra.igralecNaVrsti != null) {
 				// dolocimo kateri trikotnik iz plosce risemo
 				if (0 <= i && i <= 5) trikotnikNaPlosci = -i + 11; 
 				if (7 <= i && i <= 12) trikotnikNaPlosci = -i + 12;
@@ -457,6 +457,7 @@ public class Platno extends JPanel implements MouseListener {
 	
 	boolean izbiramoCilj = false;
 	int prejsnjiTrikotnik;
+	int kolikoPotezSe;
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -515,6 +516,10 @@ public class Platno extends JPanel implements MouseListener {
 				// System.out.println("Poteza:   " + (new Poteza(prejsnjiTrikotnik, cilj - prejsnjiTrikotnik, igra.igralecNaVrsti.pridobiFiguro())));
 				System.out.println("Poteza: " + poteza);
 				igra.odigraj(poteza);
+				List<Integer> seznamKock = igra.vrniSeznamKock();
+				if (seznamKock.size() == 0) {
+					igra.zamenjajIgralca();
+				}
 				izhodisce = 30;
 				cilj = 30;
 			}

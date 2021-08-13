@@ -79,11 +79,19 @@ public class Igra {
 	
 	
 //	!!popravi, da bo vodja dal vrednost kock: TODO
-	public int[] vrziKocki(boolean zrebanjeZacetnegaIgralca) {  // parameter true -> izbira igralca s kockami, false -> navadno metanje kock v teku igre
+	public void vrziKocki(boolean zrebanjeZacetnegaIgralca) {  // parameter true -> izbira igralca s kockami, false -> navadno metanje kock v teku igre
 		kocka1.vrziKocko();
 		kocka2.vrziKocko();
 		if (!zrebanjeZacetnegaIgralca) this.trenutnoStanje = StanjeIgre.PREMIKANJE_FIGUR;
-		else this.trenutnoStanje = StanjeIgre.METANJE_KOCK;
+		else {
+			if (!kockiImataEnakoVrednost()) {
+				this.trenutnoStanje = StanjeIgre.METANJE_KOCK;
+				return;
+			} else {
+				vrziKocki(true);
+				return;
+			}
+		}
 		
 		seznamKock.clear();
 		seznamKock.add(kocka1.vrniVrednost());
@@ -94,7 +102,7 @@ public class Igra {
 			seznamKock.add(kocka2.vrniVrednost());
 		}
 		
-		return new int[] {kocka1.vrniVrednost(), kocka2.vrniVrednost()};  // morda ne bomo rabili nič returnat
+		return;
 	}
 	
 	public int primerjajKocki(ImeKocke prvaKocka, ImeKocke drugaKocka) {  // to morda ne bo uporabno, če bomo itak morali vsako vrednost posebej v vodji dobit
@@ -128,6 +136,8 @@ public class Igra {
 		if (!potezaJeVeljavna(poteza)) throw new java.lang.RuntimeException("To se ne bi smelo zgoditi.");
 		boolean potezaJeBilaUspesnoOdigrana = this.igralnaPlosca.igrajPotezo(poteza);
 		if (!potezaJeBilaUspesnoOdigrana) return false;
+		
+		seznamKock.remove((Integer) poteza.premik);  // vrednost kocke, ki smo jo uporabili, odstranimo iz seznama
 		
 		if (igralnaPlosca.beliImaVseNaCilju()) {
 			this.trenutnoStanje = StanjeIgre.ZMAGA_BELI;
