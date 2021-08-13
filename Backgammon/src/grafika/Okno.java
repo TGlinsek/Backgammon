@@ -7,6 +7,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.EnumMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -18,6 +19,8 @@ import javax.swing.border.Border;
 
 import grafika.ColorChooserButton.ColorChangedListener;
 import logika.Igralec;
+import logika.ImeKocke;
+import logika.Kocka;
 
 public class Okno extends JFrame{
 	
@@ -67,7 +70,9 @@ public class Okno extends JFrame{
 	//Statusna vrstica v spodnjem delu okna
 	private JLabel status = new JLabel("Izberite igralce");
 	
-	
+	private Okno vrniOkno() {
+		return this;
+	}
 	
 	public Okno() { //----------------------------------------------------------------------------------------------
 		
@@ -321,8 +326,20 @@ public class Okno extends JFrame{
 		{
 		  public void actionPerformed(ActionEvent e)
 		  {
+
+
+			  
+			  Vodja vodja = new Vodja(vrniOkno());
+
+			  platno.nastaviIgro(vodja);
+			  
+
+			  vodja.vrstaIgralca = new EnumMap<Igralec, VrstaIgralca>(Igralec.class);
+			  vodja.vrstaIgralca.put(Igralec.BELI, igralec1);
+			  vodja.vrstaIgralca.put(Igralec.CRNI, igralec2);
 			  
 			  platno.vodja.igramoNovoIgro();
+			  
 		    //TODO
 			// Začni z igro (če kliknjen med igro resetiraj igro?)
 			
@@ -361,17 +378,17 @@ public class Okno extends JFrame{
 				break;
 			case PREMIKANJE_FIGUR:
 				status.setText("Na potezi je " + platno.vodja.igra.igralecNaVrsti + 
-						" (" + Vodja.vrstaIgralca.get(platno.vodja.igra.igralecNaVrsti) + 
+						" (" + platno.vodja.vrstaIgralca.get(platno.vodja.igra.igralecNaVrsti) + 
 						")"); 
 				break;
 			
 			case ZMAGA_CRNI:
 				status.setText("ZMAGAL ČRNI - " + 
-						Vodja.vrstaIgralca.get(Igralec.CRNI));
+						platno.vodja.vrstaIgralca.get(Igralec.CRNI));
 				break;
 			case ZMAGA_BELI:
 				status.setText("ZMAGAL BELI - " + 
-						Vodja.vrstaIgralca.get(Igralec.BELI));
+						platno.vodja.vrstaIgralca.get(Igralec.BELI));
 				break;
 			}
 		}

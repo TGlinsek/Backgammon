@@ -16,7 +16,7 @@ import logika.StanjeIgre;
 
 public class Vodja {	
 	
-	public static Map<Igralec, VrstaIgralca> vrstaIgralca;
+	public Map<Igralec, VrstaIgralca> vrstaIgralca;
 	// public static Map<Igralec, KdoIgra> kdoIgra;  // tega verjetno ne bomo rabili
 	
 	public Okno okno;
@@ -26,16 +26,18 @@ public class Vodja {
 	// public boolean clovekNaVrsti = false;  // ni važno, kaj je na začetku
 	public boolean clovekNaVrsti;  // ne rabimo v konstruktorju definirat, se bo sproti definiralo
 	
+	public Inteligenca racunalnikovaInteligenca;
 	/*
 	private static Igralec igralecKiZacne = Igralec.CRNI;  // default nastavitve
 	private static boolean crniGreVSmeriUrinegaKazalca = true;  // default nastavitve
 	private static boolean crniZacneSpodaj = true;  // default nastavitve
 	*/
 	
-	public Vodja() {
+	public Vodja(Okno okno) {
 		// igra = new Igra(igralecKiZacne, crniGreVSmeriUrinegaKazalca, crniZacneSpodaj);  // nastavi velikost (brez parametra za default)
 		igra = new Igra();  // verjetno na koncu ne bo nobenih parametrov tule
-		okno = new Okno();
+		this.okno = okno;
+		racunalnikovaInteligenca = new Inteligenca(igra);
 	}
 	
 	
@@ -133,9 +135,6 @@ public class Vodja {
 		default: throw new java.lang.RuntimeException("Napaka");
 		}
 	}
-	
-	
-	public Inteligenca racunalnikovaInteligenca = new Inteligenca(igra);
 	
 	
 	public void igrajRacunalnikovoPotezo() {

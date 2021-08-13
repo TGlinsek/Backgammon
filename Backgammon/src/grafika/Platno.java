@@ -81,14 +81,24 @@ public class Platno extends JPanel implements MouseListener {
 		
 		addMouseListener(this);
 		
-		vodja = new Vodja();
-		igra = vodja.igra;
+		// vodja = new Vodja();
+		// igra = vodja.igra;
+		
+		
 //		samo za preverjanje kode
 		
 //		igra.igralnaPlosca.belaBariera.stevilo = 5;
 //		igra.igralnaPlosca.crnaBariera.stevilo = 4;
 //		igra.trenutnoStanje = StanjeIgre.METANJE_KOCK;
 	}
+	
+	
+	public void nastaviIgro(Vodja vodja) {
+		this.vodja = vodja;
+		igra = vodja.igra;
+		repaint();
+	}
+	
 	
 	@Override
 	protected void paintComponent(Graphics g) {
@@ -450,67 +460,69 @@ public class Platno extends JPanel implements MouseListener {
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		int x = e.getX();
-		int y = e.getY();
-		
-		int vodoravnaStranica = (int) (Math.min(getWidth(), getHeight()));
-		int navpicnaStranica = (int) (razmerjeStranic * vodoravnaStranica);
-				
-		int rob = (int) (debelinaRobaRelativna * vodoravnaStranica);
-		
-		int sirinaTrikotnika = (vodoravnaStranica - 2 * rob) / 15;
-		int visinaTrikotnika = (int) (2.8 * (navpicnaStranica - 2 * rob) / 7);
-
-		if (x < rob || y < rob || x > vodoravnaStranica - rob || y > navpicnaStranica - rob) return;
-		
-		int stolpec = Math.round((x - rob) / sirinaTrikotnika);
-		int vrstica = 2;
-		if (y - rob < visinaTrikotnika) vrstica = 0;
-		else if (y + rob > navpicnaStranica - visinaTrikotnika) vrstica = 1;
-		
-		if (vrstica == 2 || stolpec == 13) return;
-		
-		int trikotnik = 30; // 0 je bariera crnega, 25 je cilj crnega
-
-		if (0 <= stolpec && stolpec <= 5 && vrstica == 0) trikotnik = 12 - stolpec;
-		if (7 <= stolpec && stolpec <= 12 && vrstica == 0) trikotnik = 13 - stolpec;
-		if (0 <= stolpec && stolpec <= 5 && vrstica == 1) trikotnik = 13 + stolpec;
-		if (7 <= stolpec && stolpec <= 12 && vrstica == 1) trikotnik = 12 + stolpec;
-		if (vrstica == 0 && (stolpec == 6 || stolpec == 14)) trikotnik = 0;
-		if (vrstica == 1 && (stolpec == 6 || stolpec == 14)) trikotnik = 25;
-		
-		prejsnjiTrikotnik = izhodisce;
-		if (1 <= trikotnik && trikotnik <= 24) {
-			if (igra.igralnaPlosca.plosca[trikotnik - 1].barvaFigur == igra.igralecNaVrsti.pridobiFiguro()) izhodisce = trikotnik;		
-		}
-		else if (trikotnik == 0 && igra.igralnaPlosca.crnaBariera.stevilo > 0 && igra.igralecNaVrsti.pridobiFiguro() == Figura.CRNA) izhodisce = trikotnik;
-		else if (trikotnik == 25 && igra.igralnaPlosca.belaBariera.stevilo > 0 && igra.igralecNaVrsti.pridobiFiguro() == Figura.BELA) izhodisce = trikotnik;
-		else izhodisce = 30;
-		System.out.println("Trikotnik:    " + trikotnik);
-		System.out.println("Izbrani trikotniki klikanje:   " + izbraniTrikotniki);
-		if (izbraniTrikotniki != null) {		
-			if (izbraniTrikotniki.size() > 0 && izbraniTrikotniki.contains(trikotnik)) {
-				cilj = trikotnik;
-			}
-			else cilj = 30;
-		} 
-		System.out.println("Prejsnji trikotnik:    " + prejsnjiTrikotnik);
-		System.out.println("Izhodisce:   " + izhodisce);
-		System.out.println("Cilj:  " + cilj);
-		
-		if (cilj != 30) {
-			Poteza poteza = izberiPotezoIzmedMoznihPotez(prejsnjiTrikotnik, cilj - prejsnjiTrikotnik, igra.igralecNaVrsti.pridobiFiguro());
+		if (igra != null) {
+			int x = e.getX();
+			int y = e.getY();
 			
-			// System.out.println("Poteza:   " + (new Poteza(prejsnjiTrikotnik, cilj - prejsnjiTrikotnik, igra.igralecNaVrsti.pridobiFiguro())));
-			System.out.println("Poteza: " + poteza);
-			igra.odigraj(poteza);
-			izhodisce = 30;
-			cilj = 30;
+			int vodoravnaStranica = (int) (Math.min(getWidth(), getHeight()));
+			int navpicnaStranica = (int) (razmerjeStranic * vodoravnaStranica);
+					
+			int rob = (int) (debelinaRobaRelativna * vodoravnaStranica);
+			
+			int sirinaTrikotnika = (vodoravnaStranica - 2 * rob) / 15;
+			int visinaTrikotnika = (int) (2.8 * (navpicnaStranica - 2 * rob) / 7);
+	
+			if (x < rob || y < rob || x > vodoravnaStranica - rob || y > navpicnaStranica - rob) return;
+			
+			int stolpec = Math.round((x - rob) / sirinaTrikotnika);
+			int vrstica = 2;
+			if (y - rob < visinaTrikotnika) vrstica = 0;
+			else if (y + rob > navpicnaStranica - visinaTrikotnika) vrstica = 1;
+			
+			if (vrstica == 2 || stolpec == 13) return;
+			
+			int trikotnik = 30; // 0 je bariera crnega, 25 je cilj crnega
+	
+			if (0 <= stolpec && stolpec <= 5 && vrstica == 0) trikotnik = 12 - stolpec;
+			if (7 <= stolpec && stolpec <= 12 && vrstica == 0) trikotnik = 13 - stolpec;
+			if (0 <= stolpec && stolpec <= 5 && vrstica == 1) trikotnik = 13 + stolpec;
+			if (7 <= stolpec && stolpec <= 12 && vrstica == 1) trikotnik = 12 + stolpec;
+			if (vrstica == 0 && (stolpec == 6 || stolpec == 14)) trikotnik = 0;
+			if (vrstica == 1 && (stolpec == 6 || stolpec == 14)) trikotnik = 25;
+			
+			prejsnjiTrikotnik = izhodisce;
+			if (1 <= trikotnik && trikotnik <= 24) {
+				if (igra.igralnaPlosca.plosca[trikotnik - 1].barvaFigur == igra.igralecNaVrsti.pridobiFiguro()) izhodisce = trikotnik;		
+			}
+			else if (trikotnik == 0 && igra.igralnaPlosca.crnaBariera.stevilo > 0 && igra.igralecNaVrsti.pridobiFiguro() == Figura.CRNA) izhodisce = trikotnik;
+			else if (trikotnik == 25 && igra.igralnaPlosca.belaBariera.stevilo > 0 && igra.igralecNaVrsti.pridobiFiguro() == Figura.BELA) izhodisce = trikotnik;
+			else izhodisce = 30;
+			System.out.println("Trikotnik:    " + trikotnik);
+			System.out.println("Izbrani trikotniki klikanje:   " + izbraniTrikotniki);
+			if (izbraniTrikotniki != null) {		
+				if (izbraniTrikotniki.size() > 0 && izbraniTrikotniki.contains(trikotnik)) {
+					cilj = trikotnik;
+				}
+				else cilj = 30;
+			} 
+			System.out.println("Prejsnji trikotnik:    " + prejsnjiTrikotnik);
+			System.out.println("Izhodisce:   " + izhodisce);
+			System.out.println("Cilj:  " + cilj);
+			
+			if (cilj != 30) {
+				Poteza poteza = izberiPotezoIzmedMoznihPotez(prejsnjiTrikotnik, cilj - prejsnjiTrikotnik, igra.igralecNaVrsti.pridobiFiguro());
+				
+				// System.out.println("Poteza:   " + (new Poteza(prejsnjiTrikotnik, cilj - prejsnjiTrikotnik, igra.igralecNaVrsti.pridobiFiguro())));
+				System.out.println("Poteza: " + poteza);
+				igra.odigraj(poteza);
+				izhodisce = 30;
+				cilj = 30;
+			}
+			
+			
+	//		System.out.println("X: " + x + "; Y: " + y + "; izhodisce: " + izhodisce);
+			repaint();
 		}
-		
-		
-//		System.out.println("X: " + x + "; Y: " + y + "; izhodisce: " + izhodisce);
-		repaint();
 	}
 	
 	public void nastaviTemo(String tema) {
